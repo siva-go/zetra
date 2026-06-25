@@ -2,19 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zetra/app/routes/app_router.dart';
+import 'package:zetra/app/themes/app_colors.dart';
+import 'package:zetra/core/services/di.dart';
 import 'package:zetra/features/charging/presentation/bloc/charging_bloc.dart';
 
-void main() {
+void main() async {
+
   WidgetsFlutterBinding.ensureInitialized();
+
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.light,
-      systemNavigationBarColor: Color(0xFF0D1120),
-      systemNavigationBarIconBrightness: Brightness.light,
-    ),
+      systemNavigationBarColor: AppColors.navBackground,
+      systemNavigationBarIconBrightness: Brightness.light
+    )
   );
+
+  await setupDependencies();
+
   runApp(const ZetraApp());
+
 }
 
 class ZetraApp extends StatelessWidget {
@@ -22,17 +30,20 @@ class ZetraApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ChargingBloc(),
+
+    return BlocProvider<ChargingBloc>(
+      create: (_) => getIt<ChargingBloc>(),
       child: MaterialApp.router(
         title: 'ZETRA EV Charging',
         debugShowCheckedModeBanner: false,
         themeMode: ThemeMode.dark,
         darkTheme: ThemeData.dark().copyWith(
-          scaffoldBackgroundColor: const Color(0xFF0A0E17),
+          scaffoldBackgroundColor: AppColors.scaffoldDark
         ),
-        routerConfig: appRouter,
-      ),
+        routerConfig: appRouter
+      )
     );
+
   }
+
 }

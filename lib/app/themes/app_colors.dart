@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
 
-/// ZETRA Design System - Color Tokens
-/// All colors used in the application are defined here.
-/// Hardcoded colors in widgets are strictly prohibited.
 class AppColors {
-  AppColors._();
 
-  // ── Background ──
+  static const Color whiteColor = Colors.white;
   static const Color scaffoldDark = Color(0xFF0A0E17);
   static const Color cardDark = Color(0xFF141927);
   static const Color surfaceDark = Color(0xFF1A1F33);
