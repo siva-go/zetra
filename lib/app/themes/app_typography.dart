@@ -4,8 +4,6 @@ import 'package:zetra/app/themes/app_colors.dart';
 
 class AppTypography {
 
-  AppTypography._();
-
   // Headings
   static TextStyle h1 = GoogleFonts.urbanist(
     fontSize: 96,

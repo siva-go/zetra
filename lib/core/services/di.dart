@@ -8,6 +8,7 @@ import 'package:zetra/core/storage/database/app_database.dart';
 import 'package:zetra/core/storage/secure_storage.dart';
 import 'package:zetra/features/authentication/bloc/auth_bloc.dart';
 import 'package:zetra/features/charging/presentation/bloc/charging_bloc.dart';
+import 'package:zetra/features/home/bloc/home_bloc.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -47,6 +48,9 @@ Future<void> setupDependencies() async {
   );
   getIt.registerFactory<AuthBloc>(
     () => AuthBloc()
+  );
+  getIt.registerFactory<HomeBloc>(
+    () => HomeBloc()
   );
 
 }
