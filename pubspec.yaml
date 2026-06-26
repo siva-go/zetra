@@ -36,6 +36,8 @@ dependencies:
   flutter_animate: ^4.5.2
   flutter_svg: ^2.0.17
   video_player: ^2.9.2
+  flutter_screenutil: ^5.9.3
+  google_fonts: ^6.2.1
 
   # Routing
   go_router: ^13.2.0
