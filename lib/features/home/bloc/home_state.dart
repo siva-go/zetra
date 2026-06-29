@@ -10,14 +10,9 @@ class HomeState {
   final String searchQuery;
   final NearestStationData? nearestStation;
   final int currentNavIndex;
+  final String? selectedStationId;
 
-  const HomeState({
-    required this.status,
-    required this.showNearestStation,
-    required this.searchQuery,
-    required this.currentNavIndex,
-    this.nearestStation
-  });
+  const HomeState({required this.status, required this.showNearestStation, required this.searchQuery, required this.currentNavIndex, this.nearestStation, this.selectedStationId});
 
   factory HomeState.initial() {
 
@@ -26,24 +21,27 @@ class HomeState {
       showNearestStation: true,
       searchQuery: '',
       currentNavIndex: 0,
+      selectedStationId: 'Chennai',
       nearestStation: NearestStationData(
-        name: 'ZETRA GreenCharge Hub',
-        type: 'DC Fast 150kW',
-        distanceKm: 2.1,
-        availableCount: 8
+        id: 'Chennai',
+        name: 'ZETRA Marina Hub',
+        type: 'DC Fast 60kW',
+        distanceKm: 3.4,
+        availableCount: 4
       )
     );
 
   }
 
-  HomeState copyWith({HomeStatus? status, bool? showNearestStation, String? searchQuery, NearestStationData? nearestStation, int? currentNavIndex}) {
+  HomeState copyWith({HomeStatus? status, bool? showNearestStation, String? searchQuery, NearestStationData? nearestStation, int? currentNavIndex, String? selectedStationId}) {
 
     return HomeState(
       status: status ?? this.status,
       showNearestStation: showNearestStation ?? this.showNearestStation,
       searchQuery: searchQuery ?? this.searchQuery,
       nearestStation: nearestStation ?? this.nearestStation,
-      currentNavIndex: currentNavIndex ?? this.currentNavIndex
+      currentNavIndex: currentNavIndex ?? this.currentNavIndex,
+      selectedStationId: selectedStationId ?? this.selectedStationId
     );
 
   }
@@ -53,12 +51,14 @@ class HomeState {
 @immutable
 class NearestStationData {
 
+  final String id;
   final String name;
   final String type;
   final double distanceKm;
   final int availableCount;
 
   const NearestStationData({
+    required this.id,
     required this.name,
     required this.type,
     required this.distanceKm,

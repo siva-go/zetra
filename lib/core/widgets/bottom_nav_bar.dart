@@ -18,14 +18,16 @@ class ZetraBottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final Color bgColor = isDark ? AppColors.navBackground : AppColors.whiteColor;
+    final Color borderColor = isDark ? AppColors.border.withValues(alpha: 0.5) : AppColors.borderLight;
+
     return Container(
       decoration: BoxDecoration(
-        color: AppColors.navBackground,
+        color: bgColor,
         border: Border(
           top: BorderSide(
-            color: AppColors.border.withValues(
-                alpha: 0.5
-            ),
+            color: borderColor,
             width: 0.5
           )
         )
@@ -45,6 +47,7 @@ class ZetraBottomNavBar extends StatelessWidget {
                 activeIcon: Icons.home,
                 label: 'Home',
                 isActive: currentIndex == 0,
+                isDark: isDark,
                 onTap: () => onTap?.call(0)
               ),
               _NavItem(
@@ -52,6 +55,7 @@ class ZetraBottomNavBar extends StatelessWidget {
                 activeIcon: Icons.qr_code_scanner,
                 label: 'Scan QR',
                 isActive: currentIndex == 1,
+                isDark: isDark,
                 onTap: () => onTap?.call(1)
               ),
               _NavItem(
@@ -59,6 +63,7 @@ class ZetraBottomNavBar extends StatelessWidget {
                 activeIcon: Icons.assignment,
                 label: 'Sessions',
                 isActive: currentIndex == 2,
+                isDark: isDark,
                 onTap: () => onTap?.call(2)
               ),
               _NavItem(
@@ -66,6 +71,7 @@ class ZetraBottomNavBar extends StatelessWidget {
                 activeIcon: Icons.person,
                 label: 'Profile',
                 isActive: currentIndex == 3,
+                isDark: isDark,
                 onTap: () => onTap?.call(3)
               )
             ]
@@ -84,6 +90,7 @@ class _NavItem extends StatelessWidget {
   final IconData activeIcon;
   final String label;
   final bool isActive;
+  final bool isDark;
   final VoidCallback? onTap;
 
   const _NavItem({
@@ -91,13 +98,16 @@ class _NavItem extends StatelessWidget {
     required this.activeIcon,
     required this.label,
     required this.isActive,
+    required this.isDark,
     this.onTap
   });
 
   @override
   Widget build(BuildContext context) {
 
-    final color = isActive ? AppColors.whiteColor : AppColors.navInactive;
+    final Color activeColor = isDark ? AppColors.whiteColor : AppColors.primary;
+    final Color inactiveColor = isDark ? AppColors.navInactive : AppColors.textSecondaryLight;
+    final Color color = isActive ? activeColor : inactiveColor;
 
     return GestureDetector(
       onTap: onTap,
