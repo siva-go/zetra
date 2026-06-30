@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:zetra/features/authentication/views/login.dart';
 import 'package:zetra/features/authentication/views/login_otp.dart';
 import 'package:zetra/features/charging/presentation/screens/charge_link.dart';
 import 'package:zetra/features/charging/presentation/screens/charging.dart' as charging;
 import 'package:zetra/features/home/views/home.dart';
+import 'package:zetra/features/station/bloc/search_station_bloc.dart';
+import 'package:zetra/features/station/views/search_station.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/home',
@@ -49,6 +52,17 @@ final GoRouter appRouter = GoRouter(
       builder: (BuildContext context, GoRouterState state) {
 
         return const charging.HomeScreen();
+
+      }
+    ),
+    GoRoute(
+      path: '/search-station',
+      builder: (BuildContext context, GoRouterState state) {
+
+        return BlocProvider<SearchStationBloc>(
+          create: (_) => SearchStationBloc(),
+          child: const SearchStationScreen()
+        );
 
       }
     )

@@ -1,4 +1,4 @@
-package com.example.zetra
+package app.zetraev.com
 
 import io.flutter.embedding.android.FlutterActivity
 

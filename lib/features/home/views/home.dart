@@ -5,6 +5,7 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:zetra/app/themes/app_colors.dart';
 import 'package:zetra/app/themes/app_radius.dart';
@@ -470,9 +471,10 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                 Expanded(
                   child: TextField(
                     controller: _searchController,
-                    onChanged: (String val) {
+                    readOnly: true,
+                    onTap: () {
 
-                      context.read<HomeBloc>().add(SearchQueryChanged(val));
+                      context.push('/search-station');
 
                     },
                     style: AppTypography.bodyMedium.copyWith(
