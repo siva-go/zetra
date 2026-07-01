@@ -54,7 +54,7 @@ class AppColors {
   static const Color slideTrack = Color(0xFF1A1F33);
   static const Color slideThumb = Color(0xFFFF073A);
   // Bolt / Lightning
-  static const Color bolt = Color(0xFFFFD600);
+  static const Color bolt = Color(0xFFFFD713);
   // Dynamic Color Getters
   static Color getScaffold(BuildContext context) => Theme.of(context).brightness == Brightness.dark ? scaffoldDark : scaffoldLight;
   static Color getCard(BuildContext context) => Theme.of(context).brightness == Brightness.dark ? cardDark : cardLight;

@@ -7,64 +7,90 @@ import 'package:zetra/features/charging/presentation/screens/charge_link.dart';
 import 'package:zetra/features/charging/presentation/screens/charging.dart' as charging;
 import 'package:zetra/features/home/views/home.dart';
 import 'package:zetra/features/station/bloc/search_station_bloc.dart';
+import 'package:zetra/features/station/models/station_info.dart';
 import 'package:zetra/features/station/views/search_station.dart';
+import 'package:zetra/features/station/views/station_details.dart';
 
 final GoRouter appRouter = GoRouter(
-  initialLocation: '/home',
-  routes: <RouteBase>[
-    GoRoute(
-      path: '/home',
-      builder: (BuildContext context, GoRouterState state) {
+    initialLocation: '/home',
+    routes: <RouteBase>[
+      GoRoute(
+          path: '/home',
+          builder: (BuildContext context, GoRouterState state) {
 
-        return const Home();
+            return const Home();
 
-      }
-    ),
-    GoRoute(
-      path: '/login',
-      builder: (BuildContext context, GoRouterState state) {
+          }
+      ),
+      GoRoute(
+          path: '/login',
+          builder: (BuildContext context, GoRouterState state) {
 
-        return const Login();
+            return const Login();
 
-      }
-    ),
-    GoRoute(
-      path: '/otp',
-      builder: (BuildContext context, GoRouterState state) {
+          }
+      ),
+      GoRoute(
+          path: '/otp',
+          builder: (BuildContext context, GoRouterState state) {
 
-        final String phone = state.uri.queryParameters['phone'] ?? '';
-        return LoginOtp(
-            phone: phone
-        );
+            final String phone = state.uri.queryParameters['phone'] ?? '';
 
-      }
-    ),
-    GoRoute(
-      path: '/charge-link',
-      builder: (BuildContext context, GoRouterState state) {
+            return LoginOtp(
+                phone: phone
+            );
 
-        return const ChargeLinkScreen();
+          }
+      ),
+      GoRoute(
+          path: '/charge-link',
+          builder: (BuildContext context, GoRouterState state) {
 
-      }
-    ),
-    GoRoute(
-      path: '/charging',
-      builder: (BuildContext context, GoRouterState state) {
+            return const ChargeLinkScreen();
 
-        return const charging.HomeScreen();
+          }
+      ),
+      GoRoute(
+          path: '/charging',
+          builder: (BuildContext context, GoRouterState state) {
 
-      }
-    ),
-    GoRoute(
-      path: '/search-station',
-      builder: (BuildContext context, GoRouterState state) {
+            return const charging.HomeScreen();
 
-        return BlocProvider<SearchStationBloc>(
-          create: (_) => SearchStationBloc(),
-          child: const SearchStationScreen()
-        );
+          }
+      ),
+      GoRoute(
+          path: '/search-station',
+          builder: (BuildContext context, GoRouterState state) {
 
-      }
-    )
-  ]
+            return BlocProvider<SearchStationBloc>(
+                create: (_) => SearchStationBloc(),
+                child: const SearchStation()
+            );
+
+          }
+      ),
+      GoRoute(
+        path: '/station-details',
+        builder: (BuildContext context, GoRouterState state) {
+
+          final StationInfo? station = state.extra as StationInfo?;
+
+          if (station == null) {
+
+            return const Scaffold(
+                body: Center(
+                    child: Text('Station not found')
+                )
+            );
+
+          }
+
+          return StationDetails(
+              station: station
+          );
+
+        }
+
+      )
+    ]
 );

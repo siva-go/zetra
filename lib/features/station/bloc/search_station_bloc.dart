@@ -13,42 +13,46 @@ class SearchStationBloc extends Bloc<SearchStationEvent, SearchStationState> {
     StationInfo(
       id: 'ZGH',
       city: 'Chennai',
-      name: 'ZETRA GreenCharge Hub',
+      name: 'GreenCharge Hub',
       type: 'DC Fast 150kW',
       distanceKm: 2.1,
       availableCount: 8,
       pricePerKwh: 18,
-      connectorCount: 2
+      connectorCount: 2,
+      address: '123 Anna Salai, Chennai'
     ),
     StationInfo(
       id: 'ZES',
       city: 'Bengaluru',
-      name: 'ZETRA EcoPower Station',
+      name: 'EcoPower Station',
       type: 'AC Type 2 7kW',
       distanceKm: 3.1,
       availableCount: 4,
       pricePerKwh: 12,
-      connectorCount: 1
+      connectorCount: 1,
+      address: '45 MG Road, Bengaluru'
     ),
     StationInfo(
       id: 'ZPA',
       city: 'Mumbai',
-      name: 'ZETRA Pulse Station',
+      name: 'Pulse Station',
       type: 'DC Fast 150kW',
       distanceKm: 1.2,
       availableCount: 12,
       pricePerKwh: 15.5,
-      connectorCount: 3
+      connectorCount: 3,
+      address: '78 Link Road, Andheri West, Mumbai'
     ),
     StationInfo(
       id: 'ZHH',
       city: 'Nagpur',
-      name: 'ZETRA Highway Hub',
+      name: 'Highway Hub',
       type: 'DC CCS2 250kW',
       distanceKm: 6.8,
       availableCount: 2,
       pricePerKwh: 20,
-      connectorCount: 2
+      connectorCount: 2,
+      address: 'Sector 5, Wardha Road, Nagpur'
     )
   ];
 

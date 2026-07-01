@@ -11,6 +11,7 @@ class StationInfo {
   final int availableCount;
   final double pricePerKwh;
   final int connectorCount;
+  final String address;
 
   const StationInfo({
     required this.id,
@@ -20,7 +21,8 @@ class StationInfo {
     required this.distanceKm,
     required this.availableCount,
     required this.pricePerKwh,
-    required this.connectorCount
+    required this.connectorCount,
+    required this.address,
   });
 
 }
