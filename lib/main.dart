@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zetra/app/routes/app_router.dart';
 import 'package:zetra/features/charging/presentation/bloc/charging_bloc.dart';
+import 'package:zetra/features/charging/presentation/bloc/plugin_bloc.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,8 +23,11 @@ class ZetraApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ChargingBloc(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (context) => ChargingBloc()),
+        BlocProvider(create: (context) => PlugInBloc()),
+      ],
       child: MaterialApp.router(
         title: 'ZETRA EV Charging',
         debugShowCheckedModeBanner: false,
