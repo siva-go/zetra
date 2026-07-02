@@ -298,7 +298,11 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                   currentIndex: state.currentNavIndex,
                   onTap: (int idx) {
 
-                    context.read<HomeBloc>().add(NavigationTabChanged(idx));
+                    if (idx == 1) {
+                      context.push('/scan-qr');
+                    } else {
+                      context.read<HomeBloc>().add(NavigationTabChanged(idx));
+                    }
 
                   }
                 )
@@ -342,7 +346,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
           ),
           const Spacer(),
           GestureDetector(
-            onTap: () {},
+            onTap: () => context.push('/wallet'),
             child: ClipRRect(
               borderRadius: AppRadius.mdBorder,
               child: BackdropFilter(

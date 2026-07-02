@@ -22,66 +22,151 @@ class ZetraBottomNavBar extends StatelessWidget {
     final Color bgColor = isDark ? AppColors.navBackground : AppColors.whiteColor;
     final Color borderColor = isDark ? AppColors.border.withValues(alpha: 0.5) : AppColors.borderLight;
 
-    return Container(
-      decoration: BoxDecoration(
-        color: bgColor,
-        border: Border(
-          top: BorderSide(
-            color: borderColor,
-            width: 0.5
-          )
-        )
-      ),
-      child: SafeArea(
-        top: false,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.lg,
-            vertical: AppSpacing.sm,
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              _NavItem(
-                icon: Icons.home_outlined,
-                activeIcon: Icons.home,
-                label: 'Home',
-                isActive: currentIndex == 0,
-                isDark: isDark,
-                onTap: () => onTap?.call(0)
-              ),
-              _NavItem(
-                icon: Icons.qr_code_scanner_outlined,
-                activeIcon: Icons.qr_code_scanner,
-                label: 'Scan QR',
-                isActive: currentIndex == 1,
-                isDark: isDark,
-                onTap: () => onTap?.call(1)
-              ),
-              _NavItem(
-                icon: Icons.assignment_outlined,
-                activeIcon: Icons.assignment,
-                label: 'Sessions',
-                isActive: currentIndex == 2,
-                isDark: isDark,
-                onTap: () => onTap?.call(2)
-              ),
-              _NavItem(
-                icon: Icons.person_outline,
-                activeIcon: Icons.person,
-                label: 'Profile',
-                isActive: currentIndex == 3,
-                isDark: isDark,
-                onTap: () => onTap?.call(3)
+    return Stack(
+      clipBehavior: Clip.none,
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            color: bgColor,
+            border: Border(
+              top: BorderSide(
+                color: borderColor,
+                width: 0.5
               )
-            ]
+            )
+          ),
+          child: SafeArea(
+            top: false,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.lg,
+                vertical: AppSpacing.sm,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  _NavItem(
+                    icon: Icons.home_outlined,
+                    activeIcon: Icons.home,
+                    label: 'Home',
+                    isActive: currentIndex == 0,
+                    isDark: isDark,
+                    onTap: () => onTap?.call(0)
+                  ),
+                  if (currentIndex == 1)
+                    _ActiveScanHexagon(onTap: () => onTap?.call(1))
+                  else
+                    _NavItem(
+                      icon: Icons.qr_code_scanner_outlined,
+                      activeIcon: Icons.qr_code_scanner,
+                      label: 'Scan QR',
+                      isActive: false,
+                      isDark: isDark,
+                      onTap: () => onTap?.call(1)
+                    ),
+                  _NavItem(
+                    icon: Icons.assignment_outlined,
+                    activeIcon: Icons.assignment,
+                    label: 'Sessions',
+                    isActive: currentIndex == 2,
+                    isDark: isDark,
+                    onTap: () => onTap?.call(2)
+                  ),
+                  _NavItem(
+                    icon: Icons.person_outline,
+                    activeIcon: Icons.person,
+                    label: 'Profile',
+                    isActive: currentIndex == 3,
+                    isDark: isDark,
+                    onTap: () => onTap?.call(3)
+                  )
+                ]
+              )
+            )
           )
-        )
-      )
+        ),
+      ],
     );
 
   }
 
+}
+
+class _ActiveScanHexagon extends StatelessWidget {
+  final VoidCallback onTap;
+
+  const _ActiveScanHexagon({required this.onTap});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: onTap,
+      behavior: HitTestBehavior.opaque,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          Transform.translate(
+            offset: const Offset(0, -6),
+            child: Container(
+              width: 52,
+              height: 52,
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                    color: AppColors.primary.withValues(alpha: 0.4),
+                    blurRadius: 16,
+                    spreadRadius: 2,
+                  ),
+                ],
+              ),
+              child: ClipPath(
+                clipper: _HexagonClipper(),
+                child: Container(
+                  color: AppColors.primary,
+                  child: Center(
+                    child: Icon(
+                      Icons.qr_code_scanner,
+                      color: AppColors.blackColor,
+                      size: 28,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 2),
+          Text(
+            'Scan QR',
+            style: AppTypography.caption.copyWith(
+              color: AppColors.primary,
+              fontSize: 10,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _HexagonClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    final Path path = Path();
+    path.moveTo(size.width * 0.5, 0);
+    path.lineTo(size.width, size.height * 0.25);
+    path.lineTo(size.width, size.height * 0.75);
+    path.lineTo(size.width * 0.5, size.height);
+    path.lineTo(0, size.height * 0.75);
+    path.lineTo(0, size.height * 0.25);
+    path.close();
+    return path;
+  }
+
+  @override
+  bool shouldReclip(covariant CustomClipper<Path> oldClipper) => false;
 }
 
 class _NavItem extends StatelessWidget {
