@@ -20,43 +20,51 @@ class WalletScreen extends StatefulWidget {
   State<WalletScreen> createState() => _WalletScreenState();
 }
 
-class _WalletScreenState extends State<WalletScreen>
-    with TickerProviderStateMixin {
+class _WalletScreenState extends State<WalletScreen> with TickerProviderStateMixin {
+
   late final AnimationController _pulseController;
 
   @override
   void initState() {
+
     super.initState();
     context.read<WalletBloc>().add(const WalletInitialized());
     _pulseController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1800),
-    )..repeat(reverse: true);
+      duration: const Duration(
+          milliseconds: 1800
+      )
+    )..repeat(
+        reverse: true
+    );
+
   }
 
   @override
   void dispose() {
+
     _pulseController.dispose();
     super.dispose();
+
   }
 
   @override
   Widget build(BuildContext context) {
+
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
 
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
-      statusBarIconBrightness:
-          isDark ? Brightness.light : Brightness.dark,
+      statusBarIconBrightness: isDark ? Brightness.light : Brightness.dark,
       systemNavigationBarColor: AppColors.navBackground,
-      systemNavigationBarIconBrightness: Brightness.light,
+      systemNavigationBarIconBrightness: Brightness.light
     ));
 
     return Scaffold(
-      backgroundColor:
-          isDark ? AppColors.scaffoldDark : AppColors.scaffoldLight,
+      backgroundColor: isDark ? AppColors.scaffoldDark : AppColors.scaffoldLight,
       body: BlocBuilder<WalletBloc, WalletState>(
         builder: (BuildContext ctx, WalletState state) {
+
           return Column(
             children: <Widget>[
               _buildAppBar(isDark, state),
@@ -64,60 +72,79 @@ class _WalletScreenState extends State<WalletScreen>
                 child: SingleChildScrollView(
                   physics: const BouncingScrollPhysics(),
                   child: Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 16.w),
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 16.w
+                    ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
-                        SizedBox(height: 8.h),
+                        SizedBox(
+                            height: 8.h
+                        ),
                         _buildBalanceCard(isDark, state),
-                        SizedBox(height: 20.h),
+                        SizedBox(
+                            height: 20.h
+                        ),
                         _buildWalletIllustration(isDark),
-                        SizedBox(height: 20.h),
-                        _buildAddMoneyButton(isDark),
-                        SizedBox(height: 24.h),
+                        SizedBox(
+                            height: 24.h
+                        ),
                         _buildRecentTransactionsHeader(isDark),
-                        SizedBox(height: 12.h),
+                        SizedBox(
+                            height: 12.h
+                        ),
                         _buildTransactionsList(isDark, state),
-                        SizedBox(height: 16.h),
-                      ],
-                    ),
-                  ),
-                ),
+                        SizedBox(
+                            height: 16.h
+                        )
+                      ]
+                    )
+                  )
+                )
               ),
               ZetraBottomNavBar(
-                currentIndex: 0,
                 onTap: (int idx) {
-                  if (idx == 0) context.go('/home');
-                },
-              ),
-            ],
+
+                  if (idx == 0) {
+
+                    context.go('/home');
+
+                  }
+
+                }
+              )
+            ]
           );
-        },
-      ),
+
+        }
+      )
     );
+
   }
 
-  // ── App Bar ───────────────────────────────────────────────────────────────
-
   Widget _buildAppBar(bool isDark, WalletState state) {
-    final Color textPrimary =
-        isDark ? AppColors.textPrimary : AppColors.textPrimaryLight;
-    final Color cardBg =
-        isDark ? AppColors.scaffoldDark : AppColors.scaffoldLight;
-    final Color borderColor =
-        isDark ? AppColors.border : AppColors.borderLight;
+
+    final Color textPrimary = isDark ? AppColors.textPrimary : AppColors.textPrimaryLight;
+    final Color cardBg = isDark ? AppColors.scaffoldDark : AppColors.scaffoldLight;
+    final Color borderColor = isDark ? AppColors.border : AppColors.borderLight;
 
     return Container(
       decoration: BoxDecoration(
         color: cardBg,
         border: Border(
-          bottom: BorderSide(color: borderColor, width: 0.5),
-        ),
+          bottom: BorderSide(
+              color: borderColor,
+              width: 0.5
+          )
+        )
       ),
       child: SafeArea(
         bottom: false,
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+          padding: EdgeInsets.symmetric(
+              horizontal: 16.w,
+              vertical: 14.h
+          ),
           child: Row(
             children: <Widget>[
               Text(
@@ -125,45 +152,32 @@ class _WalletScreenState extends State<WalletScreen>
                 style: AppTypography.h3.copyWith(
                   fontSize: 22.sp,
                   fontWeight: FontWeight.w700,
-                  color: textPrimary,
-                ),
+                  color: textPrimary
+                )
               ),
               const Spacer(),
-              _buildNotificationButton(isDark),
-            ],
-          ),
-        ),
-      ),
-    ).animate().fadeIn(duration: 400.ms).slideY(begin: -0.05);
-  }
-
-  Widget _buildNotificationButton(bool isDark) {
-    return Container(
-      width: 36,
-      height: 36,
-      decoration: BoxDecoration(
-        color: isDark ? AppColors.cardDark : AppColors.surfaceLight,
-        borderRadius: AppRadius.smBorder,
-        border: Border.all(
-          color: isDark ? AppColors.border : AppColors.borderLight,
-        ),
-      ),
-      child: Icon(
-        Icons.notifications_outlined,
-        color: isDark ? AppColors.textPrimary : AppColors.textPrimaryLight,
-        size: 18,
-      ),
+              Icon(
+                  Icons.notifications_outlined,
+                  color: isDark ? AppColors.textPrimary : AppColors.textPrimaryLight,
+                  size: 20.h
+              )
+            ]
+          )
+        )
+      )
+    ).animate().fadeIn(
+        duration: 400.ms
+    ).slideY(
+        begin: -0.05
     );
-  }
 
-  // ── Balance Card ──────────────────────────────────────────────────────────
+  }
 
   Widget _buildBalanceCard(bool isDark, WalletState state) {
+
     final Color cardBg = isDark ? AppColors.cardDark : AppColors.whiteColor;
-    final Color borderColor =
-        isDark ? AppColors.border : AppColors.borderLight;
-    final Color textSecondary =
-        isDark ? AppColors.textSecondary : AppColors.textSecondaryLight;
+    final Color borderColor = isDark ? AppColors.border : AppColors.borderLight;
+    final Color textSecondary = isDark ? AppColors.textSecondary : AppColors.textSecondaryLight;
 
     return Container(
       width: double.infinity,
@@ -171,22 +185,26 @@ class _WalletScreenState extends State<WalletScreen>
       decoration: BoxDecoration(
         color: cardBg,
         borderRadius: AppRadius.lgBorder,
-        border: Border.all(color: borderColor),
-        boxShadow: isDark
-            ? <BoxShadow>[
-                BoxShadow(
-                  color: AppColors.primary.withValues(alpha: 0.05),
-                  blurRadius: 24,
-                  offset: const Offset(0, 4),
-                ),
-              ]
-            : <BoxShadow>[
-                BoxShadow(
-                  color: AppColors.blackColor.withValues(alpha: 0.06),
-                  blurRadius: 16,
-                  offset: const Offset(0, 4),
-                ),
-              ],
+        border: Border.all(
+            color: borderColor
+        ),
+        boxShadow: isDark ? <BoxShadow>[
+          BoxShadow(
+            color: AppColors.primary.withValues(
+                alpha: 0.05
+            ),
+            blurRadius: 24,
+            offset: const Offset(0, 4)
+          )
+        ] : <BoxShadow>[
+          BoxShadow(
+            color: AppColors.blackColor.withValues(
+                alpha: 0.06
+            ),
+            blurRadius: 16,
+            offset: const Offset(0, 4)
+          )
+        ]
       ),
       child: Row(
         children: <Widget>[
@@ -198,77 +216,92 @@ class _WalletScreenState extends State<WalletScreen>
                   'Current Balance',
                   style: AppTypography.bodySmall.copyWith(
                     fontSize: 12.sp,
-                    color: textSecondary,
-                  ),
+                    color: textSecondary
+                  )
                 ),
-                SizedBox(height: 4.h),
+                SizedBox(
+                    height: 4.h
+                ),
                 ShaderMask(
                   shaderCallback: (Rect bounds) {
-                    return (state.isLowBalance
-                            ? const LinearGradient(
-                                colors: <Color>[
-                                  AppColors.chargingRed,
-                                  AppColors.chargingRedLight,
-                                ],
-                              )
-                            : const LinearGradient(
-                                colors: <Color>[
-                                  AppColors.primary,
-                                  AppColors.primaryLight,
-                                ],
-                              ))
-                        .createShader(bounds);
+
+                    return (state.isLowBalance ? const LinearGradient(
+                      colors: <Color>[
+                        AppColors.chargingRed,
+                        AppColors.chargingRedLight
+                      ]
+                    )
+                        : const LinearGradient(
+                      colors: <Color>[
+                        AppColors.primary,
+                        AppColors.primaryLight
+                      ]
+                    )).createShader(bounds);
+
                   },
                   child: Text(
                     '₹ ${state.balance.toStringAsFixed(2)}',
                     style: AppTypography.h3.copyWith(
                       fontSize: 28.sp,
                       fontWeight: FontWeight.w800,
-                      color: AppColors.whiteColor,
-                    ),
-                  ),
+                      color: AppColors.whiteColor
+                    )
+                  )
                 ),
-                SizedBox(height: 8.h),
-                if (state.isLowBalance) _buildLowBalanceBadge(),
-              ],
-            ),
+                SizedBox(
+                    height: 8.h
+                ),
+                if (state.isLowBalance) _buildLowBalanceBadge()
+              ]
+            )
           ),
           Icon(
             Icons.chevron_right_rounded,
             color: textSecondary,
-            size: 22,
-          ),
-        ],
-      ),
-    )
-        .animate()
-        .fadeIn(duration: 500.ms, delay: 100.ms)
-        .slideY(begin: 0.05, curve: Curves.easeOutCubic);
+            size: 22
+          )
+        ]
+      )
+    ).animate().fadeIn(
+        duration: 500.ms,
+        delay: 100.ms
+    ).slideY(
+        begin: 0.05,
+        curve: Curves.easeOutCubic
+    );
+
   }
 
   Widget _buildLowBalanceBadge() {
+
     return AnimatedBuilder(
       animation: _pulseController,
       builder: (BuildContext ctx, Widget? child) {
+
         return Container(
-          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+          padding: EdgeInsets.symmetric(
+              horizontal: 8.w,
+              vertical: 4.h
+          ),
           decoration: BoxDecoration(
             color: AppColors.chargingRed.withValues(
-              alpha: 0.15 + _pulseController.value * 0.08,
+              alpha: 0.15 + _pulseController.value * 0.08
             ),
             borderRadius: AppRadius.roundBorder,
             border: Border.all(
-              color: AppColors.chargingRed.withValues(alpha: 0.6),
+              color: AppColors.chargingRed.withValues(
+                  alpha: 0.6
+              )
             ),
             boxShadow: <BoxShadow>[
               BoxShadow(
                 color: AppColors.chargingRed.withValues(
-                  alpha: 0.15 + _pulseController.value * 0.1,
+                  alpha: 0.15 + _pulseController.value * 0.1
                 ),
                 blurRadius: 8,
-                spreadRadius: 1,
-              ),
-            ],
+                spreadRadius: 1
+              )
+            ]
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min,
@@ -276,44 +309,47 @@ class _WalletScreenState extends State<WalletScreen>
               const Icon(
                 Icons.warning_amber_rounded,
                 color: AppColors.chargingRed,
-                size: 11,
+                size: 11
               ),
-              SizedBox(width: 4.w),
+              SizedBox(
+                  width: 4.w
+              ),
               Text(
                 'Low Balance',
                 style: AppTypography.bodySmall.copyWith(
                   fontSize: 10.sp,
                   color: AppColors.chargingRed,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
-            ],
-          ),
+                  fontWeight: FontWeight.w600
+                )
+              )
+            ]
+          )
         );
-      },
+
+      }
     );
+
   }
 
-  // ── Wallet Illustration ───────────────────────────────────────────────────
-
   Widget _buildWalletIllustration(bool isDark) {
+
     return Container(
       width: double.infinity,
-      height: 180.h,
+      height: 220.h,
       decoration: BoxDecoration(
         borderRadius: AppRadius.lgBorder,
         gradient: LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: isDark
-              ? <Color>[const Color(0xFF0D1A2D), const Color(0xFF0A1520)]
-              : <Color>[const Color(0xFFE8F5E9), const Color(0xFFE3F2FD)],
+          colors: isDark ? <Color>[const Color(0xFF0D1A2D), const Color(0xFF0A1520)] : <Color>[const Color(0xFFE8F5E9), const Color(0xFFE3F2FD)]
         ),
         border: Border.all(
-          color: isDark
-              ? AppColors.primary.withValues(alpha: 0.15)
-              : AppColors.primary.withValues(alpha: 0.2),
-        ),
+          color: isDark ? AppColors.primary.withValues(
+              alpha: 0.15
+          ) : AppColors.primary.withValues(
+              alpha: 0.2
+          )
+        )
       ),
       child: Stack(
         children: <Widget>[
@@ -327,12 +363,14 @@ class _WalletScreenState extends State<WalletScreen>
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
                   colors: <Color>[
-                    AppColors.primary.withValues(alpha: 0.12),
-                    Colors.transparent,
-                  ],
-                ),
-              ),
-            ),
+                    AppColors.primary.withValues(
+                        alpha: 0.12
+                    ),
+                    Colors.transparent
+                  ]
+                )
+              )
+            )
           ),
           Positioned(
             bottom: -20,
@@ -344,58 +382,104 @@ class _WalletScreenState extends State<WalletScreen>
                 shape: BoxShape.circle,
                 gradient: RadialGradient(
                   colors: <Color>[
-                    const Color(0xFF5AC8FA).withValues(alpha: 0.08),
-                    Colors.transparent,
-                  ],
-                ),
-              ),
-            ),
+                    const Color(0xFF5AC8FA).withValues(
+                        alpha: 0.08
+                    ),
+                    Colors.transparent
+                  ]
+                )
+              )
+            )
           ),
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                _buildNeonWalletIcon(isDark),
-                SizedBox(height: 12.h),
-                Text(
-                  'Add money to continue',
-                  style: AppTypography.bodyMedium.copyWith(
-                    fontSize: 14.sp,
-                    color: isDark
-                        ? AppColors.textPrimary
-                        : AppColors.textPrimaryLight,
-                    fontWeight: FontWeight.w600,
-                  ),
+                Image.asset(
+                  'assets/images/ic_wallet.png',
+                  width: 90.w,
+                  height: 90.h,
+                  fit: BoxFit.contain
                 ),
-                SizedBox(height: 2.h),
-                Text(
-                  'charging',
-                  style: AppTypography.bodyMedium.copyWith(
-                    fontSize: 14.sp,
-                    color: isDark
-                        ? AppColors.textPrimary
-                        : AppColors.textPrimaryLight,
-                    fontWeight: FontWeight.w600,
-                  ),
+                SizedBox(
+                    height: 10.h
                 ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    )
-        .animate()
-        .fadeIn(duration: 500.ms, delay: 200.ms)
-        .scale(
-          begin: const Offset(0.97, 0.97),
-          curve: Curves.easeOutCubic,
-        );
+                Text(
+                  'Add money to continue charging',
+                  style: AppTypography.bodyMedium.copyWith(
+                    fontSize: 13.sp,
+                    color: isDark ? AppColors.textPrimary : AppColors.textPrimaryLight,
+                    fontWeight: FontWeight.w600
+                  )
+                ),
+                SizedBox(
+                    height: 14.h
+                ),
+                GestureDetector(
+                  onTap: () {
+
+                    HapticFeedback.mediumImpact();
+                    context.push('/wallet/add-money');
+
+                  },
+                  child: Container(
+                    margin: EdgeInsets.symmetric(
+                      horizontal: 16.w
+                    ),
+                    width: double.infinity,
+                    height: 42.h,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      borderRadius: AppRadius.lgBorder,
+                      gradient: const LinearGradient(
+                        colors: <Color>[
+                          Color(0xFFFF073A),
+                          Color(0xFF8B5CF6),
+                          Color(0xFF2979FF)
+                        ]
+                      ),
+                      boxShadow: <BoxShadow>[
+                        BoxShadow(
+                          color: const Color(0xFF8B5CF6).withValues(
+                              alpha: 0.55
+                          ),
+                          blurRadius: 20,
+                          spreadRadius: 2,
+                          offset: const Offset(0, 4)
+                        )
+                      ]
+                    ),
+                    child: Text(
+                      'Add Money',
+                      style: AppTypography.bodyMedium.copyWith(
+                        fontSize: 14.sp,
+                        fontWeight: FontWeight.w700,
+                        color: AppColors.whiteColor
+                      )
+                    )
+                  )
+                )
+              ]
+            )
+          )
+        ]
+      )
+    ).animate().fadeIn(
+        duration: 500.ms,
+        delay: 200.ms
+    ).scale(
+      begin: const Offset(0.97, 0.97),
+      curve: Curves.easeOutCubic
+    );
+
   }
 
   Widget _buildNeonWalletIcon(bool isDark) {
+
     return AnimatedBuilder(
       animation: _pulseController,
       builder: (BuildContext ctx, Widget? child) {
+
         return Container(
           width: 80,
           height: 80,
@@ -403,19 +487,23 @@ class _WalletScreenState extends State<WalletScreen>
             shape: BoxShape.circle,
             gradient: RadialGradient(
               colors: <Color>[
-                AppColors.primary.withValues(alpha: 0.2),
-                AppColors.primary.withValues(alpha: 0.04),
-              ],
+                AppColors.primary.withValues(
+                    alpha: 0.2
+                ),
+                AppColors.primary.withValues(
+                    alpha: 0.04
+                )
+              ]
             ),
             boxShadow: <BoxShadow>[
               BoxShadow(
                 color: AppColors.primary.withValues(
-                  alpha: 0.2 + _pulseController.value * 0.15,
+                  alpha: 0.2 + _pulseController.value * 0.15
                 ),
                 blurRadius: 20 + _pulseController.value * 10,
-                spreadRadius: 2,
-              ),
-            ],
+                spreadRadius: 2
+              )
+            ]
           ),
           child: Stack(
             alignment: Alignment.center,
@@ -424,37 +512,46 @@ class _WalletScreenState extends State<WalletScreen>
                 width: 46,
                 height: 36,
                 decoration: BoxDecoration(
-                  color: isDark
-                      ? AppColors.primary.withValues(alpha: 0.85)
-                      : AppColors.primary,
+                  color: isDark ? AppColors.primary.withValues(
+                      alpha: 0.85
+                  ) : AppColors.primary,
                   borderRadius: BorderRadius.circular(8),
                   boxShadow: <BoxShadow>[
                     BoxShadow(
-                      color: AppColors.primary.withValues(alpha: 0.5),
+                      color: AppColors.primary.withValues(
+                          alpha: 0.5
+                      ),
                       blurRadius: 12,
-                      spreadRadius: 1,
-                    ),
-                  ],
-                ),
+                      spreadRadius: 1
+                    )
+                  ]
+                )
               ),
               Positioned(
                 right: 12,
                 bottom: 14,
-                child: _buildCoinStack(),
+                child: _buildCoinStack()
               ),
               const Positioned(
                 left: 14,
                 top: 14,
-                child: Icon(Icons.bolt, color: AppColors.bolt, size: 18),
-              ),
-            ],
-          ),
+                child: Icon(
+                    Icons.bolt,
+                    color: AppColors.bolt,
+                    size: 18
+                )
+              )
+            ]
+          )
         );
-      },
+
+      }
     );
+
   }
 
   Widget _buildCoinStack() {
+
     return Stack(
       children: <Widget>[
         Container(
@@ -465,10 +562,12 @@ class _WalletScreenState extends State<WalletScreen>
             color: AppColors.bolt,
             boxShadow: <BoxShadow>[
               BoxShadow(
-                color: AppColors.bolt.withValues(alpha: 0.6),
-                blurRadius: 6,
-              ),
-            ],
+                color: AppColors.bolt.withValues(
+                    alpha: 0.6
+                ),
+                blurRadius: 6
+              )
+            ]
           ),
           child: Center(
             child: Text(
@@ -476,10 +575,10 @@ class _WalletScreenState extends State<WalletScreen>
               style: GoogleFonts.urbanist(
                 fontSize: 10,
                 fontWeight: FontWeight.w800,
-                color: AppColors.blackColor,
-              ),
-            ),
-          ),
+                color: AppColors.blackColor
+              )
+            )
+          )
         ),
         Positioned(
           top: 4,
@@ -489,67 +588,21 @@ class _WalletScreenState extends State<WalletScreen>
             height: 14,
             decoration: BoxDecoration(
               shape: BoxShape.circle,
-              color: AppColors.bolt.withValues(alpha: 0.7),
-            ),
-          ),
-        ),
-      ],
+              color: AppColors.bolt.withValues(
+                  alpha: 0.7
+              )
+            )
+          )
+        )
+      ]
     );
+
   }
 
-  // ── Add Money Button ──────────────────────────────────────────────────────
-
-  Widget _buildAddMoneyButton(bool isDark) {
-    return GestureDetector(
-      onTap: () {
-        HapticFeedback.mediumImpact();
-        context.push('/wallet/add-money');
-      },
-      child: Container(
-        width: double.infinity,
-        height: 52.h,
-        decoration: BoxDecoration(
-          borderRadius: AppRadius.lgBorder,
-          gradient: const LinearGradient(
-            colors: <Color>[Color(0xFF00C853), Color(0xFF00E676)],
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-          ),
-          boxShadow: <BoxShadow>[
-            BoxShadow(
-              color: AppColors.primary.withValues(alpha: 0.4),
-              blurRadius: 16,
-              offset: const Offset(0, 6),
-            ),
-          ],
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Icon(Icons.add_rounded, color: AppColors.blackColor, size: 20),
-            SizedBox(width: 8.w),
-            Text(
-              'Add Money',
-              style: AppTypography.bodyLarge.copyWith(
-                fontSize: 15.sp,
-                fontWeight: FontWeight.w700,
-                color: AppColors.blackColor,
-              ),
-            ),
-          ],
-        ),
-      ),
-    )
-        .animate()
-        .fadeIn(duration: 500.ms, delay: 300.ms)
-        .slideY(begin: 0.1, curve: Curves.easeOutCubic);
-  }
-
-  // ── Transactions ──────────────────────────────────────────────────────────
 
   Widget _buildRecentTransactionsHeader(bool isDark) {
-    final Color textPrimary =
-        isDark ? AppColors.textPrimary : AppColors.textPrimaryLight;
+
+    final Color textPrimary = isDark ? AppColors.textPrimary : AppColors.textPrimaryLight;
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -559,8 +612,8 @@ class _WalletScreenState extends State<WalletScreen>
           style: AppTypography.bodyLarge.copyWith(
             fontSize: 16.sp,
             fontWeight: FontWeight.w700,
-            color: textPrimary,
-          ),
+            color: textPrimary
+          )
         ),
         GestureDetector(
           onTap: () {},
@@ -569,55 +622,62 @@ class _WalletScreenState extends State<WalletScreen>
             style: AppTypography.bodySmall.copyWith(
               fontSize: 13.sp,
               color: AppColors.primary,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-        ),
-      ],
-    ).animate().fadeIn(duration: 500.ms, delay: 350.ms);
+              fontWeight: FontWeight.w600
+            )
+          )
+        )
+      ]
+    ).animate().fadeIn(
+        duration: 500.ms,
+        delay: 350.ms
+    );
+
   }
 
   Widget _buildTransactionsList(bool isDark, WalletState state) {
+
     return Column(
-      children: state.recentTransactions
-          .asMap()
-          .entries
-          .map((MapEntry<int, WalletTransaction> entry) {
+      children: state.recentTransactions.asMap().entries.map((MapEntry<int, WalletTransaction> entry) {
+
         return _buildTransactionTile(isDark, entry.value, entry.key);
-      }).toList(),
+
+      }).toList()
     );
+
   }
 
-  Widget _buildTransactionTile(
-      bool isDark, WalletTransaction txn, int index) {
+  Widget _buildTransactionTile(bool isDark, WalletTransaction txn, int index) {
+
     final Color cardBg = isDark ? AppColors.cardDark : AppColors.whiteColor;
-    final Color borderColor =
-        isDark ? AppColors.border : AppColors.borderLight;
-    final Color textPrimary =
-        isDark ? AppColors.textPrimary : AppColors.textPrimaryLight;
-    final Color textSecondary =
-        isDark ? AppColors.textSecondary : AppColors.textSecondaryLight;
-    final Color amountColor =
-        txn.isCredit ? AppColors.primary : AppColors.chargingRed;
-    final String amountStr =
-        '${txn.isCredit ? '+' : '-'} ₹${txn.amount.toStringAsFixed(2)}';
+    final Color borderColor = isDark ? AppColors.border : AppColors.borderLight;
+    final Color textPrimary = isDark ? AppColors.textPrimary : AppColors.textPrimaryLight;
+    final Color textSecondary = isDark ? AppColors.textSecondary : AppColors.textSecondaryLight;
+    final Color amountColor = txn.isCredit ? AppColors.primary : AppColors.chargingRed;
+    final String amountStr = '${txn.isCredit ? '+' : '-'} ₹${txn.amount.toStringAsFixed(2)}';
 
     return Container(
-      margin: EdgeInsets.only(bottom: 10.h),
-      padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 12.h),
+      margin: EdgeInsets.only(
+          bottom: 10.h
+      ),
+      padding: EdgeInsets.symmetric(
+          horizontal: 14.w,
+          vertical: 12.h
+      ),
       decoration: BoxDecoration(
         color: cardBg,
         borderRadius: AppRadius.mdBorder,
-        border: Border.all(color: borderColor),
-        boxShadow: isDark
-            ? null
-            : <BoxShadow>[
-                BoxShadow(
-                  color: AppColors.blackColor.withValues(alpha: 0.04),
-                  blurRadius: 8,
-                  offset: const Offset(0, 2),
-                ),
-              ],
+        border: Border.all(
+            color: borderColor
+        ),
+        boxShadow: isDark ? null : <BoxShadow>[
+          BoxShadow(
+            color: AppColors.blackColor.withValues(
+                alpha: 0.04
+            ),
+            blurRadius: 8,
+            offset: const Offset(0, 2)
+          )
+        ]
       ),
       child: Row(
         children: <Widget>[
@@ -625,20 +685,22 @@ class _WalletScreenState extends State<WalletScreen>
             width: 40,
             height: 40,
             decoration: BoxDecoration(
-              color: txn.isCredit
-                  ? AppColors.primary.withValues(alpha: 0.12)
-                  : AppColors.chargingRed.withValues(alpha: 0.1),
-              borderRadius: AppRadius.smBorder,
+              color: txn.isCredit ? AppColors.primary.withValues(
+                  alpha: 0.12
+              ) : AppColors.chargingRed.withValues(
+                  alpha: 0.1
+              ),
+              borderRadius: AppRadius.smBorder
             ),
             child: Icon(
-              txn.isCredit
-                  ? Icons.account_balance_wallet_rounded
-                  : Icons.ev_station_rounded,
+              txn.isCredit ? Icons.account_balance_wallet_rounded : Icons.ev_station_rounded,
               color: txn.isCredit ? AppColors.primary : AppColors.chargingRed,
-              size: 18,
-            ),
+              size: 18
+            )
           ),
-          SizedBox(width: 12.w),
+          SizedBox(
+              width: 12.w
+          ),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -648,38 +710,44 @@ class _WalletScreenState extends State<WalletScreen>
                   style: AppTypography.bodyMedium.copyWith(
                     fontSize: 13.sp,
                     fontWeight: FontWeight.w600,
-                    color: textPrimary,
+                    color: textPrimary
                   ),
                   maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
+                  overflow: TextOverflow.ellipsis
                 ),
-                SizedBox(height: 2.h),
+                SizedBox(
+                    height: 2.h
+                ),
                 Text(
                   txn.subtitle,
                   style: AppTypography.bodySmall.copyWith(
                     fontSize: 11.sp,
-                    color: textSecondary,
-                  ),
-                ),
-              ],
-            ),
+                    color: textSecondary
+                  )
+                )
+              ]
+            )
           ),
           Text(
             amountStr,
             style: AppTypography.bodyMedium.copyWith(
               fontSize: 13.sp,
               fontWeight: FontWeight.w700,
-              color: amountColor,
-            ),
-          ),
-        ],
-      ),
-    )
-        .animate()
-        .fadeIn(
-          duration: 400.ms,
-          delay: Duration(milliseconds: 400 + index * 60),
-        )
-        .slideX(begin: 0.05, curve: Curves.easeOutCubic);
+              color: amountColor
+            )
+          )
+        ]
+      )
+    ).animate().fadeIn(
+      duration: 400.ms,
+      delay: Duration(
+          milliseconds: 400 + index * 60
+      )
+    ).slideX(
+        begin: 0.05,
+        curve: Curves.easeOutCubic
+    );
+
   }
+
 }

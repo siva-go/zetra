@@ -11,51 +11,46 @@ import 'package:zetra/features/wallet/bloc/wallet_bloc.dart';
 import 'package:zetra/features/wallet/bloc/wallet_event.dart';
 import 'package:zetra/features/wallet/bloc/wallet_state.dart';
 
-/// ─── Payment method model ───────────────────────────────────────────────────
 class _PaymentMethod {
+
   final String id;
   final String label;
   final IconData icon;
   final Color iconColor;
 
-  const _PaymentMethod({
-    required this.id,
-    required this.label,
-    required this.icon,
-    required this.iconColor,
-  });
+  const _PaymentMethod({required this.id, required this.label, required this.icon, required this.iconColor});
+
 }
 
-const List<_PaymentMethod> _paymentMethods = [
+const List<_PaymentMethod> _paymentMethods = <_PaymentMethod>[
   _PaymentMethod(
     id: 'UPI',
     label: 'UPI',
     icon: Icons.smartphone_rounded,
-    iconColor: Color(0xFF5AC8FA),
+    iconColor: Color(0xFF5AC8FA)
   ),
   _PaymentMethod(
     id: 'Card',
     label: 'Credit / Debit Card',
     icon: Icons.credit_card_rounded,
-    iconColor: Color(0xFFFF9500),
+    iconColor: Color(0xFFFF9500)
   ),
   _PaymentMethod(
     id: 'NetBanking',
     label: 'Net Banking',
     icon: Icons.account_balance_rounded,
-    iconColor: Color(0xFF9B59B6),
+    iconColor: Color(0xFF9B59B6)
   ),
   _PaymentMethod(
     id: 'Wallet',
     label: 'Wallet',
     icon: Icons.account_balance_wallet_rounded,
-    iconColor: Color(0xFF00C853),
-  ),
+    iconColor: Color(0xFF00C853)
+  )
 ];
 
-const List<int> _quickAmounts = [500, 1000, 2000];
+const List<int> _quickAmounts = <int>[500, 1000, 2000];
 
-/// ─── Screen ─────────────────────────────────────────────────────────────────
 class AddMoneyScreen extends StatefulWidget {
   const AddMoneyScreen({super.key});
 
@@ -63,228 +58,279 @@ class AddMoneyScreen extends StatefulWidget {
   State<AddMoneyScreen> createState() => _AddMoneyScreenState();
 }
 
-class _AddMoneyScreenState extends State<AddMoneyScreen>
-    with SingleTickerProviderStateMixin {
+class _AddMoneyScreenState extends State<AddMoneyScreen> with SingleTickerProviderStateMixin {
+
   late final TextEditingController _amountController;
   late final FocusNode _amountFocus;
   late final AnimationController _shimmerController;
 
   @override
   void initState() {
+
     super.initState();
+
     final WalletState state = context.read<WalletBloc>().state;
-    _amountController =
-        TextEditingController(text: state.enteredAmount);
+    _amountController = TextEditingController(
+        text: state.enteredAmount
+    );
     _amountFocus = FocusNode();
     _shimmerController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 1400),
+      duration: const Duration(
+          milliseconds: 1400
+      )
     )..repeat();
+
   }
 
   @override
   void dispose() {
+
     _amountController.dispose();
     _amountFocus.dispose();
     _shimmerController.dispose();
     super.dispose();
+
   }
 
-  // ── helpers ──────────────────────────────────────────────────────────────
-
   void _onQuickAmount(int amount) {
+
     HapticFeedback.selectionClick();
     _amountController.text = amount.toString();
     _amountController.selection = TextSelection.fromPosition(
-      TextPosition(offset: _amountController.text.length),
+      TextPosition(
+          offset: _amountController.text.length
+      )
     );
     context.read<WalletBloc>().add(QuickAmountSelected(amount));
+
   }
 
   void _onPay() {
+
     HapticFeedback.mediumImpact();
     context.read<WalletBloc>().add(const PaymentInitiated());
-  }
 
-  // ── build ─────────────────────────────────────────────────────────────────
+  }
 
   @override
   Widget build(BuildContext context) {
+
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
 
     return BlocConsumer<WalletBloc, WalletState>(
       listener: (BuildContext ctx, WalletState state) {
+
         if (state.status == WalletStatus.success) {
+
           _showSuccessAndPop(ctx, state);
+
         }
+
       },
       builder: (BuildContext ctx2, WalletState state) {
+
         final bool isPaying = state.status == WalletStatus.paying;
         final bool isDark2 = isDark;
 
         return Scaffold(
-          backgroundColor:
-              isDark2 ? AppColors.scaffoldDark : AppColors.scaffoldLight,
+          backgroundColor: isDark2 ? AppColors.scaffoldDark : AppColors.scaffoldLight,
           body: GestureDetector(
             onTap: () => _amountFocus.unfocus(),
             child: Column(
-              children: [
+              children: <Widget>[
                 _buildAppBar(isDark),
                 Expanded(
                   child: SingleChildScrollView(
                     physics: const BouncingScrollPhysics(),
                     child: Padding(
-                      padding: EdgeInsets.symmetric(horizontal: 16.w),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 16.w
+                      ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 20.h),
+                        children: <Widget>[
+                          SizedBox(
+                              height: 20.h
+                          ),
                           _buildAmountLabel(isDark),
-                          SizedBox(height: 10.h),
+                          SizedBox(
+                              height: 10.h
+                          ),
                           _buildAmountInput(isDark, state),
-                          if (state.errorMessage != null) ...[
-                            SizedBox(height: 6.h),
-                            _buildError(state.errorMessage!),
+                          if (state.errorMessage != null) ...<Widget>[
+                            SizedBox(
+                                height: 6.h
+                            ),
+                            _buildError(state.errorMessage!)
                           ],
-                          SizedBox(height: 14.h),
+                          SizedBox(
+                              height: 14.h
+                          ),
                           _buildQuickAmountChips(isDark, state),
-                          SizedBox(height: 24.h),
+                          SizedBox(
+                              height: 24.h
+                          ),
                           _buildSectionLabel('Choose Payment Method', isDark),
-                          SizedBox(height: 12.h),
+                          SizedBox(
+                              height: 12.h
+                          ),
                           _buildPaymentMethods(isDark, state),
-                          SizedBox(height: 32.h),
-                          _buildPayButton(isDark, state, isPaying),
-                          SizedBox(height: 12.h),
+                          SizedBox(
+                              height: 32.h
+                          ),
+                          _buildAddMoneyButton(isDark, state, isPaying),
+                          SizedBox(
+                              height: 12.h
+                          ),
                           _buildSecuredLabel(isDark),
-                          SizedBox(height: 24.h),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
+                          SizedBox(
+                              height: 24.h
+                          )
+                        ]
+                      )
+                    )
+                  )
+                )
+              ]
+            )
+          )
         );
-      },
+
+      }
     );
+
   }
 
-  // ── app bar ───────────────────────────────────────────────────────────────
-
   Widget _buildAppBar(bool isDark) {
-    final Color textPrimary =
-        isDark ? AppColors.textPrimary : AppColors.textPrimaryLight;
-    final Color borderColor =
-        isDark ? AppColors.border : AppColors.borderLight;
+
+    final Color textPrimary = isDark ? AppColors.textPrimary : AppColors.textPrimaryLight;
+    final Color borderColor = isDark ? AppColors.border : AppColors.borderLight;
 
     return Container(
       decoration: BoxDecoration(
         color: isDark ? AppColors.scaffoldDark : AppColors.scaffoldLight,
-        border: Border(bottom: BorderSide(color: borderColor, width: 0.5)),
+        border: Border(
+            bottom: BorderSide(
+                color: borderColor,
+                width: 0.5
+            )
+        )
       ),
       child: SafeArea(
         bottom: false,
         child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 10.h),
+          padding: EdgeInsets.symmetric(
+              horizontal: 8.w,
+              vertical: 10.h
+          ),
           child: Row(
-            children: [
+            children: <Widget>[
               IconButton(
                 onPressed: () => context.pop(),
                 icon: Icon(
                   Icons.arrow_back_ios_new_rounded,
                   color: textPrimary,
-                  size: 18,
-                ),
+                  size: 18
+                )
               ),
               Text(
                 'Add Money',
                 style: AppTypography.bodyLarge.copyWith(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.w700,
-                  color: textPrimary,
-                ),
-              ),
-            ],
-          ),
-        ),
+                  color: textPrimary
+                )
+              )
+            ]
+          )
+        )
       ),
-    ).animate().fadeIn(duration: 300.ms);
+    ).animate().fadeIn(
+        duration: 300.ms
+    );
+
   }
 
-  // ── amount section ────────────────────────────────────────────────────────
-
   Widget _buildAmountLabel(bool isDark) {
+
     return Text(
       'Enter Amount',
       style: AppTypography.bodySmall.copyWith(
         fontSize: 13.sp,
         color: isDark ? AppColors.textSecondary : AppColors.textSecondaryLight,
-        fontWeight: FontWeight.w500,
-      ),
-    ).animate().fadeIn(delay: 50.ms, duration: 400.ms);
+        fontWeight: FontWeight.w500
+      )
+    ).animate().fadeIn(
+        delay: 50.ms,
+        duration: 400.ms
+    );
+
   }
 
   Widget _buildAmountInput(bool isDark, WalletState state) {
+
     final Color cardBg = isDark ? AppColors.cardDark : AppColors.whiteColor;
     final Color borderColor = isDark ? AppColors.border : AppColors.borderLight;
-    final Color textPrimary =
-        isDark ? AppColors.textPrimary : AppColors.textPrimaryLight;
+    final Color textPrimary = isDark ? AppColors.textPrimary : AppColors.textPrimaryLight;
 
     return Container(
       decoration: BoxDecoration(
         color: cardBg,
         borderRadius: AppRadius.lgBorder,
         border: Border.all(
-          color: _amountFocus.hasFocus
-              ? AppColors.primary
-              : borderColor,
-          width: _amountFocus.hasFocus ? 1.5 : 1,
+          color: _amountFocus.hasFocus ? AppColors.primary : borderColor,
+          width: _amountFocus.hasFocus ? 1.5 : 1
         ),
-        boxShadow: _amountFocus.hasFocus
-            ? [
-                BoxShadow(
-                  color: AppColors.primary.withValues(alpha: 0.18),
-                  blurRadius: 14,
-                  spreadRadius: 1,
-                )
-              ]
-            : null,
+        boxShadow: _amountFocus.hasFocus ? <BoxShadow>[
+          BoxShadow(
+            color: AppColors.primary.withValues(
+                alpha: 0.18
+            ),
+            blurRadius: 14,
+            spreadRadius: 1
+          )
+        ] : null
       ),
       child: Row(
-        children: [
-          SizedBox(width: 16.w),
+        children: <Widget>[
+          SizedBox(
+              width: 16.w
+          ),
           ShaderMask(
-            shaderCallback: (bounds) => const LinearGradient(
-              colors: [AppColors.primary, AppColors.primaryLight],
+            shaderCallback: (Rect bounds) => const LinearGradient(
+              colors: <Color>[AppColors.primary, AppColors.primaryLight]
             ).createShader(bounds),
             child: Text(
               '₹',
               style: AppTypography.h3.copyWith(
                 fontSize: 26.sp,
                 fontWeight: FontWeight.w800,
-                color: AppColors.whiteColor,
-              ),
-            ),
+                color: AppColors.whiteColor
+              )
+            )
           ),
-          SizedBox(width: 8.w),
+          SizedBox(
+              width: 8.w
+          ),
           Expanded(
             child: TextField(
               controller: _amountController,
               focusNode: _amountFocus,
-              keyboardType:
-                  const TextInputType.numberWithOptions(decimal: false),
-              inputFormatters: [
+              keyboardType: TextInputType.number,
+              inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.digitsOnly,
-                LengthLimitingTextInputFormatter(6),
+                LengthLimitingTextInputFormatter(6)
               ],
-              onChanged: (value) {
+              onChanged: (String value) {
+
                 context.read<WalletBloc>().add(AmountChanged(value));
+
               },
               style: AppTypography.h3.copyWith(
                 fontSize: 26.sp,
                 fontWeight: FontWeight.w800,
-                color: textPrimary,
+                color: textPrimary
               ),
               decoration: InputDecoration(
                 border: InputBorder.none,
@@ -293,280 +339,333 @@ class _AddMoneyScreenState extends State<AddMoneyScreen>
                 hintStyle: AppTypography.h3.copyWith(
                   fontSize: 26.sp,
                   fontWeight: FontWeight.w800,
-                  color: isDark
-                      ? AppColors.textHint
-                      : AppColors.textHintLight,
+                  color: isDark ? AppColors.textHint : AppColors.textHintLight
                 ),
-                contentPadding:
-                    EdgeInsets.symmetric(vertical: 16.h),
-              ),
-            ),
+                contentPadding: EdgeInsets.symmetric(
+                    vertical: 16.h
+                )
+              )
+            )
           ),
-          SizedBox(width: 16.w),
-        ],
-      ),
-    )
-        .animate()
-        .fadeIn(delay: 80.ms, duration: 400.ms)
-        .slideY(begin: 0.05, curve: Curves.easeOutCubic);
+          SizedBox(
+              width: 16.w
+          )
+        ]
+      )
+    ).animate().fadeIn(
+        delay: 80.ms,
+        duration: 400.ms
+    ).slideY(
+        begin: 0.05,
+        curve: Curves.easeOutCubic
+    );
+
   }
 
   Widget _buildError(String message) {
+
     return Row(
-      children: [
-        const Icon(Icons.error_outline, color: AppColors.chargingRed, size: 14),
-        SizedBox(width: 6.w),
+      children: <Widget>[
+        const Icon(
+            Icons.error_outline,
+            color: AppColors.chargingRed,
+            size: 14
+        ),
+        SizedBox(
+            width: 6.w
+        ),
         Text(
           message,
           style: AppTypography.bodySmall.copyWith(
             fontSize: 12.sp,
-            color: AppColors.chargingRed,
-          ),
-        ),
-      ],
+            color: AppColors.chargingRed
+          )
+        )
+      ]
     );
+
   }
 
-  // ── quick amounts ─────────────────────────────────────────────────────────
-
   Widget _buildQuickAmountChips(bool isDark, WalletState state) {
+
     return Row(
-      children: [
-        ..._quickAmounts.map((amount) {
+      children: <Widget>[
+        ..._quickAmounts.map((int amount) {
+
           final bool isSelected = state.selectedQuickAmount == amount;
+
           return Padding(
-            padding: EdgeInsets.only(right: 10.w),
+            padding: EdgeInsets.only(
+                right: 10.w
+            ),
             child: _QuickAmountChip(
               amount: amount,
               isSelected: isSelected,
               isDark: isDark,
-              onTap: () => _onQuickAmount(amount),
-            ),
+              onTap: () => _onQuickAmount(amount)
+            )
           );
+
         }),
         _OtherChip(
           isDark: isDark,
-          isSelected: state.selectedQuickAmount == null &&
-              state.enteredAmount.isNotEmpty,
+          isSelected: state.selectedQuickAmount == null && state.enteredAmount.isNotEmpty,
           onTap: () {
+
             _amountFocus.requestFocus();
-          },
-        ),
-      ],
-    ).animate().fadeIn(delay: 120.ms, duration: 400.ms);
+
+          }
+        )
+      ]
+    ).animate().fadeIn(
+        delay: 120.ms,
+        duration: 400.ms
+    );
+
   }
 
-  // ── payment methods ───────────────────────────────────────────────────────
-
   Widget _buildSectionLabel(String text, bool isDark) {
+
     return Text(
       text,
       style: AppTypography.bodyMedium.copyWith(
         fontSize: 14.sp,
         fontWeight: FontWeight.w600,
-        color: isDark ? AppColors.textSecondary : AppColors.textSecondaryLight,
-      ),
-    ).animate().fadeIn(delay: 150.ms, duration: 400.ms);
+        color: isDark ? AppColors.textSecondary : AppColors.textSecondaryLight
+      )
+    ).animate().fadeIn(
+        delay: 150.ms,
+        duration: 400.ms
+    );
+
   }
 
   Widget _buildPaymentMethods(bool isDark, WalletState state) {
+
     return Column(
-      children: _paymentMethods.asMap().entries.map((entry) {
+      children: _paymentMethods.asMap().entries.map((MapEntry<int, _PaymentMethod> entry) {
+
         final int idx = entry.key;
         final _PaymentMethod method = entry.value;
         final bool isSelected = state.selectedPaymentMethod == method.id;
+
         return _PaymentMethodTile(
           method: method,
           isSelected: isSelected,
           isDark: isDark,
           onTap: () {
+
             HapticFeedback.selectionClick();
-            context
-                .read<WalletBloc>()
-                .add(PaymentMethodSelected(method.id));
+            context.read<WalletBloc>().add(PaymentMethodSelected(method.id));
+
           },
-          index: idx,
+          index: idx
         );
-      }).toList(),
+
+      }).toList()
     );
+
   }
 
-  // ── pay button ────────────────────────────────────────────────────────────
+  Widget _buildAddMoneyButton(bool isDark, WalletState state, bool isPaying) {
 
-  Widget _buildPayButton(bool isDark, WalletState state, bool isPaying) {
-    final double amount =
-        double.tryParse(state.enteredAmount) ?? 0;
-    final String label = amount > 0
-        ? 'Pay  ₹${amount.toStringAsFixed(0)}'
-        : 'Pay';
+    final double amount = double.tryParse(state.enteredAmount) ?? 0;
+    final String label = amount > 0 ? 'Add  ₹${amount.toStringAsFixed(0)}' : 'Add Money';
 
     return GestureDetector(
       onTap: isPaying ? null : _onPay,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
+        duration: const Duration(
+            milliseconds: 200
+        ),
         width: double.infinity,
         height: 54.h,
         decoration: BoxDecoration(
           borderRadius: AppRadius.lgBorder,
           gradient: LinearGradient(
-            colors: isPaying
-                ? [
-                    AppColors.primary.withValues(alpha: 0.6),
-                    AppColors.primaryLight.withValues(alpha: 0.6),
-                  ]
-                : const [
-                    Color(0xFF8B5CF6),
-                    Color(0xFF6D28D9),
-                  ],
-            begin: Alignment.centerLeft,
-            end: Alignment.centerRight,
-          ),
-          boxShadow: [
-            BoxShadow(
-              color: const Color(0xFF8B5CF6).withValues(alpha: 0.4),
-              blurRadius: 18,
-              offset: const Offset(0, 6),
-            ),
-          ],
-        ),
-        child: isPaying
-            ? Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  SizedBox(
-                    width: 20,
-                    height: 20,
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation(AppColors.whiteColor),
-                    ),
-                  ),
-                  SizedBox(width: 12.w),
-                  Text(
-                    'Processing...',
-                    style: AppTypography.bodyLarge.copyWith(
-                      fontSize: 15.sp,
-                      fontWeight: FontWeight.w700,
-                      color: AppColors.whiteColor,
-                    ),
-                  ),
-                ],
-              )
-            : Center(
-                child: Text(
-                  label,
-                  style: AppTypography.bodyLarge.copyWith(
-                    fontSize: 15.sp,
-                    fontWeight: FontWeight.w700,
-                    color: AppColors.whiteColor,
-                  ),
-                ),
+            colors: isPaying ? <Color>[
+              AppColors.primary.withValues(
+                  alpha: 0.6
               ),
-      ),
-    )
-        .animate()
-        .fadeIn(delay: 300.ms, duration: 400.ms)
-        .slideY(begin: 0.1, curve: Curves.easeOutCubic);
+              AppColors.primaryLight.withValues(
+                  alpha: 0.6
+              )
+            ] : const <Color>[
+              Color(0xFF00C853),
+              Color(0xFF00E676)
+            ]
+          ),
+          boxShadow: <BoxShadow>[
+            BoxShadow(
+              color: const Color(0xFF00C853).withValues(
+                  alpha: 0.4
+              ),
+              blurRadius: 18,
+              offset: const Offset(0, 6)
+            )
+          ]
+        ),
+        child: isPaying ? Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const SizedBox(
+              width: 20,
+              height: 20,
+              child: CircularProgressIndicator(
+                strokeWidth: 2,
+                valueColor: AlwaysStoppedAnimation<Color?>(AppColors.blackColor),
+              )
+            ),
+            SizedBox(
+                width: 12.w
+            ),
+            Text(
+              'Processing...',
+              style: AppTypography.bodyLarge.copyWith(
+                fontSize: 15.sp,
+                fontWeight: FontWeight.w700,
+                color: AppColors.blackColor
+              )
+            )
+          ]
+        ) : Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Icon(
+                Icons.add_rounded,
+                color: AppColors.blackColor,
+                size: 20
+            ),
+            SizedBox(
+                width: 8.w
+            ),
+            Text(
+              label,
+              style: AppTypography.bodyLarge.copyWith(
+                fontSize: 15.sp,
+                fontWeight: FontWeight.w700,
+                color: AppColors.blackColor
+              )
+            )
+          ]
+        )
+      )
+    ).animate().fadeIn(
+        delay: 300.ms,
+        duration: 400.ms
+    );
+
   }
 
   Widget _buildSecuredLabel(bool isDark) {
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
-      children: [
+      children: <Widget>[
         Icon(
           Icons.lock_outline_rounded,
           color: isDark ? AppColors.textTertiary : AppColors.textTertiaryLight,
-          size: 13,
+          size: 13
         ),
-        SizedBox(width: 5.w),
+        SizedBox(
+            width: 5.w
+        ),
         Text(
           'Secured by Zetra Pay',
           style: AppTypography.bodySmall.copyWith(
             fontSize: 11.sp,
-            color:
-                isDark ? AppColors.textTertiary : AppColors.textTertiaryLight,
-          ),
-        ),
-      ],
-    ).animate().fadeIn(delay: 350.ms, duration: 400.ms);
+            color: isDark ? AppColors.textTertiary : AppColors.textTertiaryLight
+          )
+        )
+      ]
+    ).animate().fadeIn(
+        delay: 350.ms,
+        duration: 400.ms
+    );
+
   }
 
-  // ── success dialog ────────────────────────────────────────────────────────
-
   void _showSuccessAndPop(BuildContext ctx, WalletState state) {
+
     showDialog<void>(
       context: ctx,
       barrierDismissible: false,
       builder: (_) => _PaymentSuccessDialog(
         amount: double.tryParse(state.enteredAmount) ?? 0,
         newBalance: state.balance,
-        isDark: Theme.of(ctx).brightness == Brightness.dark,
-      ),
+        isDark: Theme.of(ctx).brightness == Brightness.dark
+      )
     ).then((_) {
+
       ctx.read<WalletBloc>().add(const PaymentResultReceived(true));
-      if (ctx.mounted) ctx.pop();
+
+      if (ctx.mounted) {
+
+        ctx.pop();
+
+      }
+
     });
+
   }
+
 }
 
-// ─── Quick-amount chip ────────────────────────────────────────────────────────
 
 class _QuickAmountChip extends StatelessWidget {
+
   final int amount;
   final bool isSelected;
   final bool isDark;
   final VoidCallback onTap;
 
-  const _QuickAmountChip({
-    required this.amount,
-    required this.isSelected,
-    required this.isDark,
-    required this.onTap,
-  });
+  const _QuickAmountChip({required this.amount, required this.isSelected, required this.isDark, required this.onTap});
 
   @override
   Widget build(BuildContext context) {
+
     final Color cardBg = isDark ? AppColors.cardDark : AppColors.whiteColor;
     final Color borderColor = isDark ? AppColors.border : AppColors.borderLight;
 
     return GestureDetector(
       onTap: onTap,
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        padding: EdgeInsets.symmetric(horizontal: 18.w, vertical: 10.h),
+        duration: const Duration(
+            milliseconds: 200
+        ),
+        padding: EdgeInsets.symmetric(
+            horizontal: 18.w,
+            vertical: 10.h
+        ),
         decoration: BoxDecoration(
-          color: isSelected
-              ? AppColors.primary.withValues(alpha: isDark ? 0.15 : 0.1)
-              : cardBg,
+          color: isSelected ? AppColors.primary.withValues(
+              alpha: isDark ? 0.15 : 0.1
+          ) : cardBg,
           borderRadius: AppRadius.lgBorder,
           border: Border.all(
             color: isSelected ? AppColors.primary : borderColor,
-            width: isSelected ? 1.5 : 1,
+            width: isSelected ? 1.5 : 1
           ),
-          boxShadow: isSelected
-              ? [
-                  BoxShadow(
-                    color: AppColors.primary.withValues(alpha: 0.2),
-                    blurRadius: 10,
-                    spreadRadius: 0,
-                  ),
-                ]
-              : null,
+          boxShadow: isSelected ? <BoxShadow>[
+            BoxShadow(
+              color: AppColors.primary.withValues(
+                  alpha: 0.2
+              ),
+              blurRadius: 10,
+            )
+          ] : null
         ),
         child: Text(
           '₹$amount',
           style: AppTypography.bodyMedium.copyWith(
             fontSize: 13.sp,
             fontWeight: FontWeight.w600,
-            color: isSelected
-                ? AppColors.primary
-                : (isDark
-                    ? AppColors.textPrimary
-                    : AppColors.textPrimaryLight),
-          ),
-        ),
-      ),
+            color: isSelected ? AppColors.primary : (isDark ? AppColors.textPrimary : AppColors.textPrimaryLight)
+          )
+        )
+      )
     );
+
   }
 }
 
@@ -664,7 +763,7 @@ class _PaymentMethodTile extends StatelessWidget {
             width: isSelected ? 1.5 : 1,
           ),
           boxShadow: isSelected
-              ? [
+              ? <BoxShadow>[
                   BoxShadow(
                     color: method.iconColor.withValues(alpha: 0.12),
                     blurRadius: 10,
@@ -673,7 +772,7 @@ class _PaymentMethodTile extends StatelessWidget {
                 ]
               : isDark
                   ? null
-                  : [
+                  : <BoxShadow>[
                       BoxShadow(
                         color: AppColors.blackColor.withValues(alpha: 0.04),
                         blurRadius: 8,
@@ -682,7 +781,7 @@ class _PaymentMethodTile extends StatelessWidget {
                     ],
         ),
         child: Row(
-          children: [
+          children: <Widget>[
             // Icon container
             Container(
               width: 38,
@@ -713,7 +812,7 @@ class _PaymentMethodTile extends StatelessWidget {
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: AppColors.primary,
-                  boxShadow: [
+                  boxShadow: <BoxShadow>[
                     BoxShadow(
                       color: AppColors.primary.withValues(alpha: 0.4),
                       blurRadius: 8,
@@ -786,7 +885,7 @@ class _PaymentSuccessDialogState extends State<_PaymentSuccessDialog>
         decoration: BoxDecoration(
           color: cardBg,
           borderRadius: AppRadius.xxlBorder,
-          boxShadow: [
+          boxShadow: <BoxShadow>[
             BoxShadow(
               color: AppColors.primary.withValues(alpha: 0.2),
               blurRadius: 30,
@@ -796,7 +895,7 @@ class _PaymentSuccessDialogState extends State<_PaymentSuccessDialog>
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: [
+          children: <Widget>[
             // Success icon
             ScaleTransition(
               scale: CurvedAnimation(
@@ -809,7 +908,7 @@ class _PaymentSuccessDialogState extends State<_PaymentSuccessDialog>
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
                   color: AppColors.primary.withValues(alpha: 0.15),
-                  boxShadow: [
+                  boxShadow: <BoxShadow>[
                     BoxShadow(
                       color: AppColors.primary.withValues(alpha: 0.3),
                       blurRadius: 20,
@@ -837,8 +936,8 @@ class _PaymentSuccessDialogState extends State<_PaymentSuccessDialog>
             ),
             SizedBox(height: 6.h),
             ShaderMask(
-              shaderCallback: (bounds) => const LinearGradient(
-                colors: [AppColors.primary, AppColors.primaryLight],
+              shaderCallback: (Rect bounds) => const LinearGradient(
+                colors: <Color>[AppColors.primary, AppColors.primaryLight],
               ).createShader(bounds),
               child: Text(
                 '₹ ${widget.amount.toStringAsFixed(2)}',
@@ -872,7 +971,7 @@ class _PaymentSuccessDialogState extends State<_PaymentSuccessDialog>
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
+                children: <Widget>[
                   Text(
                     'Current Balance',
                     style: AppTypography.bodySmall.copyWith(
@@ -883,7 +982,7 @@ class _PaymentSuccessDialogState extends State<_PaymentSuccessDialog>
                     ),
                   ),
                   Row(
-                    children: [
+                    children: <Widget>[
                       Text(
                         '₹ ${widget.newBalance.toStringAsFixed(2)}',
                         style: AppTypography.bodyMedium.copyWith(
@@ -917,9 +1016,9 @@ class _PaymentSuccessDialogState extends State<_PaymentSuccessDialog>
                 decoration: BoxDecoration(
                   borderRadius: AppRadius.lgBorder,
                   gradient: const LinearGradient(
-                    colors: [Color(0xFF8B5CF6), Color(0xFF6D28D9)],
+                    colors: <Color>[Color(0xFF8B5CF6), Color(0xFF6D28D9)],
                   ),
-                  boxShadow: [
+                  boxShadow: <BoxShadow>[
                     BoxShadow(
                       color: const Color(0xFF8B5CF6).withValues(alpha: 0.4),
                       blurRadius: 14,

@@ -6,12 +6,12 @@ import 'package:zetra/features/authentication/views/login_otp.dart';
 import 'package:zetra/features/charging/presentation/screens/charge_link.dart';
 import 'package:zetra/features/charging/presentation/screens/charging.dart' as charging;
 import 'package:zetra/features/home/views/home.dart';
+import 'package:zetra/features/station/bloc/scan_qr_bloc.dart';
 import 'package:zetra/features/station/bloc/search_station_bloc.dart';
 import 'package:zetra/features/station/models/station_info.dart';
+import 'package:zetra/features/station/views/scan_qr_screen.dart';
 import 'package:zetra/features/station/views/search_station.dart';
 import 'package:zetra/features/station/views/station_details.dart';
-import 'package:zetra/features/station/bloc/scan_qr_bloc.dart';
-import 'package:zetra/features/station/views/scan_qr_screen.dart';
 import 'package:zetra/features/wallet/bloc/wallet_bloc.dart';
 import 'package:zetra/features/wallet/views/add_money_screen.dart';
 import 'package:zetra/features/wallet/views/wallet_screen.dart';
@@ -103,7 +103,7 @@ final GoRouter appRouter = GoRouter(
 
           return BlocProvider<ScanQrBloc>(
             create: (_) => ScanQrBloc(),
-            child: const ScanQrScreen(),
+            child: const ScanQrScreen()
           );
 
         },
@@ -114,7 +114,7 @@ final GoRouter appRouter = GoRouter(
 
           return BlocProvider<WalletBloc>(
             create: (_) => WalletBloc(),
-            child: const WalletScreen(),
+            child: const WalletScreen()
           );
 
         },
@@ -123,12 +123,11 @@ final GoRouter appRouter = GoRouter(
             path: 'add-money',
             builder: (BuildContext context, GoRouterState state) {
 
-              // Inherits the WalletBloc from the parent shell via context
               return const AddMoneyScreen();
 
-            },
-          ),
-        ],
-      ),
+            }
+          )
+        ]
+      )
     ]
 );

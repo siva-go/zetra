@@ -4,6 +4,7 @@ enum ScanQrStatus { initial, scanning, detected, processing, success, error }
 
 @immutable
 class ScanQrState {
+
   final ScanQrStatus status;
   final bool isFlashOn;
   final String? scannedCode;
@@ -13,28 +14,27 @@ class ScanQrState {
     required this.status,
     required this.isFlashOn,
     this.scannedCode,
-    this.errorMessage,
+    this.errorMessage
   });
 
   factory ScanQrState.initial() {
+
     return const ScanQrState(
       status: ScanQrStatus.initial,
-      isFlashOn: false,
+      isFlashOn: false
     );
+
   }
 
-  ScanQrState copyWith({
-    ScanQrStatus? status,
-    bool? isFlashOn,
-    String? scannedCode,
-    String? errorMessage,
-    bool clearError = false,
-  }) {
+  ScanQrState copyWith({ScanQrStatus? status, bool? isFlashOn, String? scannedCode, String? errorMessage, bool clearError = false}) {
+
     return ScanQrState(
       status: status ?? this.status,
       isFlashOn: isFlashOn ?? this.isFlashOn,
       scannedCode: scannedCode ?? this.scannedCode,
-      errorMessage: clearError ? null : (errorMessage ?? this.errorMessage),
+      errorMessage: clearError ? null : (errorMessage ?? this.errorMessage)
     );
+
   }
+
 }
