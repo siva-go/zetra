@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 
-/// ZETRA Design System - Border Radius Tokens
 class AppRadius {
-  AppRadius._();
 
   static const double xs = 4.0;
   static const double sm = 8.0;
@@ -19,4 +17,5 @@ class AppRadius {
   static BorderRadius get xlBorder => BorderRadius.circular(xl);
   static BorderRadius get xxlBorder => BorderRadius.circular(xxl);
   static BorderRadius get roundBorder => BorderRadius.circular(round);
+
 }

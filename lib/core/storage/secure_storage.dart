@@ -47,7 +47,7 @@ class SecureStorage {
   /// Returns `true` if an access token is currently stored.
   Future<bool> hasAccessToken() async {
 
-    final token = await getAccessToken();
+    final String? token = await getAccessToken();
     return token != null && token.isNotEmpty;
 
   }

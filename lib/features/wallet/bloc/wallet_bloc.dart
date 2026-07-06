@@ -72,6 +72,17 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
         milliseconds: 1500
     ));
 
+    if (amount == 999) {
+
+      emit(state.copyWith(
+        status: WalletStatus.error,
+        errorMessage: 'Transaction declined by bank'
+      ));
+
+      return;
+
+    }
+
     final double newBalance = state.balance + amount;
 
     emit(state.copyWith(

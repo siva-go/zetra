@@ -13,8 +13,9 @@ import 'package:zetra/features/station/views/scan_qr_screen.dart';
 import 'package:zetra/features/station/views/search_station.dart';
 import 'package:zetra/features/station/views/station_details.dart';
 import 'package:zetra/features/wallet/bloc/wallet_bloc.dart';
-import 'package:zetra/features/wallet/views/add_money_screen.dart';
-import 'package:zetra/features/wallet/views/wallet_screen.dart';
+import 'package:zetra/features/wallet/views/add_money.dart';
+import 'package:zetra/features/wallet/views/payment_status.dart';
+import 'package:zetra/features/wallet/views/wallet.dart';
 
 final GoRouter appRouter = GoRouter(
     initialLocation: '/home',
@@ -114,7 +115,7 @@ final GoRouter appRouter = GoRouter(
 
           return BlocProvider<WalletBloc>(
             create: (_) => WalletBloc(),
-            child: const WalletScreen()
+            child: const Wallet()
           );
 
         },
@@ -123,7 +124,25 @@ final GoRouter appRouter = GoRouter(
             path: 'add-money',
             builder: (BuildContext context, GoRouterState state) {
 
-              return const AddMoneyScreen();
+              return BlocProvider<WalletBloc>(
+                create: (_) => WalletBloc(),
+                child: const AddMoney()
+              );
+
+            }
+          ),
+          GoRoute(
+            path: 'payment-status',
+            builder: (BuildContext context, GoRouterState state) {
+
+              final Map<String, dynamic> extra =
+                  (state.extra as Map<String, dynamic>?) ?? <String, dynamic>{};
+
+              return PaymentStatus(
+                isSuccess: (extra['isSuccess'] as bool?) ?? true,
+                amount: (extra['amount'] as double?) ?? 0.0,
+                newBalance: (extra['newBalance'] as double?) ?? 0.0,
+              );
 
             }
           )

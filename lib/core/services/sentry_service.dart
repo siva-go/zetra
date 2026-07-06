@@ -1,13 +1,13 @@
 import 'package:flutter/foundation.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import '../constants/app_constants.dart';
+import 'package:zetra/core/constants/app_constants.dart';
 
 class SentryService {
 
   static Future<void> init(AppRunner runner) async {
 
     await SentryFlutter.init(
-      (options) {
+      (SentryFlutterOptions options) {
         options.dsn = AppConstants.sentryDsn;
         options.tracesSampleRate = kDebugMode ? 0.0 : 0.2;
         options.profilesSampleRate = kDebugMode ? 0.0 : 0.1;
@@ -21,14 +21,14 @@ class SentryService {
 
   static Future<void> logChargingStarted({required String stationId}) => Sentry.captureMessage(
       'charging_session_started',
-      withScope: (scope) => scope.setContexts('charging', {'station_id': stationId})
+      withScope: (Scope scope) => scope.setContexts('charging', <String, String>{'station_id': stationId})
   );
 
   static Future<void> logChargingStop({required String stationId, required bool isError, String? reason}) => Sentry.captureMessage(
     isError ? 'charging_session_error' : 'charging_session_stopped',
-    withScope: (scope) {
+    withScope: (Scope scope) {
 
-      scope.setContexts('charging', {
+      scope.setContexts('charging', <String, String>{
         'station_id': stationId,
         if (reason != null) 'reason': reason,
       });
@@ -38,14 +38,14 @@ class SentryService {
 
   static Future<void> logQrValidationFailed({required String rawCode}) => Sentry.captureMessage(
     'qr_validation_failed',
-    withScope: (scope) => scope.setContexts('qr', {'raw_code': rawCode})
+    withScope: (Scope scope) => scope.setContexts('qr', <String, String>{'raw_code': rawCode})
   );
 
   static Future<void> logPaymentFailed({required String gateway, required String errorCode}) => Sentry.captureMessage(
     'payment_failed',
-    withScope: (scope) {
+    withScope: (Scope scope) {
 
-      scope.setContexts('payment', {
+      scope.setContexts('payment', <String, String>{
         'gateway': gateway,
         'error_code': errorCode,
       });
@@ -57,7 +57,7 @@ class SentryService {
   static Future<void> captureException(Object error, {StackTrace? stackTrace, String? hint}) => Sentry.captureException(
     error,
     stackTrace: stackTrace,
-    hint: hint != null ? Hint.withMap({'message': hint}) : null,
+    hint: hint != null ? Hint.withMap(<String, dynamic>{'message': hint}) : null,
   );
 
 }

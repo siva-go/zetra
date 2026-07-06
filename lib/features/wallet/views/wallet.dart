@@ -4,7 +4,6 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:zetra/app/themes/app_colors.dart';
 import 'package:zetra/app/themes/app_radius.dart';
 import 'package:zetra/app/themes/app_typography.dart';
@@ -13,14 +12,14 @@ import 'package:zetra/features/wallet/bloc/wallet_bloc.dart';
 import 'package:zetra/features/wallet/bloc/wallet_event.dart';
 import 'package:zetra/features/wallet/bloc/wallet_state.dart';
 
-class WalletScreen extends StatefulWidget {
-  const WalletScreen({super.key});
+class Wallet extends StatefulWidget {
+  const Wallet({super.key});
 
   @override
-  State<WalletScreen> createState() => _WalletScreenState();
+  State<Wallet> createState() => _WalletState();
 }
 
-class _WalletScreenState extends State<WalletScreen> with TickerProviderStateMixin {
+class _WalletState extends State<Wallet> with TickerProviderStateMixin {
 
   late final AnimationController _pulseController;
 
@@ -397,8 +396,8 @@ class _WalletScreenState extends State<WalletScreen> with TickerProviderStateMix
               children: <Widget>[
                 Image.asset(
                   'assets/images/ic_wallet.png',
-                  width: 90.w,
-                  height: 90.h,
+                  width: 150.w,
+                  height: 100.h,
                   fit: BoxFit.contain
                 ),
                 SizedBox(
@@ -473,132 +472,6 @@ class _WalletScreenState extends State<WalletScreen> with TickerProviderStateMix
     );
 
   }
-
-  Widget _buildNeonWalletIcon(bool isDark) {
-
-    return AnimatedBuilder(
-      animation: _pulseController,
-      builder: (BuildContext ctx, Widget? child) {
-
-        return Container(
-          width: 80,
-          height: 80,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: RadialGradient(
-              colors: <Color>[
-                AppColors.primary.withValues(
-                    alpha: 0.2
-                ),
-                AppColors.primary.withValues(
-                    alpha: 0.04
-                )
-              ]
-            ),
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                color: AppColors.primary.withValues(
-                  alpha: 0.2 + _pulseController.value * 0.15
-                ),
-                blurRadius: 20 + _pulseController.value * 10,
-                spreadRadius: 2
-              )
-            ]
-          ),
-          child: Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              Container(
-                width: 46,
-                height: 36,
-                decoration: BoxDecoration(
-                  color: isDark ? AppColors.primary.withValues(
-                      alpha: 0.85
-                  ) : AppColors.primary,
-                  borderRadius: BorderRadius.circular(8),
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                      color: AppColors.primary.withValues(
-                          alpha: 0.5
-                      ),
-                      blurRadius: 12,
-                      spreadRadius: 1
-                    )
-                  ]
-                )
-              ),
-              Positioned(
-                right: 12,
-                bottom: 14,
-                child: _buildCoinStack()
-              ),
-              const Positioned(
-                left: 14,
-                top: 14,
-                child: Icon(
-                    Icons.bolt,
-                    color: AppColors.bolt,
-                    size: 18
-                )
-              )
-            ]
-          )
-        );
-
-      }
-    );
-
-  }
-
-  Widget _buildCoinStack() {
-
-    return Stack(
-      children: <Widget>[
-        Container(
-          width: 18,
-          height: 18,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: AppColors.bolt,
-            boxShadow: <BoxShadow>[
-              BoxShadow(
-                color: AppColors.bolt.withValues(
-                    alpha: 0.6
-                ),
-                blurRadius: 6
-              )
-            ]
-          ),
-          child: Center(
-            child: Text(
-              '₹',
-              style: GoogleFonts.urbanist(
-                fontSize: 10,
-                fontWeight: FontWeight.w800,
-                color: AppColors.blackColor
-              )
-            )
-          )
-        ),
-        Positioned(
-          top: 4,
-          left: 4,
-          child: Container(
-            width: 14,
-            height: 14,
-            decoration: BoxDecoration(
-              shape: BoxShape.circle,
-              color: AppColors.bolt.withValues(
-                  alpha: 0.7
-              )
-            )
-          )
-        )
-      ]
-    );
-
-  }
-
 
   Widget _buildRecentTransactionsHeader(bool isDark) {
 
