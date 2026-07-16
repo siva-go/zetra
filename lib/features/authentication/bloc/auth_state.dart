@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-enum AuthStatus { initial, sendingOtp, otpSent, verifyingOtp, verified, error }
+enum AuthStatus { initial, sendingOtp, otpSent, verifyingOtp, verified, error, registered }
 
 @immutable
 class AuthState {
@@ -11,6 +11,8 @@ class AuthState {
   final int timerSeconds;
   final AuthStatus status;
   final String? errorMessage;
+  final String? accessToken;
+  final String? refreshToken;
 
   const AuthState({
     required this.phone,
@@ -18,7 +20,9 @@ class AuthState {
     required this.otpDigits,
     required this.timerSeconds,
     required this.status,
-    this.errorMessage
+    this.errorMessage,
+    this.accessToken,
+    this.refreshToken,
   });
 
   factory AuthState.initial() {
@@ -28,12 +32,24 @@ class AuthState {
       isPhoneValid: false,
       otpDigits: List<String>.filled(6, ''),
       timerSeconds: 30,
-      status: AuthStatus.initial
+      status: AuthStatus.initial,
+      errorMessage: null,
+      accessToken: null,
+      refreshToken: null,
     );
 
   }
 
-  AuthState copyWith({String? phone, bool? isPhoneValid, List<String>? otpDigits, int? timerSeconds, AuthStatus? status, String? errorMessage}) {
+  AuthState copyWith({
+    String? phone,
+    bool? isPhoneValid,
+    List<String>? otpDigits,
+    int? timerSeconds,
+    AuthStatus? status,
+    String? errorMessage,
+    String? accessToken,
+    String? refreshToken,
+  }) {
 
     return AuthState(
       phone: phone ?? this.phone,
@@ -41,7 +57,9 @@ class AuthState {
       otpDigits: otpDigits ?? this.otpDigits,
       timerSeconds: timerSeconds ?? this.timerSeconds,
       status: status ?? this.status,
-      errorMessage: errorMessage ?? this.errorMessage
+      errorMessage: errorMessage ?? this.errorMessage,
+      accessToken: accessToken ?? this.accessToken,
+      refreshToken: refreshToken ?? this.refreshToken,
     );
 
   }

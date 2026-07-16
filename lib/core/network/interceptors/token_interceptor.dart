@@ -8,12 +8,11 @@ import '../../errors/app_exception.dart';
 /// If the refresh fails, [SessionExpiredException] is thrown and the user
 /// should be redirected to the login screen.
 class TokenInterceptor extends Interceptor {
-  TokenInterceptor({required SecureStorage secureStorage, required Dio dio})
-      : _storage = secureStorage,
-        _dio = dio;
+  TokenInterceptor({required SecureStorage secureStorage})
+      : _storage = secureStorage;
 
   final SecureStorage _storage;
-  final Dio _dio;
+  late final Dio dio;
 
   // Track in-flight refresh to avoid concurrent refresh calls
   bool _isRefreshing = false;
@@ -32,7 +31,7 @@ class TokenInterceptor extends Interceptor {
           final token = await _storage.getAccessToken();
           final opts = err.requestOptions;
           opts.headers['Authorization'] = 'Bearer $token';
-          final response = await _dio.fetch(opts);
+          final response = await dio.fetch(opts);
           handler.resolve(response);
           return;
         }
@@ -63,7 +62,7 @@ class TokenInterceptor extends Interceptor {
     if (refreshToken == null) return false;
 
     try {
-      final response = await _dio.post(
+      final response = await dio.post(
         '/auth/refresh',
         data: {'refresh_token': refreshToken},
       );

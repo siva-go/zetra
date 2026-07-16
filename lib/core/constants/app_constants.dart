@@ -4,7 +4,7 @@
 /// No hardcoded URL/key should appear in any other file.
 abstract final class AppConstants {
   // ── API ────────────────────────────────────────────────────────────────────
-  static const String baseUrl = 'https://api.zetra.io/v1';
+  static const String baseUrl = 'https://zetra-production.up.railway.app/api/v1';
   static const Duration connectTimeout = Duration(seconds: 15);
   static const Duration receiveTimeout = Duration(seconds: 30);
   static const Duration sendTimeout = Duration(seconds: 20);

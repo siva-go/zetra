@@ -627,6 +627,35 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                   )
                 ),
                 SizedBox(
+                    height: 16.h
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      'New user? ',
+                      style: AppTypography.bodyMedium.copyWith(
+                        color: textSecondary,
+                        fontSize: 13.sp,
+                      ),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        HapticFeedback.lightImpact();
+                        context.push('/signup');
+                      },
+                      child: Text(
+                        'SignUp',
+                        style: AppTypography.bodyMedium.copyWith(
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 13.sp,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(
                     height: AppSpacing.sh
                 ),
                 Center(

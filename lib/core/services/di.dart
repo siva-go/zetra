@@ -10,6 +10,7 @@ import 'package:zetra/features/authentication/bloc/auth_bloc.dart';
 import 'package:zetra/features/charging/presentation/bloc/charging_bloc.dart';
 import 'package:zetra/features/home/bloc/home_bloc.dart';
 import 'package:zetra/features/charging/presentation/bloc/plugin_bloc.dart';
+import 'package:zetra/features/station/bloc/search_station_bloc.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -33,14 +34,18 @@ Future<void> setupDependencies() async {
   );
 
   getIt.registerLazySingleton<ApiClient>(
-    () => ApiClient(
-      authInterceptor: getIt<AuthInterceptor>(),
-      tokenInterceptor: TokenInterceptor(
+    () {
+      final TokenInterceptor tokenInterceptor = TokenInterceptor(
         secureStorage: getIt<SecureStorage>(),
-        dio: getIt<ApiClient>().dio
-      ),
-      loggerInterceptor: getIt<LoggerInterceptor>()
-    )
+      );
+      final ApiClient client = ApiClient(
+        authInterceptor: getIt<AuthInterceptor>(),
+        tokenInterceptor: tokenInterceptor,
+        loggerInterceptor: getIt<LoggerInterceptor>(),
+      );
+      tokenInterceptor.dio = client.dio;
+      return client;
+    }
   );
 
   /// Blocs
@@ -48,13 +53,19 @@ Future<void> setupDependencies() async {
     () => ChargingBloc()
   );
   getIt.registerFactory<AuthBloc>(
-    () => AuthBloc()
+    () => AuthBloc(
+      getIt<ApiClient>(),
+      getIt<SecureStorage>(),
+    )
   );
   getIt.registerFactory<HomeBloc>(
     () => HomeBloc()
   );
   getIt.registerFactory<PlugInBloc>(
     () => PlugInBloc()
+  );
+  getIt.registerFactory<SearchStationBloc>(
+    () => SearchStationBloc(getIt<ApiClient>())
   );
 
 }

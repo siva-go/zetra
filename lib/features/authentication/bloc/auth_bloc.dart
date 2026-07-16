@@ -1,13 +1,19 @@
 import 'dart:async';
+import 'dart:convert';
+import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:zetra/core/api/api_client.dart';
+import 'package:zetra/core/storage/secure_storage.dart';
 import 'package:zetra/features/authentication/bloc/auth_event.dart';
 import 'package:zetra/features/authentication/bloc/auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
+  final ApiClient _apiClient;
+  final SecureStorage _secureStorage;
 
   Timer? _timer;
 
-  AuthBloc() : super(AuthState.initial()) {
+  AuthBloc(this._apiClient, this._secureStorage) : super(AuthState.initial()) {
     on<PhoneChanged>(_onPhoneChanged);
     on<SendOtp>(_onSendOtp);
     on<OtpDigitChanged>(_onOtpDigitChanged);
@@ -15,6 +21,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<StartOtpTimer>(_onStartOtpTimer);
     on<TickOtpTimer>(_onTickOtpTimer);
     on<ResendOtp>(_onResendOtp);
+    on<SignUpSubmitted>(_onSignUpSubmitted);
   }
 
   void _onPhoneChanged(PhoneChanged event, Emitter<AuthState> emit) {
@@ -41,14 +48,120 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         status: AuthStatus.sendingOtp
     ));
 
-    await Future<void>.delayed(const Duration(
-        milliseconds: 800
-    ));
+    try {
+      final Response<dynamic> response = await _apiClient.dio.post(
+        'https://zetra-production.up.railway.app/api/v1/auth/login',
+        data: <String, dynamic>{
+          'email': 'driver@example.com',
+          'phone': state.phone,
+          'password': 'correct-horse-battery-staple'
+        },
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final Map<String, dynamic> data = response.data as Map<String, dynamic>;
+        emit(state.copyWith(
+          status: AuthStatus.otpSent,
+          otpDigits: List<String>.filled(6, ''),
+          accessToken: data['accessToken'] as String?,
+          refreshToken: data['refreshToken'] as String?,
+        ));
+      } else {
+        emit(state.copyWith(
+          status: AuthStatus.error,
+          errorMessage: 'Invalid phone number or credentials',
+        ));
+      }
+    } on DioException catch (e) {
+      String errMsg = 'Invalid phone number or credentials';
+      try {
+        final dynamic responseData = e.response?.data;
+        Map<dynamic, dynamic>? dataMap;
+        if (responseData is Map) {
+          dataMap = responseData;
+        } else if (responseData is String && responseData.isNotEmpty) {
+          final decoded = jsonDecode(responseData);
+          if (decoded is Map) dataMap = decoded;
+        }
+        if (dataMap != null) {
+          errMsg = dataMap['message']?.toString() ?? errMsg;
+        }
+      } catch (_) {
+        // Parsing failed, keep default errMsg
+      }
+      emit(state.copyWith(
+        status: AuthStatus.error,
+        errorMessage: errMsg,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        status: AuthStatus.error,
+        errorMessage: 'An unexpected error occurred',
+      ));
+    }
+
+  }
+
+  Future<void> _onSignUpSubmitted(SignUpSubmitted event, Emitter<AuthState> emit) async {
 
     emit(state.copyWith(
-      status: AuthStatus.otpSent,
-      otpDigits: List<String>.filled(6, '')
+      status: AuthStatus.sendingOtp,
+      phone: event.phone,
     ));
+
+    try {
+      final Response<dynamic> response = await _apiClient.dio.post(
+        'https://zetra-production.up.railway.app/api/v1/auth/register',
+        data: <String, dynamic>{
+          'email': event.email,
+          'phone': event.phone,
+          'password': event.password,
+          'fullName': event.fullName,
+        },
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        emit(state.copyWith(
+          status: AuthStatus.registered,
+        ));
+      } else {
+        emit(state.copyWith(
+          status: AuthStatus.error,
+          errorMessage: 'Registration failed',
+        ));
+      }
+    } on DioException catch (e) {
+      String errMsg = 'Registration failed';
+      try {
+        final dynamic responseData = e.response?.data;
+        Map<dynamic, dynamic>? dataMap;
+        if (responseData is Map) {
+          dataMap = responseData;
+        } else if (responseData is String && responseData.isNotEmpty) {
+          final decoded = jsonDecode(responseData);
+          if (decoded is Map) dataMap = decoded;
+        }
+
+        if (e.response?.statusCode == 409 ||
+            (dataMap?['message']?.toString().toLowerCase().contains('already exists') ?? false)) {
+          errMsg = 'User already exists. Please login.';
+        } else if (dataMap != null) {
+          errMsg = dataMap['message']?.toString() ?? errMsg;
+        }
+      } catch (_) {
+        // Parsing failed, keep default errMsg
+      }
+
+      emit(state.copyWith(
+        status: AuthStatus.error,
+        errorMessage: errMsg,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        status: AuthStatus.error,
+        errorMessage: 'An unexpected error occurred: ${e.toString()}',
+      ));
+    }
 
   }
 
@@ -86,9 +199,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         milliseconds: 800
     ));
 
-    emit(state.copyWith(
-        status: AuthStatus.verified
-    ));
+    if (otp == '123456') {
+      if (state.accessToken != null) {
+        await _secureStorage.saveAccessToken(state.accessToken!);
+      }
+      if (state.refreshToken != null) {
+        await _secureStorage.saveRefreshToken(state.refreshToken!);
+      }
+      emit(state.copyWith(
+          status: AuthStatus.verified
+      ));
+    } else {
+      emit(state.copyWith(
+          status: AuthStatus.error,
+          errorMessage: 'Invalid OTP'
+      ));
+    }
 
   }
 
@@ -127,13 +253,14 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
   }
 
-  void _onResendOtp(ResendOtp event, Emitter<AuthState> emit) {
+  Future<void> _onResendOtp(ResendOtp event, Emitter<AuthState> emit) async {
 
     _timer?.cancel();
 
     emit(state.copyWith(
       timerSeconds: 30,
-      otpDigits: List<String>.filled(6, '')
+      otpDigits: List<String>.filled(6, ''),
+      status: AuthStatus.sendingOtp,
     ));
 
     _timer = Timer.periodic(const Duration(
@@ -143,6 +270,57 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       add(TickOtpTimer());
 
     });
+
+    try {
+      final Response<dynamic> response = await _apiClient.dio.post(
+        'https://zetra-production.up.railway.app/api/v1/auth/login',
+        data: <String, dynamic>{
+          'email': 'driver@example.com',
+          'phone': state.phone,
+          'password': 'correct-horse-battery-staple'
+        },
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final Map<String, dynamic> data = response.data as Map<String, dynamic>;
+        emit(state.copyWith(
+          status: AuthStatus.otpSent,
+          accessToken: data['accessToken'] as String?,
+          refreshToken: data['refreshToken'] as String?,
+        ));
+      } else {
+        emit(state.copyWith(
+          status: AuthStatus.error,
+          errorMessage: 'Invalid phone number or credentials',
+        ));
+      }
+    } on DioException catch (e) {
+      String errMsg = 'Invalid phone number or credentials';
+      try {
+        final dynamic responseData = e.response?.data;
+        Map<dynamic, dynamic>? dataMap;
+        if (responseData is Map) {
+          dataMap = responseData;
+        } else if (responseData is String && responseData.isNotEmpty) {
+          final decoded = jsonDecode(responseData);
+          if (decoded is Map) dataMap = decoded;
+        }
+        if (dataMap != null) {
+          errMsg = dataMap['message']?.toString() ?? errMsg;
+        }
+      } catch (_) {
+        // Parsing failed, keep default errMsg
+      }
+      emit(state.copyWith(
+        status: AuthStatus.error,
+        errorMessage: errMsg,
+      ));
+    } catch (e) {
+      emit(state.copyWith(
+        status: AuthStatus.error,
+        errorMessage: 'An unexpected error occurred',
+      ));
+    }
 
   }
 
