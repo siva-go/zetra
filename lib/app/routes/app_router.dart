@@ -18,8 +18,13 @@ import 'package:zetra/features/home/presentation/screens/profile_screen.dart';
 import 'package:zetra/features/station/bloc/search_station_bloc.dart';
 import 'package:zetra/features/station/bloc/search_station_event.dart';
 import 'package:zetra/features/station/models/station_info.dart';
+import 'package:zetra/features/station/views/scan_qr_screen.dart';
 import 'package:zetra/features/station/views/search_station.dart';
 import 'package:zetra/features/station/views/station_details.dart';
+import 'package:zetra/features/wallet/bloc/wallet_bloc.dart';
+import 'package:zetra/features/wallet/views/add_money.dart';
+import 'package:zetra/features/wallet/views/payment_status.dart';
+import 'package:zetra/features/wallet/views/wallet.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/login',

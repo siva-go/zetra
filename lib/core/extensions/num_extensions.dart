@@ -1,5 +1,5 @@
-/// ZETRA Core — Numeric Extensions
 extension ZetraNumExtension on num {
+
   /// Formats a kWh value to 2 decimal places with unit: "34.52 kWh".
   String toKWh() => '${toStringAsFixed(2)} kWh';
 
@@ -14,12 +14,15 @@ extension ZetraNumExtension on num {
 
   /// Converts a 0.0–1.0 fraction to a "84%" string.
   String toPercentString() => '${toPercent()}%';
+
 }
 
 extension ZetraDoubleExtension on double {
+
   /// Clamps a speed (kW) to a sensible range [0, 350].
   double clampSpeed() => clamp(0.0, 350.0).toDouble();
 
   /// Clamps a SOC value to [0.0, 1.0].
   double clampSoc() => clamp(0.0, 1.0).toDouble();
+
 }
