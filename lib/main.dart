@@ -8,6 +8,7 @@ import 'package:zetra/app/themes/app_colors.dart';
 import 'package:zetra/core/services/di.dart';
 import 'package:zetra/features/authentication/bloc/auth_bloc.dart';
 import 'package:zetra/features/charging/presentation/bloc/charging_bloc.dart';
+import 'package:zetra/features/charging/presentation/bloc/plugin_bloc.dart';
 import 'package:zetra/features/home/bloc/home_bloc.dart';
 
 void main() async {
@@ -34,7 +35,6 @@ class ZetraApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     ScreenUtil.init(context);
 
     return MultiBlocProvider(
@@ -47,6 +47,9 @@ class ZetraApp extends StatelessWidget {
         ),
         BlocProvider<HomeBloc>(
           create: (_) => getIt<HomeBloc>()
+        ),
+        BlocProvider<PlugInBloc>(
+          create: (_) => getIt<PlugInBloc>()
         )
       ],
       child: MaterialApp.router(

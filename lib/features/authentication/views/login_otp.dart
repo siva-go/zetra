@@ -166,7 +166,7 @@ class _LoginOtpState extends State<LoginOtp> with TickerProviderStateMixin {
                           )
                         );
 
-                        context.go('/charge-link');
+                        context.go('/home');
 
                       } else if (state.otpDigits.every((String d) => d.isEmpty)) {
 

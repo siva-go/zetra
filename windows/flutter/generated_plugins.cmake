@@ -5,6 +5,7 @@
 list(APPEND FLUTTER_PLUGIN_LIST
   flutter_secure_storage_windows
   geolocator_windows
+  rive_common
   sentry_flutter
   sqlite3_flutter_libs
   url_launcher_windows

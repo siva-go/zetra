@@ -186,15 +186,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
     return Scaffold(
       backgroundColor: isDark ? AppColors.scaffoldDark : AppColors.scaffoldLight,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: isDark ? AppColors.scaffoldDark : AppColors.scaffoldLight,
-        surfaceTintColor: isDark ? AppColors.scaffoldDark : AppColors.scaffoldLight,
-        elevation: 0,
-        centerTitle: false,
-        titleSpacing: 0,
-        title: _buildTopBar(isDark)
-      ),
       body: SafeArea(
         child: BlocBuilder<HomeBloc, HomeState>(
           builder: (BuildContext context, HomeState state) {
@@ -254,17 +245,10 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                         )
                       ),
                       Positioned(
-                        top: 0,
+                        top: 16.h,
                         left: 0,
                         right: 0,
-                        child: Column(
-                          children: <Widget>[
-                            SizedBox(
-                                height: 6.h
-                            ),
-                            _buildSearchBar(isDark)
-                          ]
-                        )
+                        child: _buildSearchBar(isDark)
                       ),
                       if (state.showNearestStation && state.nearestStation != null)
                         Positioned(
@@ -294,13 +278,8 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                     ]
                   )
                 ),
-                ZetraBottomNavBar(
-                  currentIndex: state.currentNavIndex,
-                  onTap: (int idx) {
-
-                    context.read<HomeBloc>().add(NavigationTabChanged(idx));
-
-                  }
+                const ZetraBottomNavBar(
+                  currentIndex: 0,
                 )
               ]
             );
@@ -312,108 +291,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
   }
 
-  Widget _buildTopBar(bool isDark) {
 
-    final Color textPrimary = isDark ? AppColors.textPrimary : AppColors.textPrimaryLight;
-    final Color textSecondary = isDark ? AppColors.textSecondary : AppColors.textSecondaryLight;
-    final Color cardBg = isDark ? AppColors.cardDark : AppColors.whiteColor;
-    final Color borderColor = isDark ? AppColors.border : AppColors.borderLight;
-
-    return Padding(
-      padding: EdgeInsets.symmetric(
-          horizontal: 16.w, vertical: 10.h
-      ),
-      child: Row(
-        children: <Widget>[
-          ShaderMask(
-            shaderCallback: (Rect bounds) => const LinearGradient(
-              colors: <Color>[Color(0xFF00C853), Color(0xFF2EFE58)]
-            ).createShader(bounds),
-            child: Text(
-              'ZETRA',
-              style: AppTypography.h3.copyWith(
-                fontSize: 22.sp,
-                fontWeight: FontWeight.w900,
-                letterSpacing: 3,
-                color: AppColors.whiteColor,
-                height: 1
-              )
-            )
-          ),
-          const Spacer(),
-          GestureDetector(
-            onTap: () {},
-            child: ClipRRect(
-              borderRadius: AppRadius.mdBorder,
-              child: BackdropFilter(
-                filter: ImageFilter.blur(
-                    sigmaX: 10,
-                    sigmaY: 10
-                ),
-                child: Container(
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 10.w,
-                      vertical: 6.h
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: <Widget>[
-                      Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          Text(
-                            'Wallet',
-                            textAlign: TextAlign.center,
-                            style: AppTypography.labelSmall.copyWith(
-                              fontSize: 10.sp,
-                              color: textSecondary,
-                              letterSpacing: 0.5
-                            )
-                          ),
-                          Text(
-                            '₹ 600.00',
-                            style: AppTypography.bodyMedium.copyWith(
-                              fontSize: 12.sp,
-                              color: textPrimary,
-                              fontWeight: FontWeight.w700
-                            )
-                          )
-                        ]
-                      ),
-                      SizedBox(
-                          width: 7.w
-                      ),
-                      Container(
-                          width: 26,
-                          height: 26,
-                          decoration: BoxDecoration(
-                              color: AppColors.primary.withValues(
-                                  alpha: 0.15
-                              ),
-                              borderRadius: AppRadius.smBorder
-                          ),
-                          child: const Icon(
-                              Icons.account_balance_wallet_rounded,
-                              color: AppColors.primary,
-                              size: 15
-                          )
-                      )
-                    ]
-                  )
-                )
-              )
-            )
-          )
-        ]
-      )
-    ).animate().fade(
-        duration: 500.ms
-    ).slideY(
-        begin: -0.1,
-        curve: Curves.easeOutCubic
-    );
-
-  }
 
   Widget _buildSearchBar(bool isDark) {
 

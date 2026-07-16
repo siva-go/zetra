@@ -23,15 +23,16 @@ class ChargeLinkScreen extends StatefulWidget {
 
 class _ChargeLinkScreenState extends State<ChargeLinkScreen>
     with TickerProviderStateMixin {
-  // ── Animations ─────────────────────────────────────────────────────────────
-  late AnimationController _checkController;
-  late Animation<double> _checkScale;
-  late Animation<double> _checkOpacity;
+  // ── Animations (nullable to avoid LateInitializationError) ─────────────────
+  AnimationController? _checkController;
+  Animation<double>? _checkScale;
+  Animation<double>? _checkOpacity;
 
-  late AnimationController _waveController;
-  late AnimationController _confettiController;
+  AnimationController? _waveController;
+  AnimationController? _confettiController;
+  AnimationController? _glowController;
 
-  // ── Confetti dots ──────────────────────────────────────────────────────────
+  // ── Confetti dots — small pops only over car region (right portion) ─────────
   final List<_ConfettiDot> _dots = _generateDots();
 
   static List<_ConfettiDot> _generateDots() {
@@ -44,11 +45,12 @@ class _ChargeLinkScreenState extends State<ChargeLinkScreen>
       const Color(0xFFE040FB), // purple
       const Color(0xFF00E5FF), // cyan
     ];
-    return List.generate(80, (i) {
+    // 20 small dots, x in [0.40, 1.0] — only over the car region
+    return List.generate(20, (i) {
       return _ConfettiDot(
-        x: rand.nextDouble(),
-        y: rand.nextDouble(), // full screen height — showers over car area too
-        size: 4.0 + rand.nextDouble() * 7.0,
+        x: 0.40 + rand.nextDouble() * 0.60,
+        y: rand.nextDouble(),
+        size: 3.0 + rand.nextDouble() * 3.0, // smaller pops (3–6 px)
         color: colors[rand.nextInt(colors.length)],
         speed: 0.3 + rand.nextDouble() * 0.7,
         phase: rand.nextDouble() * math.pi * 2,
@@ -63,12 +65,14 @@ class _ChargeLinkScreenState extends State<ChargeLinkScreen>
     // Check-mark pop-in
     _checkController = AnimationController(
       vsync: this,
-      duration: const Duration(milliseconds: 600),
+      duration: const Duration(milliseconds: 700),
     );
-    _checkScale = CurvedAnimation(parent: _checkController, curve: Curves.elasticOut);
-    _checkOpacity = CurvedAnimation(parent: _checkController, curve: Curves.easeIn);
+    _checkScale =
+        CurvedAnimation(parent: _checkController!, curve: Curves.elasticOut);
+    _checkOpacity =
+        CurvedAnimation(parent: _checkController!, curve: Curves.easeIn);
     Future.delayed(const Duration(milliseconds: 200), () {
-      if (mounted) _checkController.forward();
+      if (mounted) _checkController?.forward();
     });
 
     // Waveform oscillation
@@ -82,235 +86,311 @@ class _ChargeLinkScreenState extends State<ChargeLinkScreen>
       vsync: this,
       duration: const Duration(seconds: 6),
     )..repeat();
+
+    // Ground glow pulse
+    _glowController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 1800),
+    )..repeat(reverse: true);
   }
 
   @override
   void dispose() {
-    _checkController.dispose();
-    _waveController.dispose();
-    _confettiController.dispose();
+    _checkController?.dispose();
+    _waveController?.dispose();
+    _confettiController?.dispose();
+    _glowController?.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    // Illustration block height: generous so car + checkmark both fit
+    final illH = size.height * 0.40;
 
     return Scaffold(
       backgroundColor: AppColors.scaffoldDark,
       body: SafeArea(
-        child: Stack(
+        child: Column(
           children: [
-            // ── Confetti dots layer ──────────────────────────────────────────
-            AnimatedBuilder(
-              animation: _confettiController,
-              builder: (context, _) {
-                return CustomPaint(
-                  size: Size(size.width, size.height),
-                  painter: _ConfettiPainter(
-                    dots: _dots,
-                    progress: _confettiController.value,
-                  ),
-                );
-              },
-            ),
-
-            // ── Main content ────────────────────────────────────────────────
-            Column(
-              children: [
-                const SizedBox(height: AppSpacing.sm),
-
-                // ── Green checkmark badge ────────────────────────────────────
-                ScaleTransition(
-                  scale: _checkScale,
-                  child: FadeTransition(
-                    opacity: _checkOpacity,
+            // ── Top Bar with Back Arrow ─────────────────────────────────────
+            Padding(
+              padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.sm,
+                vertical: AppSpacing.xs,
+              ),
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: () => context.go('/home'),
+                    behavior: HitTestBehavior.opaque,
                     child: Container(
-                      width: 88,
-                      height: 88,
+                      width: 36,
+                      height: 36,
                       decoration: BoxDecoration(
+                        color: AppColors.cardDark,
                         shape: BoxShape.circle,
-                        gradient: const RadialGradient(
-                          colors: [
-                            Color(0xFF1BFF6A),
-                            Color(0xFF00C853),
-                          ],
+                        border: Border.all(
+                          color: AppColors.border.withValues(alpha: 0.5),
+                          width: 1,
                         ),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.chargingGreenGlow.withValues(alpha: 0.55),
-                            blurRadius: 30,
-                            spreadRadius: 4,
-                          ),
-                        ],
                       ),
                       child: const Icon(
-                        Icons.check_rounded,
+                        Icons.chevron_left_rounded,
                         color: Colors.white,
-                        size: 52,
+                        size: 20,
                       ),
                     ),
                   ),
-                ),
+                ],
+              ),
+            ),
 
-                const SizedBox(height: AppSpacing.md),
-
-                // ── Illustration Stack (station, car, and green line) ───────
-                SizedBox(
-                  height: size.height * 0.35,
-                  child: Stack(
-                    alignment: Alignment.center,
-                    children: [
-                      // 1. Green line / Neon circle base
-                      Positioned(
-                        bottom: 0,
-                        left: AppSpacing.md,
-                        right: AppSpacing.md,
-                        child: Center(
-                          child: Opacity(
-                            opacity: 0.9,
-                            child: Image.asset(
-                              'assets/images/green_line.png',
-                              width: size.width * 0.85,
-                              fit: BoxFit.fitWidth,
+            // ── Illustration Stack ─────────────────────────────────────────────────────
+            // Draw order (back to front):
+            //   1. Green ground glow (bottom)
+            //   2. Green neon line
+            //   3. Station (behind the car, slightly left)
+            //   4. Car (front, centre-right)
+            //   5. Confetti (only over car region)
+            //   6. Checkmark badge (above car)
+            SizedBox(
+              height: illH,
+              width: double.infinity,
+              child: Stack(
+                clipBehavior: Clip.hardEdge,
+                children: [
+                  // ── 1. Green neon ground glow — full-width bottom band ───────
+                  if (_glowController != null)
+                    Positioned(
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      child: AnimatedBuilder(
+                        animation: _glowController!,
+                        builder: (context, child) => Container(
+                          height: illH * 0.32,
+                          decoration: BoxDecoration(
+                            gradient: LinearGradient(
+                              begin: Alignment.bottomCenter,
+                              end: Alignment.topCenter,
+                              colors: [
+                                const Color(0xFF00FF6A).withValues(
+                                  alpha: 0.28 +
+                                      0.12 * (_glowController?.value ?? 0.0),
+                                ),
+                                const Color(0xFF00FF6A).withValues(alpha: 0.06),
+                                Colors.transparent,
+                              ],
+                              stops: const [0.0, 0.5, 1.0],
                             ),
                           ),
                         ),
                       ),
-                      // 2. Charging station on the left
-                      Positioned(
-                        left: size.width * 0.1,
-                        bottom: 12,
-                        height: size.height * 0.28,
-                        child: Image.asset(
-                          'assets/images/station.png',
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                      // 3. EV Car on the right
-                      Positioned(
-                        right: size.width * 0.08,
-                        bottom: 30,
-                        height: size.height * 0.22,
-                        child: Image.asset(
-                          'assets/images/car_link_image.png',
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+                    ),
 
-                const SizedBox(height: AppSpacing.md),
+                  // // ── 2. Green neon line at the very bottom ────────────────
+                  // Positioned(
+                  //   bottom: 4,
+                  //   left: 0,
+                  //   right: 0,
+                  //   child: Opacity(
+                  //     opacity: 0.95,
+                  //     child: Image.asset(
+                  //       'assets/images/green_line.png',
+                  //       width: size.width,
+                  //       fit: BoxFit.fitWidth,
+                  //     ),
+                  //   ),
+                  // ),
 
-                // ── "Power Link Established! ⚡" ─────────────────────────────
-                ShaderMask(
-                  shaderCallback: (bounds) => const LinearGradient(
-                    colors: [
-                      Color(0xFF69F0AE),
-                      Color(0xFF2EFE58),
-                    ],
-                  ).createShader(bounds),
-                  blendMode: BlendMode.srcIn,
-                  child: Text(
-                    'Power Link\nEstablished! ⚡',
-                    textAlign: TextAlign.center,
-                    style: AppTypography.labelLarge.copyWith(
-                      fontSize: 26,
-                      fontWeight: FontWeight.w800,
-                      color: Colors.white, // masked by ShaderMask
-                      height: 1.25,
+                  // // ── 3. Station — behind the car, left-of-centre ────────────
+                  // Positioned(
+                  //   left: size.width * 0.06,
+                  //   bottom: 18,
+                  //   height: illH * 0.58,
+                  //   child: Image.asset(
+                  //     'assets/images/station.png',
+                  //     fit: BoxFit.contain,
+                  //   ),
+                  // ),
+
+                  // ── 4. Car — in front, centre to right ───────────────────
+                  Positioned(
+                    left: size.width * 0.18,
+                    right: 0,
+                    bottom: 20,
+                    height: illH * 0.75,
+                    child: Image.asset(
+                      'assets/images/car_link.png',
+                      fit: BoxFit.contain,
+                      alignment: Alignment.bottomRight,
                     ),
                   ),
-                ),
 
-                const SizedBox(height: AppSpacing.xs),
-
-                // ── Subtitle ─────────────────────────────────────────────────
-                Text(
-                  'Vehicle connected successfully.',
-                  textAlign: TextAlign.center,
-                  style: AppTypography.bodyMedium.copyWith(
-                    color: AppColors.textSecondary,
-                    fontSize: 14,
-                  ),
-                ),
-
-                const SizedBox(height: AppSpacing.sm),
-
-                // ── Waveform animation ────────────────────────────────────────
-                SizedBox(
-                  height: 36,
-                  child: AnimatedBuilder(
-                    animation: _waveController,
-                    builder: (context, _) {
-                      return CustomPaint(
-                        size: const Size(double.infinity, 36),
-                        painter: _WaveformPainter(
-                          progress: _waveController.value,
-                          color: AppColors.chargingGreenGlow,
+                  // ── 5. Confetti — small pops only over the car region ───────
+                  if (_confettiController != null)
+                    Positioned.fill(
+                      child: ClipRect(
+                        child: AnimatedBuilder(
+                          animation: _confettiController!,
+                          builder: (context, child) => CustomPaint(
+                            painter: _ConfettiPainter(
+                              dots: _dots,
+                              progress: _confettiController!.value,
+                              canvasWidth: size.width,
+                            ),
+                          ),
                         ),
-                      );
+                      ),
+                    ),
+
+                  // ── 6. Checkmark badge — above the car ───────────────────
+                  if (_checkScale != null && _checkOpacity != null)
+                    Positioned(
+                      right: size.width * 0.20,
+                      top: illH * 0.01,
+                      child: ScaleTransition(
+                        scale: _checkScale!,
+                        child: FadeTransition(
+                          opacity: _checkOpacity!,
+                          child: Container(
+                            width: 80,
+                            height: 80,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient: const RadialGradient(
+                                colors: [
+                                  Color(0xFF1BFF6A),
+                                  Color(0xFF00C853),
+                                ],
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppColors.chargingGreenGlow
+                                      .withValues(alpha: 0.70),
+                                  blurRadius: 36,
+                                  spreadRadius: 8,
+                                ),
+                              ],
+                            ),
+                            child: const Icon(
+                              Icons.check_rounded,
+                              color: Colors.white,
+                              size: 46,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+
+            const SizedBox(height: AppSpacing.md),
+
+            // ── "Power Link Established! ⚡" ────────────────────────────────────
+            ShaderMask(
+              shaderCallback: (bounds) => const LinearGradient(
+                colors: [Color(0xFF69F0AE), Color(0xFF2EFE58)],
+              ).createShader(bounds),
+              blendMode: BlendMode.srcIn,
+              child: Text(
+                'Power Link\nEstablished! ⚡',
+                textAlign: TextAlign.center,
+                style: AppTypography.labelLarge.copyWith(
+                  fontSize: 26,
+                  fontWeight: FontWeight.w800,
+                  color: Colors.white,
+                  height: 1.25,
+                ),
+              ),
+            ),
+
+            const SizedBox(height: AppSpacing.xs),
+
+            // ── Subtitle ────────────────────────────────────────────────────────
+            Text(
+              'Vehicle connected successfully.',
+              textAlign: TextAlign.center,
+              style: AppTypography.bodyMedium.copyWith(
+                color: AppColors.textSecondary,
+                fontSize: 14,
+              ),
+            ),
+
+            const SizedBox(height: AppSpacing.sm),
+
+            // ── Waveform — BLUE, bars touch (no gaps) ──────────────────────────
+            Padding(
+              padding:
+                  const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
+              child: SizedBox(
+                height: 44,
+                child: _waveController != null
+                    ? AnimatedBuilder(
+                        animation: _waveController!,
+                        builder: (context, child) => CustomPaint(
+                          size: const Size(double.infinity, 44),
+                          painter: _WaveformPainter(
+                            progress: _waveController!.value,
+                            color: const Color(0xFF2979FF),
+                          ),
+                        ),
+                      )
+                    : const SizedBox.shrink(),
+              ),
+            ),
+
+            const Spacer(),
+
+            // ── "Let's Charge" button ───────────────────────────────────────────
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg)
+                  .copyWith(bottom: AppSpacing.lg),
+              child: SizedBox(
+                width: double.infinity,
+                height: 56,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF7B2FF7), Color(0xFF4A90E2)],
+                      begin: Alignment.centerLeft,
+                      end: Alignment.centerRight,
+                    ),
+                    borderRadius: AppRadius.roundBorder,
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFF7B2FF7).withValues(alpha: 0.4),
+                        blurRadius: 20,
+                        offset: const Offset(0, 8),
+                      ),
+                    ],
+                  ),
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.transparent,
+                      shadowColor: Colors.transparent,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: AppRadius.roundBorder),
+                    ),
+                    onPressed: () {
+                      context.read<ChargingBloc>().add(StartCharging());
+                      context.go('/charging');
                     },
-                  ),
-                ),
-
-                const Spacer(),
-
-                // ── "Let's Charge" button ─────────────────────────────────────
-                Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: AppSpacing.lg,
-                  ).copyWith(bottom: AppSpacing.lg),
-                  child: SizedBox(
-                    width: double.infinity,
-                    height: 56,
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [
-                            Color(0xFF7B2FF7),
-                            Color(0xFF4A90E2),
-                          ],
-                          begin: Alignment.centerLeft,
-                          end: Alignment.centerRight,
-                        ),
-                        borderRadius: AppRadius.roundBorder,
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(0xFF7B2FF7).withValues(alpha: 0.4),
-                            blurRadius: 20,
-                            offset: const Offset(0, 8),
-                          ),
-                        ],
-                      ),
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.transparent,
-                          shadowColor: Colors.transparent,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: AppRadius.roundBorder,
-                          ),
-                        ),
-                        onPressed: () {
-                          // Start the charging simulation and navigate
-                          context.read<ChargingBloc>().add(StartCharging());
-                          context.go('/charging');
-                        },
-                        child: Text(
-                          "Let's Charge",
-                          style: AppTypography.labelLarge.copyWith(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: 0.4,
-                          ),
-                        ),
+                    child: Text(
+                      "Let's Charge",
+                      style: AppTypography.labelLarge.copyWith(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: 0.4,
                       ),
                     ),
                   ),
                 ),
-              ],
+              ),
             ),
           ],
         ),
@@ -342,17 +422,22 @@ class _ConfettiDot {
 class _ConfettiPainter extends CustomPainter {
   final List<_ConfettiDot> dots;
   final double progress;
+  final double canvasWidth;
 
-  const _ConfettiPainter({required this.dots, required this.progress});
+  const _ConfettiPainter({
+    required this.dots,
+    required this.progress,
+    required this.canvasWidth,
+  });
 
   @override
   void paint(Canvas canvas, Size size) {
     for (final dot in dots) {
       final t = (progress * dot.speed + dot.phase / (math.pi * 2)) % 1.0;
-      final dy = t * size.height * 0.08; // gentle drift
-      final dx = math.sin(t * math.pi * 2 + dot.phase) * 6.0;
+      final dy = t * size.height * 0.08;
+      final dx = math.sin(t * math.pi * 2 + dot.phase) * 5.0;
       final paint = Paint()
-        ..color = dot.color.withValues(alpha: 0.85)
+        ..color = dot.color.withValues(alpha: 0.90)
         ..style = PaintingStyle.fill;
       canvas.drawCircle(
         Offset(dot.x * size.width + dx, dot.y * size.height + dy),
@@ -366,36 +451,36 @@ class _ConfettiPainter extends CustomPainter {
   bool shouldRepaint(_ConfettiPainter old) => old.progress != progress;
 }
 
-// ── Waveform painter ───────────────────────────────────────────────────────────
+// ── Waveform painter — blue, bars touch (no gaps) ─────────────────────────────
 class _WaveformPainter extends CustomPainter {
   final double progress;
   final Color color;
 
   const _WaveformPainter({required this.progress, required this.color});
 
-  static const _barCount = 32;
+  static const _barCount = 48;
 
   @override
   void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = color.withValues(alpha: 0.8)
-      ..strokeWidth = 2.5
-      ..strokeCap = StrokeCap.round
-      ..style = PaintingStyle.stroke;
-
-    final barWidth = size.width / (_barCount * 2 - 1);
+    final barWidth = size.width / _barCount;
     final centerY = size.height / 2;
 
     for (int i = 0; i < _barCount; i++) {
       final fraction = i / (_barCount - 1);
-      // Envelope: tall in the middle, short at edges
       final envelope = math.sin(fraction * math.pi);
-      // Animate heights with a phase offset per bar
       final phase = fraction * math.pi * 4 + progress * math.pi * 2;
-      final heightFactor = (0.25 + 0.75 * envelope * (0.5 + 0.5 * math.sin(phase)));
+      final heightFactor =
+          0.20 + 0.80 * envelope * (0.45 + 0.55 * math.sin(phase));
       final barHeight = size.height * heightFactor;
+      final x = i * barWidth + barWidth / 2;
+      final alpha = 0.55 + 0.45 * envelope;
 
-      final x = i * barWidth * 2 + barWidth / 2;
+      final paint = Paint()
+        ..color = color.withValues(alpha: alpha)
+        ..strokeWidth = barWidth * 0.85 // wide enough — no gap
+        ..strokeCap = StrokeCap.round
+        ..style = PaintingStyle.stroke;
+
       canvas.drawLine(
         Offset(x, centerY - barHeight / 2),
         Offset(x, centerY + barHeight / 2),

@@ -46,8 +46,30 @@ class HomeScreen extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
+                      // Back button
+                      GestureDetector(
+                        onTap: () => context.go('/home'),
+                        behavior: HitTestBehavior.opaque,
+                        child: Container(
+                          width: 36,
+                          height: 36,
+                          decoration: BoxDecoration(
+                            color: AppColors.cardDark,
+                            shape: BoxShape.circle,
+                            border: Border.all(
+                              color: AppColors.border.withValues(alpha: 0.5),
+                              width: 1,
+                            ),
+                          ),
+                          child: const Icon(
+                            Icons.chevron_left_rounded,
+                            color: Colors.white,
+                            size: 20,
+                          ),
+                        ),
+                      ),
                       Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
                             'CHARGING SESSION',
@@ -186,7 +208,7 @@ class HomeScreen extends StatelessWidget {
                           Navigator.of(context).pop();
                           // Reset charging and navigate back
                           context.read<ChargingBloc>().add(ResetCharging());
-                          context.go('/charge-link');
+                          context.go('/home');
                         },
                       );
                     },
@@ -196,20 +218,7 @@ class HomeScreen extends StatelessWidget {
                 const SizedBox(height: AppSpacing.md),
 
                 // ── Navigation Bar ──
-                ZetraBottomNavBar(
-                  currentIndex: 0,
-                  onTap: (index) {
-                    // Quick feedback when navigation items are tapped
-                    if (index != 0) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text('Tab $index tapped (Feature coming soon)'),
-                          duration: const Duration(seconds: 1),
-                        ),
-                      );
-                    }
-                  },
-                ),
+                const ZetraBottomNavBar(currentIndex: 2),
               ],
             ),
           ),
