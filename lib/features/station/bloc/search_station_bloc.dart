@@ -6,6 +6,7 @@ import 'package:zetra/features/station/models/station_info.dart';
 class SearchStationBloc extends Bloc<SearchStationEvent, SearchStationState> {
 
   SearchStationBloc() : super(SearchStationState.initial(_stations)) {
+    on<FetchStations>(_onFetchStations);
     on<SearchStationQueryChanged>(_onSearchStationQueryChanged);
   }
 
@@ -55,6 +56,14 @@ class SearchStationBloc extends Bloc<SearchStationEvent, SearchStationState> {
       address: 'Sector 5, Wardha Road, Nagpur'
     )
   ];
+
+  void _onFetchStations(FetchStations event, Emitter<SearchStationState> emit) {
+
+    emit(state.copyWith(
+      filteredStations: _stations
+    ));
+
+  }
 
   void _onSearchStationQueryChanged(SearchStationQueryChanged event, Emitter<SearchStationState> emit,) {
 

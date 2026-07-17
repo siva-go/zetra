@@ -145,10 +145,9 @@ class _AddMoneyState extends State<AddMoney> with SingleTickerProviderStateMixin
       builder: (BuildContext ctx2, WalletState state) {
 
         final bool isPaying = state.status == WalletStatus.paying;
-        final bool isDark2 = isDark;
 
         return Scaffold(
-          backgroundColor: isDark2 ? AppColors.scaffoldDark : AppColors.scaffoldLight,
+          backgroundColor: isDark ? AppColors.scaffoldDark : AppColors.scaffoldLight,
           body: GestureDetector(
             onTap: () => _amountFocus.unfocus(),
             child: Column(
