@@ -26,10 +26,8 @@ class _SearchStationState extends State<SearchStation> {
 
   @override
   void dispose() {
-
     _searchController.dispose();
     super.dispose();
-
   }
 
   @override
@@ -38,161 +36,226 @@ class _SearchStationState extends State<SearchStation> {
     final bool isDark = Theme.of(context).brightness == Brightness.dark;
 
     return Scaffold(
-        backgroundColor: isDark ? AppColors.scaffoldDark : AppColors.scaffoldLight,
-        body: SafeArea(
-            child: BlocBuilder<SearchStationBloc, SearchStationState>(
-                builder: (BuildContext context, SearchStationState state) {
-
-                  return Column(
-                      children: <Widget>[
-                        Padding(
-                            padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 16.h),
-                            child: ClipRRect(
-                                borderRadius: BorderRadius.circular(14.r),
-                                child: BackdropFilter(
-                                    filter: ImageFilter.blur(
-                                        sigmaX: 16,
-                                        sigmaY: 16
-                                    ),
-                                    child: Container(
-                                        decoration: BoxDecoration(
-                                            color: isDark ? AppColors.cardDark.withOpacity(0.88) : AppColors.whiteColor.withOpacity(0.96),
-                                            borderRadius: BorderRadius.circular(14.r),
-                                            border: Border.all(
-                                                color: isDark ? AppColors.border : AppColors.borderLight
-                                            )
-                                        ),
-                                        child: Row(
-                                            children: <Widget>[
-                                              SizedBox(
-                                                  width: 14.w
-                                              ),
-                                              const Icon(
-                                                  Icons.search_rounded,
-                                                  size: 22,
-                                                  color: AppColors.primary
-                                              ),
-                                              SizedBox(
-                                                  width: 10.w
-                                              ),
-                                              Expanded(
-                                                  child: TextField(
-                                                      controller: _searchController,
-                                                      onChanged: (String value) {
-
-                                                        context.read<SearchStationBloc>().add(SearchStationQueryChanged(value));
-
-                                                      },
-                                                      style: AppTypography.bodyMedium.copyWith(
-                                                          fontSize: 14.sp,
-                                                          color: isDark ? AppColors.textPrimary : AppColors.textPrimaryLight
-                                                      ),
-                                                      decoration: InputDecoration(
-                                                          border: InputBorder.none,
-                                                          hintText: 'Search location or station',
-                                                          hintStyle: AppTypography.bodyMedium.copyWith(
-                                                              fontSize: 14.sp,
-                                                              color: isDark ? AppColors.textHint : AppColors.textHintLight
-                                                          )
-                                                      )
-                                                  )
-                                              ),
-                                              Container(
-                                                  width: 1,
-                                                  height: 28.h,
-                                                  color: isDark ? AppColors.border : AppColors.borderLight
-                                              ),
-                                              IconButton(
-                                                  onPressed: () {},
-                                                  icon: Icon(
-                                                      Icons.tune_rounded,
-                                                      size: 20,
-                                                      color: isDark ? AppColors.textSecondary : AppColors.textSecondaryLight
-                                                  )
-                                              )
-                                            ]
-                                        )
-                                    )
-                                )
-                            )
+      backgroundColor: isDark ? AppColors.scaffoldDark : AppColors.scaffoldLight,
+      body: SafeArea(
+        child: BlocBuilder<SearchStationBloc, SearchStationState>(
+          builder: (BuildContext context, SearchStationState state) {
+            return Column(
+              children: <Widget>[
+                // ── Search Bar ──────────────────────────────────────────
+                Padding(
+                  padding: EdgeInsets.fromLTRB(16.w, 8.h, 16.w, 16.h),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(14.r),
+                    child: BackdropFilter(
+                      filter: ImageFilter.blur(sigmaX: 16, sigmaY: 16),
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: isDark
+                              ? AppColors.cardDark.withOpacity(0.88)
+                              : AppColors.whiteColor.withOpacity(0.96),
+                          borderRadius: BorderRadius.circular(14.r),
+                          border: Border.all(
+                            color: isDark ? AppColors.border : AppColors.borderLight,
+                          ),
                         ),
-                        Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 16.w
+                        child: Row(
+                          children: <Widget>[
+                            SizedBox(width: 14.w),
+                            const Icon(
+                              Icons.search_rounded,
+                              size: 22,
+                              color: AppColors.primary,
                             ),
-                            child: Row(
-                                children: <Widget>[
-                                  Text(
-                                      'Stations Near You',
-                                      style: AppTypography.bodyLarge.copyWith(
-                                          fontSize: 17.sp,
-                                          fontWeight: FontWeight.w700,
-                                          color: isDark ? AppColors.textPrimary : AppColors.textPrimaryLight
-                                      )
-                                  ),
-                                  const Spacer(),
-                                  Text(
-                                      '${state.filteredStations.length} results',
-                                      style: AppTypography.bodySmall.copyWith(
-                                          color: isDark ? AppColors.textSecondary : AppColors.textSecondaryLight
-                                      )
-                                  )
-                                ]
-                            )
-                        ),
-                        SizedBox(
-                            height: 12.h
-                        ),
-                        Expanded(
-                            child: state.filteredStations.isEmpty ?
-                            Center(
-                                child: Text(
-                                    'No stations found.Try a different location or keyword.',
-                                    textAlign: TextAlign.center,
-                                    style: AppTypography.bodyMedium.copyWith(
-                                        color: isDark ? AppColors.textSecondary : AppColors.textSecondaryLight
-                                    )
-                                )
-                            ) :
-                            ListView.separated(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 16.w
-                                ),
-                                itemCount: state.filteredStations.length,
-                                separatorBuilder: (_, __) => SizedBox(
-                                    height: 16.h
-                                ),
-                                itemBuilder: (BuildContext context, int index) {
-
-                                  final StationInfo station = state.filteredStations[index];
-
-                                  return StationCard(
-                                      station: station,
-                                      onTap: () {
-
-                                        context.push('/station-details', extra: station);
-
-                                      }
+                            SizedBox(width: 10.w),
+                            Expanded(
+                              child: TextField(
+                                controller: _searchController,
+                                onChanged: (String value) {
+                                  context.read<SearchStationBloc>().add(
+                                    SearchStationQueryChanged(value),
                                   );
-
-                                }
-                            )
+                                },
+                                style: AppTypography.bodyMedium.copyWith(
+                                  fontSize: 14.sp,
+                                  color: isDark
+                                      ? AppColors.textPrimary
+                                      : AppColors.textPrimaryLight,
+                                ),
+                                decoration: InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: 'Search location or station',
+                                  hintStyle: AppTypography.bodyMedium.copyWith(
+                                    fontSize: 14.sp,
+                                    color: isDark
+                                        ? AppColors.textHint
+                                        : AppColors.textHintLight,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: 1,
+                              height: 28.h,
+                              color: isDark ? AppColors.border : AppColors.borderLight,
+                            ),
+                            IconButton(
+                              onPressed: () {},
+                              icon: Icon(
+                                Icons.tune_rounded,
+                                size: 20,
+                                color: isDark
+                                    ? AppColors.textSecondary
+                                    : AppColors.textSecondaryLight,
+                              ),
+                            ),
+                          ],
                         ),
-                        SizedBox(
-                            height: 16.h
-                        )
-                      ]
-                  ).animate().fade(
-                      duration: 400.ms
-                  ).slideY(
-                      begin: 0.02
-                  );
+                      ),
+                    ),
+                  ),
+                ),
 
-                }
-            )
-        )
+                // ── Header row ─────────────────────────────────────────
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 16.w),
+                  child: Row(
+                    children: <Widget>[
+                      Text(
+                        'Stations Near You',
+                        style: AppTypography.bodyLarge.copyWith(
+                          fontSize: 17.sp,
+                          fontWeight: FontWeight.w700,
+                          color: isDark
+                              ? AppColors.textPrimary
+                              : AppColors.textPrimaryLight,
+                        ),
+                      ),
+                      const Spacer(),
+                      if (state.status == SearchStationStatus.loaded)
+                        Text(
+                          '${state.filteredStations.length} results',
+                          style: AppTypography.bodySmall.copyWith(
+                            color: isDark
+                                ? AppColors.textSecondary
+                                : AppColors.textSecondaryLight,
+                          ),
+                        ),
+                    ],
+                  ),
+                ),
+                SizedBox(height: 12.h),
+
+                // ── Body ──────────────────────────────────────────────
+                Expanded(child: _buildBody(state, isDark, context)),
+
+                SizedBox(height: 16.h),
+              ],
+            ).animate().fade(duration: 400.ms).slideY(begin: 0.02);
+          },
+        ),
+      ),
     );
-
   }
 
+  Widget _buildBody(SearchStationState state, bool isDark, BuildContext context) {
+    switch (state.status) {
+      case SearchStationStatus.loading:
+      case SearchStationStatus.initial:
+        return Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              SizedBox(
+                width: 32,
+                height: 32,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2.5,
+                  valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
+                ),
+              ),
+              SizedBox(height: 16.h),
+              Text(
+                'Finding stations near you…',
+                style: AppTypography.bodyMedium.copyWith(
+                  color: isDark ? AppColors.textSecondary : AppColors.textSecondaryLight,
+                ),
+              ),
+            ],
+          ),
+        );
+
+      case SearchStationStatus.error:
+        return Center(
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 32.w),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Icon(
+                  Icons.wifi_off_rounded,
+                  size: 48,
+                  color: isDark ? AppColors.textSecondary : AppColors.textSecondaryLight,
+                ),
+                SizedBox(height: 16.h),
+                Text(
+                  state.errorMessage ?? 'Failed to load stations',
+                  textAlign: TextAlign.center,
+                  style: AppTypography.bodyMedium.copyWith(
+                    color: isDark ? AppColors.textSecondary : AppColors.textSecondaryLight,
+                  ),
+                ),
+                SizedBox(height: 20.h),
+                ElevatedButton.icon(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    foregroundColor: AppColors.whiteColor,
+                    shape: const StadiumBorder(),
+                    padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 12.h),
+                  ),
+                  onPressed: () {
+                    context.read<SearchStationBloc>().add(FetchStations());
+                  },
+                  icon: const Icon(Icons.refresh_rounded, size: 18),
+                  label: Text(
+                    'Retry',
+                    style: AppTypography.bodyMedium.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.whiteColor,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+
+      case SearchStationStatus.loaded:
+        if (state.filteredStations.isEmpty) {
+          return Center(
+            child: Text(
+              'No stations found.\nTry a different location or keyword.',
+              textAlign: TextAlign.center,
+              style: AppTypography.bodyMedium.copyWith(
+                color: isDark ? AppColors.textSecondary : AppColors.textSecondaryLight,
+              ),
+            ),
+          );
+        }
+        return ListView.separated(
+          padding: EdgeInsets.symmetric(horizontal: 16.w),
+          itemCount: state.filteredStations.length,
+          separatorBuilder: (_, __) => SizedBox(height: 16.h),
+          itemBuilder: (BuildContext context, int index) {
+            final StationInfo station = state.filteredStations[index];
+            return StationCard(
+              station: station,
+              onTap: () {
+                context.push('/station-details', extra: station);
+              },
+            );
+          },
+        );
+    }
+  }
 }

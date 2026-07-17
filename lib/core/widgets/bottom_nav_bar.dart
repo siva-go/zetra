@@ -27,7 +27,7 @@ const List<RiveAsset> bottomNavs = <RiveAsset>[
 /// Routes for each nav index.
 const List<String> _navRoutes = <String>[
   '/home',
-  '', // Scan QR — no navigation for now
+  '/scan-qr',
   '/plug-in',
   '/profile',
   '/notifications',

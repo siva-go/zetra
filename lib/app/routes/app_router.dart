@@ -19,6 +19,7 @@ import 'package:zetra/features/station/bloc/search_station_bloc.dart';
 import 'package:zetra/features/station/bloc/search_station_event.dart';
 import 'package:zetra/features/station/models/station_info.dart';
 import 'package:zetra/features/station/views/scan_qr_screen.dart';
+import 'package:zetra/features/station/bloc/scan_qr_bloc.dart';
 import 'package:zetra/features/station/views/search_station.dart';
 import 'package:zetra/features/station/views/station_details.dart';
 import 'package:zetra/features/wallet/bloc/wallet_bloc.dart';
@@ -135,6 +136,15 @@ final GoRouter appRouter = GoRouter(
         return const InvoiceScreen();
 
       }
+    ),
+    GoRoute(
+      path: '/scan-qr',
+      builder: (BuildContext context, GoRouterState state) {
+        return BlocProvider<ScanQrBloc>(
+          create: (_) => GetIt.instance<ScanQrBloc>(),
+          child: const ScanQrScreen(),
+        );
+      },
     ),
     GoRoute(
       path: '/search-station',
