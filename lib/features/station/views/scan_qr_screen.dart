@@ -182,19 +182,19 @@ class _ScanQrScreenState extends State<ScanQrScreen> with SingleTickerProviderSt
                     ),
                     ZetraBottomNavBar(
                         currentIndex: 1,
-                        onTap: (int idx) {
+                        // onTap: (int idx) {
 
-                          if (idx == 0) {
+                        //   if (idx == 0) {
 
-                            context.go('/home');
+                        //     context.go('/home');
 
-                          } else if (idx == 3) {
+                        //   } else if (idx == 3) {
 
-                            // Profile etc.
+                        //     // Profile etc.
 
-                          }
+                        //   }
 
-                        }
+                        // }
                     )
                   ]
               )

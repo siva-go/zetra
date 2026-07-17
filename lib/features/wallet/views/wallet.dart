@@ -102,15 +102,15 @@ class _WalletState extends State<Wallet> with TickerProviderStateMixin {
                 )
               ),
               ZetraBottomNavBar(
-                onTap: (int idx) {
+                // onTap: (int idx) {
 
-                  if (idx == 0) {
+                //   if (idx == 0) {
 
-                    context.go('/home');
+                //     context.go('/home');
 
-                  }
+                //   }
 
-                }
+                // }
               )
             ]
           );
