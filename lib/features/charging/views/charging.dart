@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:zetra/core/l10n/app_localizations.dart';
+import 'package:zetra/features/charging/views/widgets/charger_info_row.dart';
+import 'package:zetra/features/charging/views/widgets/mini_circular_gauge.dart';
+import 'package:zetra/features/charging/views/widgets/soc_gauge.dart';
 
 import '../../../../app/themes/app_colors.dart';
 import '../../../../app/themes/app_spacing.dart';
@@ -8,9 +12,6 @@ import '../../../../app/themes/app_typography.dart';
 import '../../../../core/widgets/bottom_nav_bar.dart';
 import '../../../../core/widgets/slide_to_stop_button.dart';
 import '../../../../core/components/app_dialog.dart';
-import '../widgets/soc_gauge.dart';
-import '../widgets/mini_circular_gauge.dart';
-import '../widgets/charger_info_row.dart';
 import '../bloc/charging_bloc.dart';
 import '../bloc/charging_event.dart';
 import '../bloc/charging_state.dart';
@@ -72,7 +73,7 @@ class HomeScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            'CHARGING SESSION',
+                            AppLocalizations.of(context).chargingSessionSession,
                             style: AppTypography.labelSmall.copyWith(
                               letterSpacing: 1.5,
                               color: AppColors.textSecondary,
@@ -94,10 +95,10 @@ class HomeScreen extends StatelessWidget {
                               const SizedBox(width: AppSpacing.xs),
                               Text(
                                 state.status == ChargingStatus.charging
-                                    ? 'Active Charging'
+                                    ? AppLocalizations.of(context).activeCharging
                                     : state.status == ChargingStatus.completed
-                                        ? 'Charging Completed'
-                                        : 'Session Paused',
+                                        ? AppLocalizations.of(context).chargingCompletedStatus
+                                        : AppLocalizations.of(context).sessionPaused,
                                 style: AppTypography.bodyMedium.copyWith(
                                   color: Colors.white,
                                   fontWeight: FontWeight.bold,
@@ -112,9 +113,9 @@ class HomeScreen extends StatelessWidget {
                         onPressed: () {
                           AppDialog.show(
                             context: context,
-                            title: 'Station Info',
-                            content: 'Charger: Super DC-94\nLocation: Sector 4 EV Hub\nNetwork: Zetra Power\nStatus: Online',
-                            primaryButtonText: 'OK',
+                            title: AppLocalizations.of(context).stationInfo,
+                            content: AppLocalizations.of(context).stationInfoDetails,
+                            primaryButtonText: AppLocalizations.of(context).ok,
                           );
                         },
                       ),
@@ -143,21 +144,21 @@ class HomeScreen extends StatelessWidget {
                       MiniCircularGauge(
                         percentage: (state.chargingSpeed / 150.0).clamp(0.0, 1.0),
                         value: state.chargingSpeed.toString(),
-                        label: 'SPEED',
+                        label: AppLocalizations.of(context).speed,
                         unit: 'kW',
                         activeColor: themeColor,
                       ),
                       MiniCircularGauge(
                         percentage: (state.energyDelivered / 85.0).clamp(0.0, 1.0),
                         value: state.energyDelivered.toString(),
-                        label: 'ENERGY',
+                        label: AppLocalizations.of(context).energy,
                         unit: 'kWh',
                         activeColor: themeColor,
                       ),
                       MiniCircularGauge(
                         percentage: (state.timeRemaining.inMinutes / 60.0).clamp(0.0, 1.0),
                         value: state.timeRemaining.inMinutes.toString(),
-                        label: 'REMAINING',
+                        label: AppLocalizations.of(context).remaining,
                         unit: 'min',
                         activeColor: themeColor,
                       ),
@@ -171,9 +172,9 @@ class HomeScreen extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
                   child: ChargerInfoRow(
-                    chargerType: 'DC Fast Charge',
+                    chargerType: AppLocalizations.of(context).dcFastCharge,
                     powerValue: '150 kW',
-                    connectorType: 'CCS Type 2',
+                    connectorType: AppLocalizations.of(context).ccsType2,
                     temperature: '${state.batteryTemp}°C',
                   ),
                 ),
@@ -186,21 +187,23 @@ class HomeScreen extends StatelessWidget {
                   child: SlideToStopButton(
                     themeColor: themeColor,
                     label: state.status == ChargingStatus.completed
-                        ? 'Slide to Finish'
-                        : 'Slide to Stop Charging',
+                        ? AppLocalizations.of(context).slideToFinish
+                        : AppLocalizations.of(context).slideToStopCharging,
                     onSlideComplete: () {
                       context.read<ChargingBloc>().add(StopCharging());
 
                       // Show summary dialog
                       AppDialog.show(
                         context: context,
-                        title: 'Session Summary',
-                        content: 'Charging session stopped successfully.\n\n'
-                            '• Final Charge: ${(state.soc * 100).toInt()}%\n'
-                            '• Energy Delivered: ${state.energyDelivered} kWh\n'
-                            '• Elapsed Time: ${state.elapsedTime.inMinutes}m ${state.elapsedTime.inSeconds % 60}s\n'
-                            '• Average Temp: ${state.batteryTemp}°C',
-                        primaryButtonText: 'Finish',
+                        title: AppLocalizations.of(context).sessionSummary,
+                        content: AppLocalizations.of(context).sessionSummaryDetails(
+                          (state.soc * 100).toInt().toString(),
+                          state.energyDelivered.toString(),
+                          state.elapsedTime.inMinutes.toString(),
+                          (state.elapsedTime.inSeconds % 60).toString(),
+                          state.batteryTemp.toString(),
+                        ),
+                        primaryButtonText: AppLocalizations.of(context).finish,
                         icon: Icons.check_circle_outline_rounded,
                         iconColor: AppColors.chargingGreenGlow,
                         onPrimaryPressed: () {

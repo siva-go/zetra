@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:zetra/core/l10n/app_localizations.dart';
 
 import '../../../../app/themes/app_colors.dart';
 import '../../../../app/themes/app_radius.dart';
@@ -52,7 +53,7 @@ class InvoiceScreen extends StatelessWidget {
 
                         // ── Session Summary label ─────────────────────────
                         Text(
-                          'SESSION SUMMARY',
+                          AppLocalizations.of(context).sessionSummaryHeader,
                           style: AppTypography.labelSmall.copyWith(
                             fontSize: 10,
                             letterSpacing: 2,
@@ -126,7 +127,7 @@ class _AppBar extends StatelessWidget {
           ),
           const SizedBox(width: AppSpacing.sm),
           Text(
-            'Invoice',
+            AppLocalizations.of(context).invoice,
             style: AppTypography.bodyLarge.copyWith(
               color: Colors.white,
               fontWeight: FontWeight.w700,
@@ -237,7 +238,7 @@ class _OrderCard extends StatelessWidget {
           const SizedBox(height: AppSpacing.sm),
 
           // Total amount
-          Text('Total Amount Paid',
+          Text(AppLocalizations.of(context).totalAmountPaid,
               style: AppTypography.bodySmall.copyWith(
                   color: AppColors.textSecondary, fontSize: 11)),
           const SizedBox(height: 4),
@@ -261,12 +262,12 @@ class _OrderCard extends StatelessWidget {
               const SizedBox(width: 6),
               Padding(
                 padding: const EdgeInsets.only(bottom: 4),
-                child: Text('INCL. TAXES',
+                child: Text(AppLocalizations.of(context).inclTaxes,
                     style: AppTypography.labelSmall.copyWith(
-                        color: neonCyan,
-                        fontSize: 9,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: 1.2)),
+                         color: neonCyan,
+                         fontSize: 9,
+                         fontWeight: FontWeight.w700,
+                         letterSpacing: 1.2)),
               ),
             ],
           ),
@@ -291,7 +292,7 @@ class _OrderCard extends StatelessWidget {
                   Icon(Icons.receipt_long_outlined,
                       color: neonCyan, size: 16),
                   const SizedBox(width: 6),
-                  Text('View Digital Receipt',
+                  Text(AppLocalizations.of(context).viewDigitalReceipt,
                       style: AppTypography.bodySmall.copyWith(
                           color: Colors.white,
                           fontWeight: FontWeight.w600,
@@ -334,7 +335,7 @@ class _DownloadButton extends StatelessWidget {
             const Icon(Icons.download_rounded,
                 color: AppColors.scaffoldDark, size: 20),
             const SizedBox(width: 8),
-            Text('Download Invoice',
+            Text(AppLocalizations.of(context).downloadInvoice,
                 style: AppTypography.bodyLarge.copyWith(
                     color: AppColors.scaffoldDark,
                     fontWeight: FontWeight.w800,
@@ -385,7 +386,7 @@ class _HubCard extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Charging Hub',
+              Text(AppLocalizations.of(context).chargingHub,
                   style: AppTypography.bodySmall.copyWith(
                       color: AppColors.textTertiary, fontSize: 10)),
               const SizedBox(height: 2),
@@ -411,14 +412,14 @@ class _StatsRow extends StatelessWidget {
     return Row(
       children: [
         _StatBox(
-          label: 'Energy Consumed',
+          label: AppLocalizations.of(context).energyConsumed,
           value: '24.7 kWh',
           icon: Icons.bolt_rounded,
           iconColor: neonGreen,
         ),
         const SizedBox(width: AppSpacing.sm),
         _StatBox(
-          label: 'Duration',
+          label: AppLocalizations.of(context).duration,
           value: '00:47:22',
           icon: Icons.timer_outlined,
           iconColor: neonCyan,
@@ -518,10 +519,10 @@ class _BillingCard extends StatelessWidget {
           Row(
             children: [
               _BillingItem(
-                  label: 'Unit Price', value: '₹18.20 / kWh'),
+                  label: AppLocalizations.of(context).unitPrice, value: '₹18.20 / kWh'),
               const SizedBox(width: AppSpacing.sm),
               _BillingItem(
-                  label: 'Base Cost', value: '₹449.54'),
+                  label: AppLocalizations.of(context).baseCost, value: '₹449.54'),
             ],
           ),
 
@@ -531,13 +532,13 @@ class _BillingCard extends StatelessWidget {
 
           // GST, convenience fee, credits
           _LineItem(
-              label: 'GST (12%)', value: '₹53.94'),
+              label: AppLocalizations.of(context).gst, value: '₹53.94'),
           const SizedBox(height: AppSpacing.xs),
           _LineItem(
-              label: 'Convenience Fee', value: '₹15.00'),
+              label: AppLocalizations.of(context).convenienceFee, value: '₹15.00'),
           const SizedBox(height: AppSpacing.xs),
           _LineItem(
-            label: 'Credits Applied',
+            label: AppLocalizations.of(context).creditsApplied,
             value: '- ₹18.48',
             valueColor: neonBlue,
           ),
@@ -550,7 +551,7 @@ class _BillingCard extends StatelessWidget {
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Total Paid',
+              Text(AppLocalizations.of(context).totalPaid,
                   style: AppTypography.bodyMedium.copyWith(
                       color: Colors.white,
                       fontWeight: FontWeight.w700,
@@ -657,7 +658,7 @@ class _HelpCard extends StatelessWidget {
             const SizedBox(width: AppSpacing.sm),
             Expanded(
               child: Text(
-                'Need help with this charge?',
+                AppLocalizations.of(context).needHelpWithCharge,
                 style: AppTypography.bodySmall.copyWith(
                     color: Colors.white,
                     fontSize: 13,

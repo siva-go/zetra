@@ -6,6 +6,7 @@ enum PlugInItemStatus { pending, active, completed }
 
 @immutable
 class PlugInState {
+
   final PluginStatus status;
   final PlugInItemStatus sessionInitiated;
   final PlugInItemStatus paymentSuccessful;
@@ -19,35 +20,33 @@ class PlugInState {
     required this.paymentSuccessful,
     required this.waitingForPlugIn,
     required this.vehicleConnected,
-    required this.chargingAutostart,
+    required this.chargingAutostart
   });
 
   factory PlugInState.initial() {
+
     return const PlugInState(
       status: PluginStatus.initial,
       sessionInitiated: PlugInItemStatus.completed,
       paymentSuccessful: PlugInItemStatus.completed,
       waitingForPlugIn: PlugInItemStatus.active,
       vehicleConnected: PlugInItemStatus.pending,
-      chargingAutostart: PlugInItemStatus.pending,
+      chargingAutostart: PlugInItemStatus.pending
     );
+
   }
 
-  PlugInState copyWith({
-    PluginStatus? status,
-    PlugInItemStatus? sessionInitiated,
-    PlugInItemStatus? paymentSuccessful,
-    PlugInItemStatus? waitingForPlugIn,
-    PlugInItemStatus? vehicleConnected,
-    PlugInItemStatus? chargingAutostart,
-  }) {
+  PlugInState copyWith({PluginStatus? status, PlugInItemStatus? sessionInitiated, PlugInItemStatus? paymentSuccessful, PlugInItemStatus? waitingForPlugIn, PlugInItemStatus? vehicleConnected, PlugInItemStatus? chargingAutostart}) {
+
     return PlugInState(
       status: status ?? this.status,
       sessionInitiated: sessionInitiated ?? this.sessionInitiated,
       paymentSuccessful: paymentSuccessful ?? this.paymentSuccessful,
       waitingForPlugIn: waitingForPlugIn ?? this.waitingForPlugIn,
       vehicleConnected: vehicleConnected ?? this.vehicleConnected,
-      chargingAutostart: chargingAutostart ?? this.chargingAutostart,
+      chargingAutostart: chargingAutostart ?? this.chargingAutostart
     );
+
   }
+
 }

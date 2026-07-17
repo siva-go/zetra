@@ -8,6 +8,7 @@ import 'package:go_router/go_router.dart';
 import 'package:zetra/app/themes/app_colors.dart';
 import 'package:zetra/app/themes/app_radius.dart';
 import 'package:zetra/app/themes/app_typography.dart';
+import 'package:zetra/core/l10n/app_localizations.dart';
 
 class PaymentStatus extends StatelessWidget {
 
@@ -258,11 +259,11 @@ class _PaymentStatusViewState extends State<_PaymentStatusView> with TickerProvi
   Widget _buildTitle(bool isDark) {
 
     return Text(
-      widget.isSuccess ? 'Payment Successful!' : 'Payment Failed',
+      widget.isSuccess ? AppLocalizations.of(context).paymentSuccessful : AppLocalizations.of(context).paymentFailed,
       style: AppTypography.bodyMedium.copyWith(
           fontSize: 24.sp,
           fontWeight: FontWeight.w800,
-          color: isDark ? AppColors.textSecondary : AppColors.textSecondaryLight,
+          color: isDark ? AppColors.textPrimary : AppColors.textPrimaryLight,
           height: 1.5
       )
     ).animate().fadeIn(
@@ -277,7 +278,7 @@ class _PaymentStatusViewState extends State<_PaymentStatusView> with TickerProvi
   Widget _buildSubtitle(bool isDark) {
 
     return Text(
-      widget.isSuccess ? 'Added to your wallet' : 'Your payment could not be processed.\nPlease try again.',
+      widget.isSuccess ? AppLocalizations.of(context).addedToWallet : AppLocalizations.of(context).paymentFailedSubtitle,
       textAlign: TextAlign.center,
       style: AppTypography.bodyMedium.copyWith(
         fontSize: 14.sp,
@@ -334,7 +335,7 @@ class _PaymentStatusViewState extends State<_PaymentStatusView> with TickerProvi
                       width: 5.w
                   ),
                   Text(
-                    'Transaction Declined',
+                    AppLocalizations.of(context).transactionDeclined,
                     style: AppTypography.bodySmall.copyWith(
                       fontSize: 11.sp,
                       color: AppColors.chargingRed,
@@ -375,7 +376,7 @@ class _PaymentStatusViewState extends State<_PaymentStatusView> with TickerProvi
       child: Row(
         children: <Widget>[
           Text(
-            'Current Balance',
+            AppLocalizations.of(context).currentBalance,
             style: AppTypography.bodyMedium.copyWith(
               fontSize: 13.sp,
               color: isDark ? AppColors.textSecondary : AppColors.textSecondaryLight
@@ -458,7 +459,7 @@ class _PaymentStatusViewState extends State<_PaymentStatusView> with TickerProvi
           ]
         ),
         child: Text(
-          'Back to Home',
+          AppLocalizations.of(context).backToHome,
           style: AppTypography.bodyLarge.copyWith(
             fontSize: 15.sp,
             fontWeight: FontWeight.w700,
@@ -518,7 +519,7 @@ class _PaymentStatusViewState extends State<_PaymentStatusView> with TickerProvi
                 width: 8.w
             ),
             Text(
-              'Try Again',
+              AppLocalizations.of(context).tryAgain,
               style: AppTypography.bodyLarge.copyWith(
                 fontSize: 15.sp,
                 fontWeight: FontWeight.w700,

@@ -5,27 +5,23 @@ import 'package:go_router/go_router.dart';
 import 'package:zetra/features/authentication/views/login.dart';
 import 'package:zetra/features/authentication/views/login_otp.dart';
 import 'package:zetra/features/authentication/views/signup.dart';
-import 'package:zetra/features/charging/presentation/screens/charge_link.dart';
-import 'package:zetra/features/charging/presentation/screens/charging.dart' as charging;
-import 'package:zetra/features/charging/presentation/screens/charging_history_screen.dart';
-import 'package:zetra/features/charging/presentation/screens/invoice_screen.dart';
-import 'package:zetra/features/charging/presentation/screens/plug_in.dart';
-import 'package:zetra/features/charging/presentation/screens/plug_in_light.dart';
+import 'package:zetra/features/charging/views/charge_link.dart';
+import 'package:zetra/features/charging/views/charging.dart' as charging;
+import 'package:zetra/features/charging/views/charging_history_screen.dart';
+import 'package:zetra/features/charging/views/invoice_screen.dart';
+import 'package:zetra/features/charging/views/plug_in.dart';
+import 'package:zetra/features/charging/views/plug_in_light.dart';
 import 'package:zetra/features/home/presentation/screens/notification_screen.dart';
 import 'package:zetra/features/home/presentation/screens/notification_screen_light.dart';
 import 'package:zetra/features/home/presentation/screens/profile_screen.dart';
 import 'package:zetra/features/home/views/home.dart';
+import 'package:zetra/features/station/bloc/scan_qr_bloc.dart';
 import 'package:zetra/features/station/bloc/search_station_bloc.dart';
 import 'package:zetra/features/station/bloc/search_station_event.dart';
 import 'package:zetra/features/station/models/station_info.dart';
 import 'package:zetra/features/station/views/scan_qr_screen.dart';
-import 'package:zetra/features/station/bloc/scan_qr_bloc.dart';
 import 'package:zetra/features/station/views/search_station.dart';
 import 'package:zetra/features/station/views/station_details.dart';
-import 'package:zetra/features/wallet/bloc/wallet_bloc.dart';
-import 'package:zetra/features/wallet/views/add_money.dart';
-import 'package:zetra/features/wallet/views/payment_status.dart';
-import 'package:zetra/features/wallet/views/wallet.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/login',

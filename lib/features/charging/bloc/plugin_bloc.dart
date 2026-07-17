@@ -1,9 +1,10 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'plugin_event.dart';
-import 'plugin_state.dart';
+import 'package:zetra/features/charging/bloc/plugin_event.dart';
+import 'package:zetra/features/charging/bloc/plugin_state.dart';
 
 class PlugInBloc extends Bloc<PlugInEvent, PlugInState> {
+
   Timer? _timer;
 
   PlugInBloc() : super(PlugInState.initial()) {
@@ -14,9 +15,13 @@ class PlugInBloc extends Bloc<PlugInEvent, PlugInState> {
     on<ResetPlugin>(_onResetPlugin);
   }
 
-  void _onStartConnectionSimulation(
-      StartConnectionSimulation event, Emitter<PlugInState> emit) {
-    if (state.status != PluginStatus.initial) return;
+  void _onStartConnectionSimulation(StartConnectionSimulation event, Emitter<PlugInState> emit) {
+
+    if (state.status != PluginStatus.initial) {
+
+      return;
+
+    }
 
     _timer?.cancel();
 
@@ -24,61 +29,90 @@ class PlugInBloc extends Bloc<PlugInEvent, PlugInState> {
     emit(state.copyWith(
       status: PluginStatus.connecting,
       waitingForPlugIn: PlugInItemStatus.completed,
-      vehicleConnected: PlugInItemStatus.active,
+      vehicleConnected: PlugInItemStatus.active
     ));
 
     // Schedule next step transition in 1.2 seconds
-    _timer = Timer(const Duration(milliseconds: 1200), () {
+    _timer = Timer(const Duration(
+        milliseconds: 1200
+    ), () {
+
       add(SetVehicleConnected());
+
     });
+
   }
 
-  void _onSetVehicleConnected(
-      SetVehicleConnected event, Emitter<PlugInState> emit) {
-    if (state.status != PluginStatus.connecting) return;
+  void _onSetVehicleConnected(SetVehicleConnected event, Emitter<PlugInState> emit) {
+
+    if (state.status != PluginStatus.connecting) {
+
+      return;
+
+    }
 
     // 2. Mark 'Vehicle Connected' as completed, make 'Charging Autostart' active.
     emit(state.copyWith(
       vehicleConnected: PlugInItemStatus.completed,
-      chargingAutostart: PlugInItemStatus.active,
+      chargingAutostart: PlugInItemStatus.active
     ));
 
     // Schedule next step transition in 1.2 seconds
-    _timer = Timer(const Duration(milliseconds: 1200), () {
+    _timer = Timer(const Duration(
+        milliseconds: 1200
+    ), () {
+
       add(SetChargingAutostart());
+
     });
+
   }
 
-  void _onSetChargingAutostart(
-      SetChargingAutostart event, Emitter<PlugInState> emit) {
-    if (state.status != PluginStatus.connecting) return;
+  void _onSetChargingAutostart(SetChargingAutostart event, Emitter<PlugInState> emit) {
+
+    if (state.status != PluginStatus.connecting) {
+
+      return;
+
+    }
 
     // 3. Mark 'Charging Autostart' as completed.
     emit(state.copyWith(
-      chargingAutostart: PlugInItemStatus.completed,
+      chargingAutostart: PlugInItemStatus.completed
     ));
 
     // Schedule final completion in 1 second
-    _timer = Timer(const Duration(milliseconds: 1000), () {
+    _timer = Timer(const Duration(
+        milliseconds: 1000
+    ), () {
+
       add(SetPlugInCompleted());
+
     });
+
   }
 
-  void _onSetPlugInCompleted(
-      SetPlugInCompleted event, Emitter<PlugInState> emit) {
+  void _onSetPlugInCompleted(SetPlugInCompleted event, Emitter<PlugInState> emit) {
+
     emit(state.copyWith(
-      status: PluginStatus.completed,
+      status: PluginStatus.completed
     ));
+
   }
 
   void _onResetPlugin(ResetPlugin event, Emitter<PlugInState> emit) {
+
     _timer?.cancel();
     emit(PlugInState.initial());
+
   }
 
   @override
   Future<void> close() {
+
     _timer?.cancel();
     return super.close();
+
   }
+
 }

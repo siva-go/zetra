@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:zetra/app/routes/app_router.dart';
 import 'package:zetra/app/themes/app_colors.dart';
+import 'package:zetra/core/l10n/app_localizations.dart';
 import 'package:zetra/core/services/di.dart';
 import 'package:zetra/features/authentication/bloc/auth_bloc.dart';
-import 'package:zetra/features/charging/presentation/bloc/charging_bloc.dart';
-import 'package:zetra/features/charging/presentation/bloc/plugin_bloc.dart';
+import 'package:zetra/features/charging/bloc/charging_bloc.dart';
+import 'package:zetra/features/charging/bloc/plugin_bloc.dart';
 import 'package:zetra/features/home/bloc/home_bloc.dart';
 
 void main() async {
@@ -65,6 +67,15 @@ class ZetraApp extends StatelessWidget {
           cardColor: AppColors.cardDark,
           textTheme: GoogleFonts.urbanistTextTheme(ThemeData.dark().textTheme)
         ),
+        localizationsDelegates: const <LocalizationsDelegate<dynamic>>[
+          AppLocalizations.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate
+        ],
+        supportedLocales: const <Locale>[
+          Locale('en', '')
+        ],
         routerConfig: appRouter
       )
     );

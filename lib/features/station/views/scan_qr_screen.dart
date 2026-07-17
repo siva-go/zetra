@@ -8,6 +8,7 @@ import 'package:mobile_scanner/mobile_scanner.dart';
 import 'package:zetra/app/themes/app_colors.dart';
 import 'package:zetra/app/themes/app_radius.dart';
 import 'package:zetra/app/themes/app_typography.dart';
+import 'package:zetra/core/l10n/app_localizations.dart';
 import 'package:zetra/core/widgets/bottom_nav_bar.dart';
 import 'package:zetra/features/station/bloc/scan_qr_bloc.dart';
 import 'package:zetra/features/station/bloc/scan_qr_event.dart';
@@ -160,7 +161,7 @@ class _ScanQrScreenState extends State<ScanQrScreen> with SingleTickerProviderSt
                                                 height: 32.h
                                             ),
                                             Text(
-                                              'Align QR code within the frame',
+                                              AppLocalizations.of(context).alignQrWithinFrame,
                                               style: AppTypography.bodyLarge.copyWith(
                                                   color: isDark ? AppColors.textSecondary : AppColors.textSecondaryLight,
                                                   fontWeight: FontWeight.w500
@@ -228,7 +229,7 @@ class _ScanQrScreenState extends State<ScanQrScreen> with SingleTickerProviderSt
                       )
                   ),
                   Text(
-                      'Scan QR Code',
+                      AppLocalizations.of(context).scanQrCode,
                       style: AppTypography.bodyLarge.copyWith(
                           fontSize: 18.sp,
                           fontWeight: FontWeight.w700,
@@ -415,7 +416,7 @@ class _ScanQrScreenState extends State<ScanQrScreen> with SingleTickerProviderSt
                     width: 13.w
                   ),
                   Text(
-                      'Enter Station ID Manually',
+                      AppLocalizations.of(context).enterStationIdManually,
                       style: AppTypography.bodyLarge.copyWith(
                           color: isDark ? AppColors.textPrimary : AppColors.textPrimaryLight,
                           fontWeight: FontWeight.w600

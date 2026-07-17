@@ -1,0 +1,673 @@
+{
+  "@@locale": "en",
+  "appTitle": "ZETRA",
+  "@appTitle": {
+    "description": "The main title of the application"
+  },
+  "navHome": "Home",
+  "@navHome": {
+    "description": "Navigation bar item for home screen"
+  },
+  "navScanQr": "Scan QR",
+  "@navScanQr": {
+    "description": "Navigation bar item for QR scanning"
+  },
+  "navCharging": "Charging",
+  "@navCharging": {
+    "description": "Navigation bar item for active charging screen"
+  },
+  "navProfile": "Profile",
+  "@navProfile": {
+    "description": "Navigation bar item for user profile"
+  },
+  "navNotifications": "Notifications",
+  "@navNotifications": {
+    "description": "Navigation bar item for notifications screen"
+  },
+  "walletBalance": "Wallet Balance",
+  "@walletBalance": {
+    "description": "Text label displaying wallet balance"
+  },
+  "addMoney": "+ Add Money",
+  "@addMoney": {
+    "description": "Button text to add money to the wallet"
+  },
+  "paymentMethods": "Payment Methods",
+  "@paymentMethods": {
+    "description": "Menu option for payment methods"
+  },
+  "savedStations": "Saved Stations",
+  "@savedStations": {
+    "description": "Menu option for saved stations"
+  },
+  "chargingHistory": "Charging History",
+  "@chargingHistory": {
+    "description": "Menu option for charging history"
+  },
+  "invoice": "Invoice",
+  "@invoice": {
+    "description": "Menu option for invoices"
+  },
+  "settings": "Settings",
+  "@settings": {
+    "description": "Menu option for app settings"
+  },
+  "helpSupport": "Help & Support",
+  "@helpSupport": {
+    "description": "Menu option for help and support"
+  },
+  "evChargingNetwork": "EV CHARGING NETWORK",
+  "@evChargingNetwork": {
+    "description": "Sub-title text under app title"
+  },
+  "welcomeBack": "Welcome Back 👋",
+  "@welcomeBack": {
+    "description": "Welcome header on login screen"
+  },
+  "enterPhoneToContinue": "Enter your phone number to continue",
+  "@enterPhoneToContinue": {
+    "description": "Instruction label under welcome header"
+  },
+  "phoneValidationRequired": "Please enter your phone number",
+  "@phoneValidationRequired": {
+    "description": "Validation message when phone is empty"
+  },
+  "phoneValidationLength": "Phone number must be 10 digits",
+  "@phoneValidationLength": {
+    "description": "Validation message when phone is not 10 digits"
+  },
+  "getOtp": "Get OTP",
+  "@getOtp": {
+    "description": "Button label to request OTP"
+  },
+  "newUser": "New user? ",
+  "@newUser": {
+    "description": "Prompt text for signup"
+  },
+  "signUp": "Sign Up",
+  "@signUp": {
+    "description": "SignUp button / label text"
+  },
+  "termsPrivacyPrompt": "By continuing you agree to our Terms & Privacy Policy",
+  "@termsPrivacyPrompt": {
+    "description": "Terms and privacy agreement footnote"
+  },
+  "verifyOtp": "Verify OTP",
+  "@verifyOtp": {
+    "description": "OTP screen header title"
+  },
+  "enterDigitCodeSent": "Enter the 6-digit code sent to\n{phone}",
+  "@enterDigitCodeSent": {
+    "description": "Instruction description for OTP entry",
+    "placeholders": {
+      "phone": {
+        "type": "String",
+        "example": "+91 9876543210"
+      }
+    }
+  },
+  "resendOtpIn": "Resend OTP in 00:{seconds}",
+  "@resendOtpIn": {
+    "description": "Cooldown timer label for resending OTP",
+    "placeholders": {
+      "seconds": {
+        "type": "String",
+        "example": "30"
+      }
+    }
+  },
+  "resendOtp": "Resend OTP",
+  "@resendOtp": {
+    "description": "Button text to resend OTP"
+  },
+  "otpVerifiedSuccess": "OTP Verified Successfully!",
+  "@otpVerifiedSuccess": {
+    "description": "Toast message on successful OTP verification"
+  },
+  "createDriverAccount": "CREATE DRIVER ACCOUNT",
+  "@createDriverAccount": {
+    "description": "Subtitle for signup screen"
+  },
+  "joinZetraNetwork": "Join Zetra Network ",
+  "@joinZetraNetwork": {
+    "description": "Header title on signup form card"
+  },
+  "fillDetailsToGetStarted": "Fill in your details to get started",
+  "@fillDetailsToGetStarted": {
+    "description": "Subtitle on signup form card"
+  },
+  "fullName": "Full Name",
+  "@fullName": {
+    "description": "Textfield label for full name"
+  },
+  "fullNameHint": "John Doe",
+  "@fullNameHint": {
+    "description": "Hint text for full name field"
+  },
+  "fullNameValidation": "Please enter your full name",
+  "@fullNameValidation": {
+    "description": "Validation error for full name"
+  },
+  "phoneNumber": "Phone Number",
+  "@phoneNumber": {
+    "description": "Label for phone number field"
+  },
+  "emailAddressOptional": "Email Address (Optional)",
+  "@emailAddressOptional": {
+    "description": "Label for email field"
+  },
+  "emailHint": "abc@gmail.com",
+  "@emailHint": {
+    "description": "Hint text for email field"
+  },
+  "emailValidation": "Please enter a valid email address",
+  "@emailValidation": {
+    "description": "Validation error for email field"
+  },
+  "password": "Password",
+  "@password": {
+    "description": "Label for password field"
+  },
+  "passwordValidationEmpty": "Please enter a password",
+  "@passwordValidationEmpty": {
+    "description": "Validation error when password is empty"
+  },
+  "passwordValidationLength": "Password must be at least 6 characters",
+  "@passwordValidationLength": {
+    "description": "Validation error when password is too short"
+  },
+  "userRegisteredSuccess": "User registered successfully",
+  "@userRegisteredSuccess": {
+    "description": "Toast message on successful registration"
+  },
+  "registrationFailed": "Registration failed",
+  "@registrationFailed": {
+    "description": "Fallback error message on failed registration"
+  },
+  "evChargingPlatform": "EV Charging Platform",
+  "@evChargingPlatform": {
+    "description": "Subtitle on home screen top bar"
+  },
+  "welcomeBackGreeting": "Welcome back! 👋",
+  "@welcomeBackGreeting": {
+    "description": "Greeting text on home screen"
+  },
+  "startChargingSession": "Start your charging session",
+  "@startChargingSession": {
+    "description": "Instruction subtitle on home screen"
+  },
+  "sessionsCount": "{count} Sessions",
+  "@sessionsCount": {
+    "description": "Chip label displaying count of sessions",
+    "placeholders": {
+      "count": {
+        "type": "String",
+        "example": "3"
+      }
+    }
+  },
+  "thisWeek": "This week",
+  "@thisWeek": {
+    "description": "Chip subtitle for sessions count"
+  },
+  "totalEnergy": "Total energy",
+  "@totalEnergy": {
+    "description": "Chip subtitle for total energy"
+  },
+  "co2Saved": "CO₂ saved",
+  "@co2Saved": {
+    "description": "Chip subtitle for carbon offset"
+  },
+  "chargingFlow": "CHARGING FLOW",
+  "@chargingFlow": {
+    "description": "Section header for charging cards list"
+  },
+  "plugIn": "Plug-In",
+  "@plugIn": {
+    "description": "Title for plugin card"
+  },
+  "connectEvToCharger": "Connect your EV to the charger",
+  "@connectEvToCharger": {
+    "description": "Subtitle for plugin card"
+  },
+  "powerLink": "Power Link",
+  "@powerLink": {
+    "description": "Title for power link card"
+  },
+  "vehicleConnectedReady": "Vehicle connected & ready to charge",
+  "@vehicleConnectedReady": {
+    "description": "Subtitle for power link card"
+  },
+  "chargingSession": "Charging Session",
+  "@chargingSession": {
+    "description": "Title for charging session card"
+  },
+  "monitorLiveStats": "Monitor live charging stats & energy",
+  "@monitorLiveStats": {
+    "description": "Subtitle for charging session card"
+  },
+  "viewPastSessions": "View past sessions & energy usage",
+  "@viewPastSessions": {
+    "description": "Subtitle for charging history card"
+  },
+  "downloadViewInvoice": "Download & view your charging invoice",
+  "@downloadViewInvoice": {
+    "description": "Subtitle for invoice card"
+  },
+  "lightTheme": "LIGHT THEME",
+  "@lightTheme": {
+    "description": "Header for light theme screens section"
+  },
+  "plugInLight": "Plug-In  ·  Light",
+  "@plugInLight": {
+    "description": "Title for light theme plugin screen"
+  },
+  "lightThemeConnectEv": "Light theme — connect your EV",
+  "@lightThemeConnectEv": {
+    "description": "Subtitle for light theme plugin screen"
+  },
+  "notificationsLight": "Notifications  ·  Light",
+  "@notificationsLight": {
+    "description": "Title for light theme notifications card"
+  },
+  "lightThemeSessionAlerts": "Light theme — session alerts",
+  "@lightThemeSessionAlerts": {
+    "description": "Subtitle for light theme notifications screen"
+  },
+  "notifications": "Notifications",
+  "@notifications": {
+    "description": "Header title for notifications screen"
+  },
+  "pluggedIn": "Plugged In",
+  "@pluggedIn": {
+    "description": "Notification title for plugged in state"
+  },
+  "vehicleConnectedSuccess": "Vehicle connected successfully.",
+  "@vehicleConnectedSuccess": {
+    "description": "Notification body for plugged in state"
+  },
+  "chargingStarted": "Charging Started",
+  "@chargingStarted": {
+    "description": "Notification title for charging start"
+  },
+  "sessionHasStarted": "Your charging session has started.",
+  "@sessionHasStarted": {
+    "description": "Notification body for charging start"
+  },
+  "lowBalance": "Low Balance",
+  "@lowBalance": {
+    "description": "Notification title for low balance alert"
+  },
+  "walletBalanceIsLow": "Your wallet balance is low.",
+  "@walletBalanceIsLow": {
+    "description": "Notification body for low balance alert"
+  },
+  "chargingCompleted": "Charging Completed",
+  "@chargingCompleted": {
+    "description": "Notification title for charging complete"
+  },
+  "sessionCompletedAt": "Session completed at ZETRA Hub.",
+  "@sessionCompletedAt": {
+    "description": "Notification body for charging complete"
+  },
+  "newOffer": "New Offer",
+  "@newOffer": {
+    "description": "Notification title for promotional offers"
+  },
+  "offerCashbackBody": "Get 10% cashback on your next 3 sessions!",
+  "@offerCashbackBody": {
+    "description": "Notification body for cashback promo"
+  },
+  "searchLocationOrStation": "Search location or station",
+  "@searchLocationOrStation": {
+    "description": "Hint text for station search field"
+  },
+  "stationsNearYou": "Stations Near You",
+  "@stationsNearYou": {
+    "description": "Header for search results near user location"
+  },
+  "resultsCount": "{count} results",
+  "@resultsCount": {
+    "description": "Text showing number of search results",
+    "placeholders": {
+      "count": {
+        "type": "String",
+        "example": "5"
+      }
+    }
+  },
+  "findingStationsNearYou": "Finding stations near you…",
+  "@findingStationsNearYou": {
+    "description": "Loading message during search"
+  },
+  "failedToLoadStations": "Failed to load stations",
+  "@failedToLoadStations": {
+    "description": "Error message when search fails"
+  },
+  "retry": "Retry",
+  "@retry": {
+    "description": "Retry button text"
+  },
+  "noStationsFound": "No stations found.\nTry a different location or keyword.",
+  "@noStationsFound": {
+    "description": "Empty state description when search returns no matches"
+  },
+  "kmAway": "{distance} km away",
+  "@kmAway": {
+    "description": "Distance label",
+    "placeholders": {
+      "distance": {
+        "type": "String",
+        "example": "2.4"
+      }
+    }
+  },
+  "availableConnectors": "Available Connectors",
+  "@availableConnectors": {
+    "description": "Header for connectors section"
+  },
+  "pricing": "Pricing",
+  "@pricing": {
+    "description": "Label for pricing row"
+  },
+  "pricePerKwh": "₹ {price} /kWh",
+  "@pricePerKwh": {
+    "description": "Price unit value",
+    "placeholders": {
+      "price": {
+        "type": "String",
+        "example": "12"
+      }
+    }
+  },
+  "stationTimings": "Station Timings",
+  "@stationTimings": {
+    "description": "Label for timings row"
+  },
+  "alwaysOpen": "24 X 7 Open",
+  "@alwaysOpen": {
+    "description": "Value for timing indicating always open"
+  },
+  "startCharging": "Start Charging",
+  "@startCharging": {
+    "description": "Call-to-action button to start EV charging"
+  },
+  "alignQrWithinFrame": "Align QR code within the frame",
+  "@alignQrWithinFrame": {
+    "description": "Helper instruction on scanner overlay"
+  },
+  "scanQrCode": "Scan QR Code",
+  "@scanQrCode": {
+    "description": "Title header for QR code scanner screen"
+  },
+  "enterStationIdManually": "Enter Station ID Manually",
+  "@enterStationIdManually": {
+    "description": "Button to input station ID via keyboard"
+  },
+  "chargingAt": "Charging at",
+  "@chargingAt": {
+    "description": "Label for current charging location"
+  },
+  "orderId": "ORDER ID: #2CASB796",
+  "@orderId": {
+    "description": "Mock Order ID text string"
+  },
+  "waitingForPlugIn": "Waiting for Plug-In",
+  "@waitingForPlugIn": {
+    "description": "Status text waiting for connector"
+  },
+  "connectHighSpeedPlug": "Please connect the premium high-speed plug to your vehicle.",
+  "@connectHighSpeedPlug": {
+    "description": "Instruction to plug in the charger connector"
+  },
+  "sessionInitiated": "Session Initiated",
+  "@sessionInitiated": {
+    "description": "Connection checklist step 1"
+  },
+  "paymentSuccessful": "Payment Successful",
+  "@paymentSuccessful": {
+    "description": "Connection checklist step 2"
+  },
+  "vehicleConnected": "Vehicle Connected",
+  "@vehicleConnected": {
+    "description": "Connection checklist step 4"
+  },
+  "chargingAutostart": "Charging Autostart",
+  "@chargingAutostart": {
+    "description": "Connection checklist step 5"
+  },
+  "letsCharge": "Let's Charge",
+  "@letsCharge": {
+    "description": "Button text to transition to charging"
+  },
+  "establishingConnection": "Establishing Connection...",
+  "@establishingConnection": {
+    "description": "Connecting button status"
+  },
+  "connected": "Connected",
+  "@connected": {
+    "description": "Connected button status"
+  },
+  "powerLinkEstablished": "Power Link\nEstablished! ⚡",
+  "@powerLinkEstablished": {
+    "description": "Success link title header"
+  },
+  "chargingSessionSession": "CHARGING SESSION",
+  "@chargingSessionSession": {
+    "description": "Active session header label"
+  },
+  "activeCharging": "Active Charging",
+  "@activeCharging": {
+    "description": "Status description when active"
+  },
+  "chargingCompletedStatus": "Charging Completed",
+  "@chargingCompletedStatus": {
+    "description": "Status description when completed"
+  },
+  "sessionPaused": "Session Paused",
+  "@sessionPaused": {
+    "description": "Status description when paused"
+  },
+  "stationInfo": "Station Info",
+  "@stationInfo": {
+    "description": "Title of station description dialog"
+  },
+  "stationInfoDetails": "Charger: Super DC-94\nLocation: Sector 4 EV Hub\nNetwork: Zetra Power\nStatus: Online",
+  "@stationInfoDetails": {
+    "description": "Details text for station info"
+  },
+  "ok": "OK",
+  "@ok": {
+    "description": "Standard confirmation button"
+  },
+  "speed": "SPEED",
+  "@speed": {
+    "description": "Label for charging speed metric"
+  },
+  "energy": "ENERGY",
+  "@energy": {
+    "description": "Label for energy delivered metric"
+  },
+  "remaining": "REMAINING",
+  "@remaining": {
+    "description": "Label for remaining time metric"
+  },
+  "dcFastCharge": "DC Fast Charge",
+  "@dcFastCharge": {
+    "description": "Mock charger type label"
+  },
+  "ccsType2": "CCS Type 2",
+  "@ccsType2": {
+    "description": "Mock connector type label"
+  },
+  "slideToFinish": "Slide to Finish",
+  "@slideToFinish": {
+    "description": "Slider action text on completion"
+  },
+  "slideToStopCharging": "Slide to Stop Charging",
+  "@slideToStopCharging": {
+    "description": "Slider action text during active charge"
+  },
+  "sessionSummary": "Session Summary",
+  "@sessionSummary": {
+    "description": "Header title of session summary dialog"
+  },
+  "sessionSummaryDetails": "Charging session stopped successfully.\n\n• Final Charge: {soc}%\n• Energy Delivered: {energy} kWh\n• Elapsed Time: {min}m {sec}s\n• Average Temp: {temp}°C",
+  "@sessionSummaryDetails": {
+    "description": "Body summary values",
+    "placeholders": {
+      "soc": { "type": "String", "example": "80" },
+      "energy": { "type": "String", "example": "15" },
+      "min": { "type": "String", "example": "45" },
+      "sec": { "type": "String", "example": "20" },
+      "temp": { "type": "String", "example": "35" }
+    }
+  },
+  "finish": "Finish",
+  "@finish": {
+    "description": "Action to finish session"
+  },
+  "sessionSummaryHeader": "SESSION SUMMARY",
+  "@sessionSummaryHeader": {
+    "description": "Header text for summary section"
+  },
+  "invoice": "Invoice",
+  "@invoice": {
+    "description": "Invoice screen appbar title"
+  },
+  "totalAmountPaid": "Total Amount Paid",
+  "@totalAmountPaid": {
+    "description": "Total amount paid subtitle"
+  },
+  "inclTaxes": "INCL. TAXES",
+  "@inclTaxes": {
+    "description": "Tax indicator subtitle"
+  },
+  "viewDigitalReceipt": "View Digital Receipt",
+  "@viewDigitalReceipt": {
+    "description": "Button to view receipt"
+  },
+  "downloadInvoice": "Download Invoice",
+  "@downloadInvoice": {
+    "description": "Button to download invoice file"
+  },
+  "chargingHub": "Charging Hub",
+  "@chargingHub": {
+    "description": "Station type label"
+  },
+  "energyConsumed": "Energy Consumed",
+  "@energyConsumed": {
+    "description": "Stat label for energy"
+  },
+  "duration": "Duration",
+  "@duration": {
+    "description": "Stat label for duration"
+  },
+  "unitPrice": "Unit Price",
+  "@unitPrice": {
+    "description": "Unit pricing detail label"
+  },
+  "baseCost": "Base Cost",
+  "@baseCost": {
+    "description": "Base cost detail label"
+  },
+  "gst": "GST (12%)",
+  "@gst": {
+    "description": "GST detail label"
+  },
+  "convenienceFee": "Convenience Fee",
+  "@convenienceFee": {
+    "description": "Convenience fee detail label"
+  },
+  "creditsApplied": "Credits Applied",
+  "@creditsApplied": {
+    "description": "Credits applied detail label"
+  },
+  "totalPaid": "Total Paid",
+  "@totalPaid": {
+    "description": "Total paid bill detail label"
+  },
+  "needHelpWithCharge": "Need help with this charge?",
+  "@needHelpWithCharge": {
+    "description": "Help center redirection prompt"
+  },
+  "wallet": "Wallet",
+  "@wallet": {
+    "description": "Wallet screen title"
+  },
+  "currentBalance": "Current Balance",
+  "@currentBalance": {
+    "description": "Remaining wallet balance label"
+  },
+  "addMoneyContinue": "Add money to continue charging",
+  "@addMoneyContinue": {
+    "description": "Illustration helper text to charge wallet"
+  },
+  "addMoney": "Add Money",
+  "@addMoney": {
+    "description": "Top-up wallet CTA text"
+  },
+  "recentTransactions": "Recent Transactions",
+  "@recentTransactions": {
+    "description": "Transactions history title"
+  },
+  "viewAll": "View All",
+  "@viewAll": {
+    "description": "Redirection to see all items link"
+  },
+  "choosePaymentMethod": "Choose Payment Method",
+  "@choosePaymentMethod": {
+    "description": "Selection prompt for payment modes"
+  },
+  "pay": "Pay",
+  "@pay": {
+    "description": "Generic pay button label"
+  },
+  "payAmount": "Pay  ₹{amount}",
+  "@payAmount": {
+    "description": "Pay with amount details label",
+    "placeholders": {
+      "amount": { "type": "String", "example": "500" }
+    }
+  },
+  "processing": "Processing...",
+  "@processing": {
+    "description": "Loading processing transaction status"
+  },
+  "securedByZetraPay": "Secured by Zetra Pay",
+  "@securedByZetraPay": {
+    "description": "Secure payment footnote"
+  },
+  "other": "Other",
+  "@other": {
+    "description": "Chip for custom payment input option"
+  },
+  "paymentSuccessful": "Payment Successful!",
+  "@paymentSuccessful": {
+    "description": "Successful topup title header"
+  },
+  "paymentFailed": "Payment Failed",
+  "@paymentFailed": {
+    "description": "Failed topup title header"
+  },
+  "addedToWallet": "Added to your wallet",
+  "@addedToWallet": {
+    "description": "Status text for successful payment"
+  },
+  "paymentFailedSubtitle": "Your payment could not be processed.\nPlease try again.",
+  "@paymentFailedSubtitle": {
+    "description": "Detailed explanation of failure status"
+  },
+  "transactionDeclined": "Transaction Declined",
+  "@transactionDeclined": {
+    "description": "Short error label badge text"
+  },
+  "backToHome": "Back to Home",
+  "@backToHome": {
+    "description": "Navigation action button"
+  },
+  "tryAgain": "Try Again",
+  "@tryAgain": {
+    "description": "Failure retry action button"
+  }
+}

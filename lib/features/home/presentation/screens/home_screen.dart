@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:zetra/core/l10n/app_localizations.dart';
 
 import '../../../../app/themes/app_colors.dart';
 import '../../../../app/themes/app_radius.dart';
@@ -49,7 +50,7 @@ class ZetraHomeScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        'EV Charging Platform',
+                        AppLocalizations.of(context).evChargingPlatform,
                         style: AppTypography.bodySmall.copyWith(
                           color: AppColors.textSecondary,
                           fontSize: 11,
@@ -125,7 +126,7 @@ class ZetraHomeScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Welcome back! 👋',
+                    AppLocalizations.of(context).welcomeBackGreeting,
                     style: AppTypography.bodyMedium.copyWith(
                       color: AppColors.textSecondary,
                       fontSize: 13,
@@ -133,7 +134,7 @@ class ZetraHomeScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: AppSpacing.xxs),
                   Text(
-                    'Start your charging session',
+                    AppLocalizations.of(context).startChargingSession,
                     style: AppTypography.labelLarge.copyWith(
                       fontSize: 20,
                       fontWeight: FontWeight.w800,
@@ -154,22 +155,22 @@ class ZetraHomeScreen extends StatelessWidget {
                   _StatChip(
                     icon: Icons.bolt_rounded,
                     iconColor: AppColors.chargingGreenGlow,
-                    label: '3 Sessions',
-                    sublabel: 'This week',
+                    label: AppLocalizations.of(context).sessionsCount('3'),
+                    sublabel: AppLocalizations.of(context).thisWeek,
                   ),
                   const SizedBox(width: AppSpacing.sm),
                   _StatChip(
                     icon: Icons.battery_charging_full_rounded,
                     iconColor: const Color(0xFF00E5FF),
                     label: '124 kWh',
-                    sublabel: 'Total energy',
+                    sublabel: AppLocalizations.of(context).totalEnergy,
                   ),
                   const SizedBox(width: AppSpacing.sm),
                   _StatChip(
                     icon: Icons.eco_rounded,
                     iconColor: AppColors.chargingGreenGlow,
                     label: '62 kg',
-                    sublabel: 'CO₂ saved',
+                    sublabel: AppLocalizations.of(context).co2Saved,
                   ),
                 ],
               ),
@@ -180,7 +181,7 @@ class ZetraHomeScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
               child: Text(
-                'CHARGING FLOW',
+                AppLocalizations.of(context).chargingFlow,
                 style: AppTypography.labelSmall.copyWith(
                   letterSpacing: 2,
                   color: AppColors.textTertiary,
@@ -202,8 +203,8 @@ class ZetraHomeScreen extends StatelessWidget {
                     // Plug-In Card (dark)
                     _NavCard(
                       step: '01',
-                      title: 'Plug-In',
-                      subtitle: 'Connect your EV to the charger',
+                      title: AppLocalizations.of(context).plugIn,
+                      subtitle: AppLocalizations.of(context).connectEvToCharger,
                       icon: Icons.power_rounded,
                       gradientColors: const [Color(0xFF1A1F33), Color(0xFF0D1020)],
                       accentColor: const Color(0xFF00E5FF),
@@ -214,8 +215,8 @@ class ZetraHomeScreen extends StatelessWidget {
                     // Power Link Card (dark)
                     _NavCard(
                       step: '02',
-                      title: 'Power Link',
-                      subtitle: 'Vehicle connected & ready to charge',
+                      title: AppLocalizations.of(context).powerLink,
+                      subtitle: AppLocalizations.of(context).vehicleConnectedReady,
                       icon: Icons.link_rounded,
                       gradientColors: const [Color(0xFF1A1F33), Color(0xFF0D1020)],
                       accentColor: AppColors.chargingGreenGlow,
@@ -226,8 +227,8 @@ class ZetraHomeScreen extends StatelessWidget {
                     // Charging Session Card (dark)
                     _NavCard(
                       step: '03',
-                      title: 'Charging Session',
-                      subtitle: 'Monitor live charging stats & energy',
+                      title: AppLocalizations.of(context).chargingSession,
+                      subtitle: AppLocalizations.of(context).monitorLiveStats,
                       icon: Icons.electric_bolt_rounded,
                       gradientColors: const [Color(0xFF1A1F33), Color(0xFF0D1020)],
                       accentColor: const Color(0xFF7B2FF7),
@@ -238,8 +239,8 @@ class ZetraHomeScreen extends StatelessWidget {
                     // Charging History Card
                     _NavCard(
                       step: '04',
-                      title: 'Charging History',
-                      subtitle: 'View past sessions & energy usage',
+                      title: AppLocalizations.of(context).chargingHistory,
+                      subtitle: AppLocalizations.of(context).viewPastSessions,
                       icon: Icons.history_rounded,
                       gradientColors: const [Color(0xFF1C1B2E), Color(0xFF0F0E1C)],
                       accentColor: const Color(0xFFFFD600),
@@ -250,8 +251,8 @@ class ZetraHomeScreen extends StatelessWidget {
                     // Invoice Card
                     _NavCard(
                       step: '05',
-                      title: 'Invoice',
-                      subtitle: 'Download & view your charging invoice',
+                      title: AppLocalizations.of(context).invoice,
+                      subtitle: AppLocalizations.of(context).downloadViewInvoice,
                       icon: Icons.receipt_long_rounded,
                       gradientColors: const [Color(0xFF1E1A10), Color(0xFF110F06)],
                       accentColor: const Color(0xFFFF6D00),
@@ -281,7 +282,7 @@ class ZetraHomeScreen extends StatelessWidget {
                                   size: 12, color: Color(0xFF8B5CF6)),
                               const SizedBox(width: 4),
                               Text(
-                                'LIGHT THEME',
+                                AppLocalizations.of(context).lightTheme,
                                 style: AppTypography.labelSmall.copyWith(
                                   color: const Color(0xFF8B5CF6),
                                   fontSize: 9,
@@ -300,8 +301,8 @@ class ZetraHomeScreen extends StatelessWidget {
                     // Plug-In Light Card
                     _NavCard(
                       step: '01',
-                      title: 'Plug-In  ·  Light',
-                      subtitle: 'Light theme — connect your EV',
+                      title: AppLocalizations.of(context).plugInLight,
+                      subtitle: AppLocalizations.of(context).lightThemeConnectEv,
                       icon: Icons.power_rounded,
                       gradientColors: const [Color(0xFF1E2440), Color(0xFF151A2E)],
                       accentColor: const Color(0xFF8B5CF6),
@@ -312,8 +313,8 @@ class ZetraHomeScreen extends StatelessWidget {
                     // Notification Light Card
                     _NavCard(
                       step: '02',
-                      title: 'Notifications  ·  Light',
-                      subtitle: 'Light theme — session alerts',
+                      title: AppLocalizations.of(context).notificationsLight,
+                      subtitle: AppLocalizations.of(context).lightThemeSessionAlerts,
                       icon: Icons.notifications_outlined,
                       gradientColors: const [Color(0xFF1E2440), Color(0xFF151A2E)],
                       accentColor: const Color(0xFF8B5CF6),

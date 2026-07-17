@@ -10,6 +10,7 @@ class AuthState {
   final List<String> otpDigits;
   final int timerSeconds;
   final AuthStatus status;
+  final bool isPasswordVisible;
   final String? errorMessage;
   final String? accessToken;
   final String? refreshToken;
@@ -20,9 +21,10 @@ class AuthState {
     required this.otpDigits,
     required this.timerSeconds,
     required this.status,
+    this.isPasswordVisible = false,
     this.errorMessage,
     this.accessToken,
-    this.refreshToken,
+    this.refreshToken
   });
 
   factory AuthState.initial() {
@@ -33,23 +35,12 @@ class AuthState {
       otpDigits: List<String>.filled(6, ''),
       timerSeconds: 30,
       status: AuthStatus.initial,
-      errorMessage: null,
-      accessToken: null,
-      refreshToken: null,
+      isPasswordVisible: false
     );
 
   }
 
-  AuthState copyWith({
-    String? phone,
-    bool? isPhoneValid,
-    List<String>? otpDigits,
-    int? timerSeconds,
-    AuthStatus? status,
-    String? errorMessage,
-    String? accessToken,
-    String? refreshToken,
-  }) {
+  AuthState copyWith({String? phone, bool? isPhoneValid, List<String>? otpDigits, int? timerSeconds, AuthStatus? status, bool? isPasswordVisible, String? errorMessage, String? accessToken, String? refreshToken}) {
 
     return AuthState(
       phone: phone ?? this.phone,
@@ -57,9 +48,10 @@ class AuthState {
       otpDigits: otpDigits ?? this.otpDigits,
       timerSeconds: timerSeconds ?? this.timerSeconds,
       status: status ?? this.status,
+      isPasswordVisible: isPasswordVisible ?? this.isPasswordVisible,
       errorMessage: errorMessage ?? this.errorMessage,
       accessToken: accessToken ?? this.accessToken,
-      refreshToken: refreshToken ?? this.refreshToken,
+      refreshToken: refreshToken ?? this.refreshToken
     );
 
   }

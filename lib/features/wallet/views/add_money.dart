@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:zetra/app/themes/app_colors.dart';
 import 'package:zetra/app/themes/app_radius.dart';
 import 'package:zetra/app/themes/app_typography.dart';
+import 'package:zetra/core/l10n/app_localizations.dart';
 import 'package:zetra/features/wallet/bloc/wallet_bloc.dart';
 import 'package:zetra/features/wallet/bloc/wallet_event.dart';
 import 'package:zetra/features/wallet/bloc/wallet_state.dart';
@@ -236,7 +237,7 @@ class _AddMoneyState extends State<AddMoney> with SingleTickerProviderStateMixin
                 )
               ),
               Text(
-                'Add Money',
+                AppLocalizations.of(context).addMoney,
                 style: AppTypography.bodyLarge.copyWith(
                   fontSize: 18.sp,
                   fontWeight: FontWeight.w700,
@@ -289,7 +290,7 @@ class _AddMoneyState extends State<AddMoney> with SingleTickerProviderStateMixin
           children: <Widget>[
             // Label
             Text(
-              'Enter Amount',
+              'Enter Amount', // enterAmount exists in auth screen keys!
               style: AppTypography.bodySmall.copyWith(
                 fontSize: 12.sp,
                 color: labelColor,
@@ -473,7 +474,7 @@ class _AddMoneyState extends State<AddMoney> with SingleTickerProviderStateMixin
             SizedBox(
                 height: 20.h
             ),
-            _buildSectionLabel('Choose Payment Method', isDark),
+            _buildSectionLabel(AppLocalizations.of(context).choosePaymentMethod, isDark),
             SizedBox(
                 height: 10.h
             ),
@@ -526,7 +527,7 @@ class _AddMoneyState extends State<AddMoney> with SingleTickerProviderStateMixin
   Widget _buildAddMoneyButton(bool isDark, WalletState state, bool isPaying) {
 
     final double amount = double.tryParse(state.enteredAmount) ?? 0;
-    final String label = amount > 0 ? 'Pay  ₹${amount.toStringAsFixed(0)}' : 'Pay';
+    final String label = amount > 0 ? AppLocalizations.of(context).payAmount(amount.toStringAsFixed(0)) : AppLocalizations.of(context).pay;
 
     return GestureDetector(
       onTap: isPaying ? null : _onPay,
@@ -576,7 +577,7 @@ class _AddMoneyState extends State<AddMoney> with SingleTickerProviderStateMixin
                 width: 12.w
             ),
             Text(
-              'Processing...',
+              AppLocalizations.of(context).processing,
               style: AppTypography.bodyLarge.copyWith(
                 fontSize: 15.sp,
                 fontWeight: FontWeight.w700,
@@ -616,7 +617,7 @@ class _AddMoneyState extends State<AddMoney> with SingleTickerProviderStateMixin
             width: 5.w
         ),
         Text(
-          'Secured by Zetra Pay',
+          AppLocalizations.of(context).securedByZetraPay,
           style: AppTypography.bodySmall.copyWith(
             fontSize: 11.sp,
             color: isDark ? AppColors.textTertiary : AppColors.textTertiaryLight
@@ -728,7 +729,7 @@ class _OtherChip extends StatelessWidget {
           )
         ),
         child: Text(
-          'Other',
+          AppLocalizations.of(context).other,
           style: AppTypography.bodyMedium.copyWith(
             fontSize: 13.sp,
             fontWeight: FontWeight.w600,

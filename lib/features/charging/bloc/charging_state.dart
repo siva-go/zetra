@@ -4,6 +4,7 @@ enum ChargingStatus { initial, charging, stopped, completed }
 
 @immutable
 class ChargingState {
+
   final ChargingStatus status;
   final double soc; // State of Charge percentage (0.0 to 1.0)
   final double chargingSpeed; // kW (e.g. 85.2)
@@ -19,30 +20,27 @@ class ChargingState {
     required this.energyDelivered,
     required this.timeRemaining,
     required this.elapsedTime,
-    required this.batteryTemp,
+    required this.batteryTemp
   });
 
   factory ChargingState.initial() {
+
     return const ChargingState(
       status: ChargingStatus.initial,
       soc: 0.45, // start from 45% as in mockup / design requirements
-      chargingSpeed: 0.0,
-      energyDelivered: 0.0,
-      timeRemaining: Duration(minutes: 38),
+      chargingSpeed: 0,
+      energyDelivered: 0,
+      timeRemaining: Duration(
+          minutes: 38
+      ),
       elapsedTime: Duration.zero,
-      batteryTemp: 29.5,
+      batteryTemp: 29.5
     );
+
   }
 
-  ChargingState copyWith({
-    ChargingStatus? status,
-    double? soc,
-    double? chargingSpeed,
-    double? energyDelivered,
-    Duration? timeRemaining,
-    Duration? elapsedTime,
-    double? batteryTemp,
-  }) {
+  ChargingState copyWith({ChargingStatus? status, double? soc, double? chargingSpeed, double? energyDelivered, Duration? timeRemaining, Duration? elapsedTime, double? batteryTemp}) {
+
     return ChargingState(
       status: status ?? this.status,
       soc: soc ?? this.soc,
@@ -50,7 +48,9 @@ class ChargingState {
       energyDelivered: energyDelivered ?? this.energyDelivered,
       timeRemaining: timeRemaining ?? this.timeRemaining,
       elapsedTime: elapsedTime ?? this.elapsedTime,
-      batteryTemp: batteryTemp ?? this.batteryTemp,
+      batteryTemp: batteryTemp ?? this.batteryTemp
     );
+
   }
+
 }

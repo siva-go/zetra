@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:zetra/app/themes/app_colors.dart';
 import 'package:zetra/app/themes/app_spacing.dart';
 import 'package:zetra/app/themes/app_typography.dart';
+import 'package:zetra/core/l10n/app_localizations.dart';
 import 'package:zetra/features/authentication/bloc/auth_bloc.dart';
 import 'package:zetra/features/authentication/bloc/auth_event.dart';
 import 'package:zetra/features/authentication/bloc/auth_state.dart';
@@ -157,10 +158,10 @@ class _LoginOtpState extends State<LoginOtp> with TickerProviderStateMixin {
                       if (state.status == AuthStatus.verified) {
 
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('OTP Verified Successfully!'),
+                          SnackBar(
+                            content: Text(AppLocalizations.of(context).otpVerifiedSuccess),
                             backgroundColor: AppColors.primary,
-                            duration: Duration(
+                            duration: const Duration(
                                 seconds: 1
                             )
                           )
@@ -181,8 +182,6 @@ class _LoginOtpState extends State<LoginOtp> with TickerProviderStateMixin {
                     },
                     builder: (BuildContext context, AuthState state) {
 
-                      final String timerString = 'Resend OTP in 00:${state.timerSeconds.toString().padLeft(2, '0')}';
-
                       return SingleChildScrollView(
                         physics: const ClampingScrollPhysics(),
                         padding: const EdgeInsets.symmetric(
@@ -194,7 +193,7 @@ class _LoginOtpState extends State<LoginOtp> with TickerProviderStateMixin {
                                 height: size.height * 0.02
                             ),
                             Text(
-                              'Verify OTP',
+                              AppLocalizations.of(context).verifyOtp,
                               style: AppTypography.subtitle1.copyWith(
                                 fontWeight: FontWeight.w800,
                                 color: textPrimary,
@@ -209,7 +208,7 @@ class _LoginOtpState extends State<LoginOtp> with TickerProviderStateMixin {
                                 height: 10.sp
                             ),
                             Text(
-                              'Enter the 6-digit code sent to\n${widget.phone}',
+                              AppLocalizations.of(context).enterDigitCodeSent(widget.phone),
                               textAlign: TextAlign.center,
                               style: AppTypography.bodyMedium.copyWith(
                                 color: textSecondary,
@@ -295,7 +294,7 @@ class _LoginOtpState extends State<LoginOtp> with TickerProviderStateMixin {
                             ),
                             Center(
                               child: state.timerSeconds > 0 ? Text(
-                                timerString,
+                                AppLocalizations.of(context).resendOtpIn(state.timerSeconds.toString()),
                                 style: AppTypography.bodyMedium.copyWith(
                                   color: textSecondary,
                                   fontWeight: FontWeight.w500,
@@ -307,7 +306,7 @@ class _LoginOtpState extends State<LoginOtp> with TickerProviderStateMixin {
                                   foregroundColor: AppColors.primary
                                 ),
                                 child: Text(
-                                  'Resend OTP',
+                                  AppLocalizations.of(context).resendOtp,
                                   style: AppTypography.bodyLarge.copyWith(
                                     fontWeight: FontWeight.w700,
                                     color: textSecondary,

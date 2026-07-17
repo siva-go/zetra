@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:zetra/app/themes/app_colors.dart';
 import 'package:zetra/app/themes/app_radius.dart';
 import 'package:zetra/app/themes/app_typography.dart';
+import 'package:zetra/core/l10n/app_localizations.dart';
 import 'package:zetra/features/station/models/station_info.dart';
 
 class StationDetails extends StatefulWidget {
@@ -143,7 +144,7 @@ class _StationDetailsState extends State<StationDetails> {
                               height: 4.h
                           ),
                           Text(
-                            '${widget.station.distanceKm.toStringAsFixed(1)} km away',
+                            AppLocalizations.of(context).kmAway(widget.station.distanceKm.toStringAsFixed(1)),
                             style: AppTypography.bodySmall.copyWith(
                               fontSize: 13.sp,
                               color: AppColors.primary,
@@ -173,7 +174,7 @@ class _StationDetailsState extends State<StationDetails> {
                           Row(
                             children: <Widget>[
                               Text(
-                                'Available Connectors',
+                                AppLocalizations.of(context).availableConnectors,
                                 style: AppTypography.bodyMedium.copyWith(
                                   fontSize: 14.sp,
                                   fontWeight: FontWeight.w600,
@@ -249,8 +250,8 @@ class _StationDetailsState extends State<StationDetails> {
                         children: <Widget>[
                           _DetailRow(
                               icon: Icons.currency_rupee_rounded,
-                              label: 'Pricing',
-                              value: '₹ ${widget.station.pricePerKwh.toStringAsFixed(0)} /kWh',
+                              label: AppLocalizations.of(context).pricing,
+                              value: AppLocalizations.of(context).pricePerKwh(widget.station.pricePerKwh.toStringAsFixed(0)),
                               textPrimary: textPrimary,
                               textSecondary: textSecondary,
                               borderColor: borderColor,
@@ -258,8 +259,8 @@ class _StationDetailsState extends State<StationDetails> {
                           ),
                           _DetailRow(
                               icon: Icons.access_time_rounded,
-                              label: 'Station Timings',
-                              value: '24 X 7 Open',
+                              label: AppLocalizations.of(context).stationTimings,
+                              value: AppLocalizations.of(context).alwaysOpen,
                               textPrimary: textPrimary,
                               textSecondary: textSecondary,
                               borderColor: borderColor,
@@ -305,7 +306,7 @@ class _StationDetailsState extends State<StationDetails> {
                                 color: AppColors.whiteColor
                             ),
                             label: Text(
-                              'Start Charging',
+                              AppLocalizations.of(context).startCharging,
                               style: AppTypography.bodyLarge.copyWith(
                                 fontSize: 16.sp,
                                 fontWeight: FontWeight.w700,

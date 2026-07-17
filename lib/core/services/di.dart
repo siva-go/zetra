@@ -7,8 +7,8 @@ import 'package:zetra/core/network/interceptors/token_interceptor.dart';
 import 'package:zetra/core/storage/database/app_database.dart';
 import 'package:zetra/core/storage/secure_storage.dart';
 import 'package:zetra/features/authentication/bloc/auth_bloc.dart';
-import 'package:zetra/features/charging/presentation/bloc/charging_bloc.dart';
-import 'package:zetra/features/charging/presentation/bloc/plugin_bloc.dart';
+import 'package:zetra/features/charging/bloc/charging_bloc.dart';
+import 'package:zetra/features/charging/bloc/plugin_bloc.dart';
 import 'package:zetra/features/home/bloc/home_bloc.dart';
 import 'package:zetra/features/station/bloc/search_station_bloc.dart';
 

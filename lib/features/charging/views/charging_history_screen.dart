@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:zetra/core/l10n/app_localizations.dart';
 
 import '../../../../app/themes/app_colors.dart';
 import '../../../../app/themes/app_radius.dart';
@@ -133,7 +134,7 @@ class _ChargingHistoryScreenState extends State<ChargingHistoryScreen> {
                   const SizedBox(width: AppSpacing.xs),
                   Expanded(
                     child: Text(
-                      'Charging History',
+                      AppLocalizations.of(context).chargingHistory,
                       textAlign: TextAlign.center,
                       style: AppTypography.bodyLarge.copyWith(
                         fontWeight: FontWeight.w700,

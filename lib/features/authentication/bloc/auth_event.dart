@@ -28,7 +28,10 @@ class TickOtpTimer extends AuthEvent {}
 
 class ResendOtp extends AuthEvent {}
 
+class TogglePasswordVisibility extends AuthEvent {}
+
 class SignUpSubmitted extends AuthEvent {
+
   final String fullName;
   final String phone;
   final String? email;
@@ -38,6 +41,7 @@ class SignUpSubmitted extends AuthEvent {
     required this.fullName,
     required this.phone,
     this.email,
-    required this.password,
+    required this.password
   });
+
 }
