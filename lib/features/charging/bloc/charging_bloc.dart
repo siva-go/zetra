@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:zetra/core/services/live_activity_service.dart';
 import 'package:zetra/features/charging/bloc/charging_event.dart';
 import 'package:zetra/features/charging/bloc/charging_state.dart';
 
@@ -14,6 +15,14 @@ class ChargingBloc extends Bloc<ChargingEvent, ChargingState> {
     on<TickCharging>(_onTickCharging);
     on<StopCharging>(_onStopCharging);
     on<ResetCharging>(_onResetCharging);
+    // Initialize platform callback for notification action clicks
+    LiveActivityService.instance.init(
+      onStopRequested: () {
+
+        add(StopCharging());
+
+      }
+    );
   }
 
   void _onStartCharging(StartCharging event, Emitter<ChargingState> emit) {
@@ -26,10 +35,21 @@ class ChargingBloc extends Bloc<ChargingEvent, ChargingState> {
 
     _ticker?.cancel();
 
+    const double initialSpeed = 82.5;
+    const double initialCost = 0;
+
     emit(state.copyWith(
       status: ChargingStatus.charging,
-      chargingSpeed: 82.5 // Initial active charging speed
+      chargingSpeed: initialSpeed,
+      cost: initialCost
     ));
+
+    LiveActivityService.instance.start(
+      soc: state.soc,
+      timeRemainingMins: state.timeRemaining.inMinutes,
+      speedKw: initialSpeed,
+      costRm: initialCost
+    );
 
     _ticker = Timer.periodic(const Duration(
         seconds: 1
@@ -62,6 +82,8 @@ class ChargingBloc extends Bloc<ChargingEvent, ChargingState> {
         timeRemaining: Duration.zero
       ));
 
+      LiveActivityService.instance.stop();
+
       return;
 
     }
@@ -81,6 +103,9 @@ class ChargingBloc extends Bloc<ChargingEvent, ChargingState> {
     );
     // Temperature rises slightly during charging
     final double newTemp = min(42, state.batteryTemp + 0.01);
+    
+    // cost calculated dynamically
+    final double newCost = double.parse((newEnergy * 1.25).toStringAsFixed(2));
 
     emit(state.copyWith(
       soc: currentSoc,
@@ -88,8 +113,16 @@ class ChargingBloc extends Bloc<ChargingEvent, ChargingState> {
       energyDelivered: double.parse(newEnergy.toStringAsFixed(2)),
       timeRemaining: newTimeRemaining,
       elapsedTime: newElapsedTime,
-      batteryTemp: double.parse(newTemp.toStringAsFixed(1))
+      batteryTemp: double.parse(newTemp.toStringAsFixed(1)),
+      cost: newCost
     ));
+
+    LiveActivityService.instance.update(
+      soc: currentSoc,
+      timeRemainingMins: totalMinutesLeft,
+      speedKw: double.parse(newSpeed.toStringAsFixed(1)),
+      costRm: newCost
+    );
 
   }
 
@@ -102,12 +135,16 @@ class ChargingBloc extends Bloc<ChargingEvent, ChargingState> {
       chargingSpeed: 0
     ));
 
+    LiveActivityService.instance.stop();
+
   }
 
   void _onResetCharging(ResetCharging event, Emitter<ChargingState> emit) {
 
     _ticker?.cancel();
     emit(ChargingState.initial());
+
+    LiveActivityService.instance.stop();
 
   }
 

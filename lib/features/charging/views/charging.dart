@@ -1,52 +1,61 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:zetra/app/themes/app_colors.dart';
+import 'package:zetra/app/themes/app_spacing.dart';
+import 'package:zetra/app/themes/app_typography.dart';
+import 'package:zetra/core/components/app_dialog.dart';
 import 'package:zetra/core/l10n/app_localizations.dart';
+import 'package:zetra/core/widgets/bottom_nav_bar.dart';
+import 'package:zetra/core/widgets/slide_to_stop_button.dart';
+import 'package:zetra/features/charging/bloc/charging_bloc.dart';
+import 'package:zetra/features/charging/bloc/charging_event.dart';
+import 'package:zetra/features/charging/bloc/charging_state.dart';
 import 'package:zetra/features/charging/views/widgets/charger_info_row.dart';
 import 'package:zetra/features/charging/views/widgets/mini_circular_gauge.dart';
 import 'package:zetra/features/charging/views/widgets/soc_gauge.dart';
 
-import '../../../../app/themes/app_colors.dart';
-import '../../../../app/themes/app_spacing.dart';
-import '../../../../app/themes/app_typography.dart';
-import '../../../../core/widgets/bottom_nav_bar.dart';
-import '../../../../core/widgets/slide_to_stop_button.dart';
-import '../../../../core/components/app_dialog.dart';
-import '../bloc/charging_bloc.dart';
-import '../bloc/charging_event.dart';
-import '../bloc/charging_state.dart';
-
 class HomeScreen extends StatelessWidget {
+
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+
     return BlocBuilder<ChargingBloc, ChargingState>(
-      builder: (context, state) {
+      builder: (BuildContext context, ChargingState state) {
+
         // Determine theme color based on current SOC for premium visual feedback
         Color themeColor;
+
         if (state.soc < 0.2) {
+
           themeColor = AppColors.chargingRedGlow;
+
         } else if (state.soc < 0.8) {
+
           themeColor = AppColors.chargingOrangeGlow;
+
         } else {
+
           themeColor = AppColors.chargingGreenGlow;
+
         }
 
         return Scaffold(
           backgroundColor: AppColors.scaffoldDark,
           body: SafeArea(
             child: Column(
-              children: [
+              children: <Widget>[
                 // ── Header / Active Status ──
                 Padding(
                   padding: const EdgeInsets.symmetric(
                     horizontal: AppSpacing.md,
-                    vertical: AppSpacing.sm,
+                    vertical: AppSpacing.sm
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
+                    children: <Widget>[
                       // Back button
                       GestureDetector(
                         onTap: () => context.go('/home'),
@@ -58,138 +67,158 @@ class HomeScreen extends StatelessWidget {
                             color: AppColors.cardDark,
                             shape: BoxShape.circle,
                             border: Border.all(
-                              color: AppColors.border.withValues(alpha: 0.5),
-                              width: 1,
-                            ),
+                              color: AppColors.border.withValues(
+                                  alpha: 0.5
+                              )
+                            )
                           ),
                           child: const Icon(
                             Icons.chevron_left_rounded,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                        ),
+                            color: AppColors.whiteColor,
+                            size: 20
+                          )
+                        )
                       ),
                       Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
+                        children: <Widget>[
                           Text(
                             AppLocalizations.of(context).chargingSessionSession,
                             style: AppTypography.labelSmall.copyWith(
                               letterSpacing: 1.5,
-                              color: AppColors.textSecondary,
-                            ),
+                              color: AppColors.textSecondary
+                            )
                           ),
-                          const SizedBox(height: 4),
+                          const SizedBox(
+                              height: 4
+                          ),
                           Row(
-                            children: [
+                            children: <Widget>[
                               Container(
                                 width: 8,
                                 height: 8,
                                 decoration: BoxDecoration(
                                   shape: BoxShape.circle,
-                                  color: state.status == ChargingStatus.charging
-                                      ? themeColor
-                                      : AppColors.textSecondary,
-                                ),
+                                  color: state.status == ChargingStatus.charging ? themeColor : AppColors.textSecondary
+                                )
                               ),
-                              const SizedBox(width: AppSpacing.xs),
+                              const SizedBox(
+                                  width: AppSpacing.xs
+                              ),
                               Text(
-                                state.status == ChargingStatus.charging
-                                    ? AppLocalizations.of(context).activeCharging
-                                    : state.status == ChargingStatus.completed
-                                        ? AppLocalizations.of(context).chargingCompletedStatus
-                                        : AppLocalizations.of(context).sessionPaused,
+                                state.status == ChargingStatus.charging ? AppLocalizations.of(context).activeCharging : state.status == ChargingStatus.completed ? AppLocalizations.of(context).chargingCompletedStatus : AppLocalizations.of(context).sessionPaused,
                                 style: AppTypography.bodyMedium.copyWith(
-                                  color: Colors.white,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ],
+                                  color: AppColors.whiteColor,
+                                  fontWeight: FontWeight.bold
+                                )
+                              )
+                            ]
+                          )
+                        ]
+                      ),
+                      Row(
+                        children: <Widget>[
+                          IconButton(
+                            icon: const Icon(
+                                Icons.mobile_screen_share_rounded,
+                                color: AppColors.whiteColor
+                            ),
+                            tooltip: 'Simulate Lock Screen Widget',
+                            onPressed: () {
+                              // Navigator.of(context).push(
+                              //   MaterialPageRoute(
+                              //     builder: (_) => const LockScreenSimulator(),
+                              //   ),
+                              // );
+                            }
                           ),
-                        ],
-                      ),
-                      IconButton(
-                        icon: const Icon(Icons.info_outline_rounded, color: Colors.white),
-                        onPressed: () {
-                          AppDialog.show(
-                            context: context,
-                            title: AppLocalizations.of(context).stationInfo,
-                            content: AppLocalizations.of(context).stationInfoDetails,
-                            primaryButtonText: AppLocalizations.of(context).ok,
-                          );
-                        },
-                      ),
-                    ],
-                  ),
+                          IconButton(
+                            icon: const Icon(
+                                Icons.info_outline_rounded,
+                                color: AppColors.whiteColor
+                            ),
+                            onPressed: () {
+
+                              AppDialog.show(
+                                context: context,
+                                title: AppLocalizations.of(context).stationInfo,
+                                content: AppLocalizations.of(context).stationInfoDetails,
+                                primaryButtonText: AppLocalizations.of(context).ok
+                              );
+
+                            }
+                          )
+                        ]
+                      )
+                    ]
+                  )
                 ),
-
                 const Spacer(),
-
                 // ── Center Gauge (SOC) ──
                 Center(
                   child: SocGauge(
                     percentage: state.soc,
-                    activeColor: themeColor,
-                  ),
+                    activeColor: themeColor
+                  )
                 ),
-
                 const Spacer(),
-
                 // ── Metrics Grid (Mini Circular Gauges) ──
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.md
+                  ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
+                    children: <Widget>[
                       MiniCircularGauge(
                         percentage: (state.chargingSpeed / 150.0).clamp(0.0, 1.0),
                         value: state.chargingSpeed.toString(),
                         label: AppLocalizations.of(context).speed,
                         unit: 'kW',
-                        activeColor: themeColor,
+                        activeColor: themeColor
                       ),
                       MiniCircularGauge(
                         percentage: (state.energyDelivered / 85.0).clamp(0.0, 1.0),
                         value: state.energyDelivered.toString(),
                         label: AppLocalizations.of(context).energy,
                         unit: 'kWh',
-                        activeColor: themeColor,
+                        activeColor: themeColor
                       ),
                       MiniCircularGauge(
                         percentage: (state.timeRemaining.inMinutes / 60.0).clamp(0.0, 1.0),
                         value: state.timeRemaining.inMinutes.toString(),
                         label: AppLocalizations.of(context).remaining,
                         unit: 'min',
-                        activeColor: themeColor,
-                      ),
-                    ],
-                  ),
+                        activeColor: themeColor
+                      )
+                    ]
+                  )
                 ),
-
                 const Spacer(),
-
                 // ── Charger details ──
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.md
+                  ),
                   child: ChargerInfoRow(
                     chargerType: AppLocalizations.of(context).dcFastCharge,
                     powerValue: '150 kW',
                     connectorType: AppLocalizations.of(context).ccsType2,
-                    temperature: '${state.batteryTemp}°C',
-                  ),
+                    temperature: '${state.batteryTemp}°C'
+                  )
                 ),
-
-                const SizedBox(height: AppSpacing.md),
-
+                const SizedBox(
+                    height: AppSpacing.md
+                ),
                 // ── Slide to Stop Action ──
                 Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.md
+                  ),
                   child: SlideToStopButton(
                     themeColor: themeColor,
-                    label: state.status == ChargingStatus.completed
-                        ? AppLocalizations.of(context).slideToFinish
-                        : AppLocalizations.of(context).slideToStopCharging,
+                    label: state.status == ChargingStatus.completed ? AppLocalizations.of(context).slideToFinish : AppLocalizations.of(context).slideToStopCharging,
                     onSlideComplete: () {
+
                       context.read<ChargingBloc>().add(StopCharging());
 
                       // Show summary dialog
@@ -201,32 +230,40 @@ class HomeScreen extends StatelessWidget {
                           state.energyDelivered.toString(),
                           state.elapsedTime.inMinutes.toString(),
                           (state.elapsedTime.inSeconds % 60).toString(),
-                          state.batteryTemp.toString(),
+                          state.batteryTemp.toString()
                         ),
                         primaryButtonText: AppLocalizations.of(context).finish,
                         icon: Icons.check_circle_outline_rounded,
                         iconColor: AppColors.chargingGreenGlow,
                         onPrimaryPressed: () {
+
                           // Dismiss dialog
                           Navigator.of(context).pop();
                           // Reset charging and navigate back
                           context.read<ChargingBloc>().add(ResetCharging());
                           context.go('/home');
-                        },
+
+                        }
                       );
-                    },
-                  ),
+
+                    }
+                  )
                 ),
-
-                const SizedBox(height: AppSpacing.md),
-
+                const SizedBox(
+                    height: AppSpacing.md
+                ),
                 // ── Navigation Bar ──
-                const ZetraBottomNavBar(currentIndex: 2),
-              ],
-            ),
-          ),
+                const ZetraBottomNavBar(
+                    currentIndex: 2
+                )
+              ]
+            )
+          )
         );
-      },
+
+      }
     );
+
   }
+
 }

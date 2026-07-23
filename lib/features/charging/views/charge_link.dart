@@ -32,7 +32,6 @@ class _ChargeLinkScreenState extends State<ChargeLinkScreen> with TickerProvider
   AnimationController? _glowController;
   // ── Confetti dots — small pops only over car region (right portion) ─────────
   final List<_ConfettiDot> _dots = _generateDots();
-
   static List<_ConfettiDot> _generateDots() {
 
     final math.Random rand = math.Random(42);
@@ -338,7 +337,6 @@ class _ChargeLinkScreenState extends State<ChargeLinkScreen> with TickerProvider
             const SizedBox(
                 height: AppSpacing.xs
             ),
-            // ── Subtitle ────────────────────────────────────────────────────────
             Text(
               AppLocalizations.of(context).vehicleConnectedSuccess,
               textAlign: TextAlign.center,
@@ -350,7 +348,6 @@ class _ChargeLinkScreenState extends State<ChargeLinkScreen> with TickerProvider
             const SizedBox(
                 height: AppSpacing.sm
             ),
-            // ── Waveform — BLUE, bars touch (no gaps) ──────────────────────────
             Padding(
               padding: const EdgeInsets.symmetric(
                   horizontal: AppSpacing.lg
@@ -432,7 +429,6 @@ class _ChargeLinkScreenState extends State<ChargeLinkScreen> with TickerProvider
 
 }
 
-// ── Confetti dot model ─────────────────────────────────────────────────────────
 class _ConfettiDot {
 
   final double x;
@@ -446,7 +442,6 @@ class _ConfettiDot {
 
 }
 
-// ── Confetti painter ───────────────────────────────────────────────────────────
 class _ConfettiPainter extends CustomPainter {
 
   final List<_ConfettiDot> dots;
@@ -482,7 +477,6 @@ class _ConfettiPainter extends CustomPainter {
   bool shouldRepaint(_ConfettiPainter old) => old.progress != progress;
 }
 
-// ── Waveform painter — blue, bars touch (no gaps) ─────────────────────────────
 class _WaveformPainter extends CustomPainter {
 
   final double progress;

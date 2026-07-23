@@ -8,6 +8,8 @@ import 'package:zetra/features/authentication/views/signup.dart';
 import 'package:zetra/features/charging/views/charge_link.dart';
 import 'package:zetra/features/charging/views/charging.dart' as charging;
 import 'package:zetra/features/charging/views/charging_history_screen.dart';
+import 'package:zetra/features/charging/bloc/charging_history_bloc.dart';
+import 'package:zetra/features/charging/bloc/charging_history_event.dart';
 import 'package:zetra/features/charging/views/invoice_screen.dart';
 import 'package:zetra/features/charging/views/plug_in.dart';
 import 'package:zetra/features/charging/views/plug_in_light.dart';
@@ -113,7 +115,10 @@ final GoRouter appRouter = GoRouter(
       path: '/charging-history',
       builder: (BuildContext context, GoRouterState state) {
 
-        return const ChargingHistoryScreen();
+        return BlocProvider<ChargingHistoryBloc>(
+          create: (_) => GetIt.instance<ChargingHistoryBloc>()..add(const LoadChargingHistory()),
+          child: const ChargingHistoryScreen(),
+        );
 
       }
     ),

@@ -12,6 +12,7 @@ class ChargingState {
   final Duration timeRemaining;
   final Duration elapsedTime;
   final double batteryTemp; // °C
+  final double cost; // RM cost
 
   const ChargingState({
     required this.status,
@@ -20,7 +21,8 @@ class ChargingState {
     required this.energyDelivered,
     required this.timeRemaining,
     required this.elapsedTime,
-    required this.batteryTemp
+    required this.batteryTemp,
+    required this.cost
   });
 
   factory ChargingState.initial() {
@@ -34,12 +36,13 @@ class ChargingState {
           minutes: 38
       ),
       elapsedTime: Duration.zero,
-      batteryTemp: 29.5
+      batteryTemp: 29.5,
+      cost: 0
     );
 
   }
 
-  ChargingState copyWith({ChargingStatus? status, double? soc, double? chargingSpeed, double? energyDelivered, Duration? timeRemaining, Duration? elapsedTime, double? batteryTemp}) {
+  ChargingState copyWith({ChargingStatus? status, double? soc, double? chargingSpeed, double? energyDelivered, Duration? timeRemaining, Duration? elapsedTime, double? batteryTemp, double? cost}) {
 
     return ChargingState(
       status: status ?? this.status,
@@ -48,7 +51,8 @@ class ChargingState {
       energyDelivered: energyDelivered ?? this.energyDelivered,
       timeRemaining: timeRemaining ?? this.timeRemaining,
       elapsedTime: elapsedTime ?? this.elapsedTime,
-      batteryTemp: batteryTemp ?? this.batteryTemp
+      batteryTemp: batteryTemp ?? this.batteryTemp,
+      cost: cost ?? this.cost
     );
 
   }

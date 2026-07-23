@@ -11,6 +11,8 @@ import 'package:zetra/features/charging/bloc/charging_bloc.dart';
 import 'package:zetra/features/charging/bloc/plugin_bloc.dart';
 import 'package:zetra/features/home/bloc/home_bloc.dart';
 import 'package:zetra/features/station/bloc/search_station_bloc.dart';
+import 'package:zetra/features/station/bloc/scan_qr_bloc.dart';
+import 'package:zetra/features/charging/bloc/charging_history_bloc.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -66,6 +68,12 @@ Future<void> setupDependencies() async {
   );
   getIt.registerFactory<SearchStationBloc>(
     () => SearchStationBloc(getIt<ApiClient>())
+  );
+  getIt.registerFactory<ScanQrBloc>(
+    () => ScanQrBloc()
+  );
+  getIt.registerFactory<ChargingHistoryBloc>(
+    () => ChargingHistoryBloc()
   );
 
 }
