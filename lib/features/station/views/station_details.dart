@@ -29,18 +29,10 @@ class _StationDetailsState extends State<StationDetails> {
     final Color borderColor = isDark ? AppColors.border : AppColors.borderLight;
     final Color surfaceColor = isDark ? AppColors.surfaceDark : AppColors.surfaceLight;
 
-    const List<_ConnectorType> connectors = <_ConnectorType>[
+    final List<_ConnectorType> connectors = <_ConnectorType>[
       _ConnectorType(
-          label: 'CCS2',
-          count: 5
-      ),
-      _ConnectorType(
-          label: 'CHAdeMO',
-          count: 2
-      ),
-      _ConnectorType(
-          label: 'Type 2',
-          count: 1
+          label: widget.station.type.isNotEmpty ? widget.station.type : 'AC Type 2',
+          count: widget.station.connectorCount > 0 ? widget.station.connectorCount : 4
       )
     ];
 

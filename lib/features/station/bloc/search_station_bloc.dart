@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:zetra/core/api/api_client.dart';
 import 'package:zetra/features/station/bloc/search_station_event.dart';
 import 'package:zetra/features/station/bloc/search_station_state.dart';
@@ -70,13 +71,41 @@ class SearchStationBloc extends Bloc<SearchStationEvent, SearchStationState> {
     emit(state.copyWith(status: SearchStationStatus.loading));
 
     try {
-      print('[ZETRA DEBUG] Fetching stations from endpoint: /stations');
+      double? userLat;
+      double? userLng;
+      try {
+        LocationPermission permission = await Geolocator.checkPermission();
+        if (permission == LocationPermission.whileInUse || permission == LocationPermission.always) {
+          final Position position = await Geolocator.getCurrentPosition(
+            locationSettings: const LocationSettings(
+              accuracy: LocationAccuracy.low,
+              timeLimit: Duration(seconds: 2),
+            ),
+          );
+          userLat = position.latitude;
+          userLng = position.longitude;
+        }
+      } catch (_) {}
+
+      final Map<String, dynamic> queryParams = <String, dynamic>{
+        'page': 1,
+        'pageSize': 20,
+      };
+
+      if (userLat != null && userLng != null) {
+        queryParams['lat'] = userLat;
+        queryParams['lng'] = userLng;
+        queryParams['radiusKm'] = 25;
+      }
+
+      if (state.query.isNotEmpty) {
+        queryParams['q'] = state.query;
+      }
+
+      print('[ZETRA DEBUG] Fetching stations from endpoint: /discover/stations with params: $queryParams');
       final Response<dynamic> response = await _apiClient.dio.get(
-        '/stations',
-        queryParameters: <String, dynamic>{
-          'page': 1,
-          'pageSize': 20,
-        },
+        '/discover/stations',
+        queryParameters: queryParams,
       );
 
       print('[ZETRA DEBUG] API Response Status Code: ${response.statusCode}');
@@ -181,20 +210,8 @@ class SearchStationBloc extends Bloc<SearchStationEvent, SearchStationState> {
     SearchStationQueryChanged event,
     Emitter<SearchStationState> emit,
   ) {
-    final String query = event.query.trim().toLowerCase();
-    final List<StationInfo> filtered = query.isEmpty
-        ? state.stations
-        : state.stations.where((StationInfo station) {
-            return station.name.toLowerCase().contains(query) ||
-                station.city.toLowerCase().contains(query) ||
-                station.type.toLowerCase().contains(query) ||
-                station.address.toLowerCase().contains(query);
-          }).toList();
-
-    emit(state.copyWith(
-      query: event.query,
-      filteredStations: filtered,
-    ));
+    emit(state.copyWith(query: event.query));
+    add(FetchStations());
   }
 
 }

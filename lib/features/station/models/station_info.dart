@@ -48,14 +48,28 @@ class StationInfo {
     String connectorType = 'AC';
     int connectorCount = 0;
     double pricePerKwh = 0;
+    if (json['totalConnectors'] != null) {
+      connectorCount = (json['totalConnectors'] as num).toInt();
+    }
+    
+    if (json['pricePerKwh'] != null) {
+      pricePerKwh = (json['pricePerKwh'] as num).toDouble();
+    } else if (json['price_per_kwh'] != null) {
+      pricePerKwh = (json['price_per_kwh'] as num).toDouble();
+    }
+
     if (json['connectors'] is List) {
       final connectors = json['connectors'] as List<dynamic>;
-      connectorCount = connectors.length;
+      if (connectorCount == 0) {
+        connectorCount = connectors.length;
+      }
       if (connectors.isNotEmpty) {
         final first = connectors.first as Map<String, dynamic>;
         connectorType = first['type']?.toString() ?? first['connectorType']?.toString() ?? 'AC';
-        pricePerKwh = (first['pricePerKwh'] as num?)?.toDouble() ??
-                      (first['price_per_kwh'] as num?)?.toDouble() ?? 0;
+        if (pricePerKwh == 0) {
+          pricePerKwh = (first['pricePerKwh'] as num?)?.toDouble() ??
+                        (first['price_per_kwh'] as num?)?.toDouble() ?? 0;
+        }
       }
     }
 
@@ -79,7 +93,7 @@ class StationInfo {
       id: json['id']?.toString() ?? json['_id']?.toString() ?? '',
       name: json['name']?.toString() ?? 'Station',
       city: city,
-      type: connectorType,
+      type: json['type']?.toString() ?? connectorType,
       distanceKm: (json['distanceKm'] as num?)?.toDouble() ??
                   (json['distance'] as num?)?.toDouble() ?? 0,
       availableCount: available,
