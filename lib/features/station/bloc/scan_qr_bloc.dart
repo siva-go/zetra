@@ -45,7 +45,8 @@ class ScanQrBloc extends Bloc<ScanQrEvent, ScanQrState> {
   void _onEnterManualIdTapped(EnterManualIdTapped event, Emitter<ScanQrState> emit) {
 
     emit(state.copyWith(
-        clearError: true
+      status: ScanQrStatus.scanning,
+      clearError: true
     ));
 
   }

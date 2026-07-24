@@ -8,16 +8,15 @@ class RiveAsset {
   final String artboard;
   final String stateMachineName;
   final String title;
-  SMIBool? input;
 
-  RiveAsset(this.artboard, {
+  const RiveAsset(this.artboard, {
     required this.stateMachineName,
     required this.title,
   });
 }
 
 /// Navigation items: Home, Scan QR, Charging, Profile, Notifications.
-final List<RiveAsset> bottomNavs = [
+const List<RiveAsset> bottomNavs = <RiveAsset>[
   RiveAsset('HOME',   stateMachineName: 'HOME_interactivity',   title: 'Home'),
   RiveAsset('SEARCH', stateMachineName: 'SEARCH_Interactivity', title: 'Scan QR'),
   RiveAsset('TIMER',  stateMachineName: 'TIMER_Interactivity',  title: 'Charging'),
@@ -26,9 +25,9 @@ final List<RiveAsset> bottomNavs = [
 ];
 
 /// Routes for each nav index.
-const List<String> _navRoutes = [
+const List<String> _navRoutes = <String>[
   '/home',
-  '', // Scan QR — no navigation for now
+  '/scan-qr',
   '/plug-in',
   '/profile',
   '/notifications',
@@ -51,6 +50,12 @@ class _ZetraBottomNavBarState extends State<ZetraBottomNavBar>
     with TickerProviderStateMixin {
   late final AnimationController _bgController;
 
+  /// Per-instance controller + input references — not stored globally.
+  final List<StateMachineController?> _riveControllers =
+      List<StateMachineController?>.filled(bottomNavs.length, null);
+  final List<SMIBool?> _riveInputs =
+      List<SMIBool?>.filled(bottomNavs.length, null);
+
   @override
   void initState() {
     super.initState();
@@ -63,19 +68,24 @@ class _ZetraBottomNavBarState extends State<ZetraBottomNavBar>
   @override
   void dispose() {
     _bgController.dispose();
+    // Dispose all Rive controllers to prevent memory leaks.
+    for (final StateMachineController? c in _riveControllers) {
+      c?.dispose();
+    }
     super.dispose();
   }
 
   void _onRiveInit(Artboard artboard, int index) {
-    final controller = StateMachineController.fromArtboard(
+    final StateMachineController? controller = StateMachineController.fromArtboard(
       artboard,
       bottomNavs[index].stateMachineName,
     );
     if (controller != null) {
       artboard.addController(controller);
-      bottomNavs[index].input = controller.findSMI('active') as SMIBool?;
+      _riveControllers[index] = controller;
+      _riveInputs[index] = controller.findSMI('active') as SMIBool?;
       if (widget.currentIndex == index) {
-        bottomNavs[index].input?.change(true);
+        _riveInputs[index]?.change(true);
       }
     }
   }
@@ -84,23 +94,23 @@ class _ZetraBottomNavBarState extends State<ZetraBottomNavBar>
   void didUpdateWidget(covariant ZetraBottomNavBar oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.currentIndex != widget.currentIndex) {
-      bottomNavs[widget.currentIndex].input?.change(true);
-      bottomNavs[oldWidget.currentIndex].input?.change(false);
+      _riveInputs[widget.currentIndex]?.change(true);
+      _riveInputs[oldWidget.currentIndex]?.change(false);
     }
   }
 
   void _handleTap(int index) {
     // Trigger Rive animation.
-    bottomNavs[index].input?.change(true);
-    Future.delayed(const Duration(milliseconds: 800), () {
+    _riveInputs[index]?.change(true);
+    Future<void>.delayed(const Duration(milliseconds: 800), () {
       if (widget.currentIndex != index && mounted) {
-        bottomNavs[index].input?.change(false);
+        _riveInputs[index]?.change(false);
       }
     });
 
     if (widget.currentIndex == index) return; // already on this tab
 
-    final route = _navRoutes[index];
+    final String route = _navRoutes[index];
     if (route.isEmpty) return; // no route (e.g. Scan QR placeholder)
 
     if (index == 0) {
@@ -116,7 +126,7 @@ class _ZetraBottomNavBarState extends State<ZetraBottomNavBar>
     final Color bgColor =
         isDark ? const Color(0xFF080C14) : AppColors.whiteColor;
     final Color borderColor = isDark
-        ? const Color(0xFF00E5FF).withOpacity(0.2)
+        ? const Color(0xFF00E5FF).withValues(alpha: 0.2)
         : AppColors.borderLight;
 
     return Container(
@@ -125,15 +135,15 @@ class _ZetraBottomNavBarState extends State<ZetraBottomNavBar>
         color: bgColor,
         border: Border(top: BorderSide(color: borderColor, width: 1.0)),
         boxShadow: isDark
-            ? [
+            ? <BoxShadow>[
                 BoxShadow(
-                  color: const Color(0xFF00E5FF).withOpacity(0.12),
+                  color: const Color(0xFF00E5FF).withValues(alpha: 0.12),
                   blurRadius: 20,
                   offset: const Offset(0, -5),
                 ),
               ]
-            : [
-                const BoxShadow(
+            : const <BoxShadow>[
+                BoxShadow(
                   color: Colors.black12,
                   blurRadius: 10,
                   offset: Offset(0, -2),
@@ -144,19 +154,19 @@ class _ZetraBottomNavBarState extends State<ZetraBottomNavBar>
         top: false,
         child: AnimatedBuilder(
           animation: _bgController,
-          builder: (context, _) {
+          builder: (BuildContext context, _) {
             return Container(
               padding: const EdgeInsets.symmetric(horizontal: 8),
               decoration: BoxDecoration(
                 gradient: isDark
                     ? LinearGradient(
-                        colors: [
-                          const Color(0xFF00E5FF).withOpacity(
-                              0.01 + 0.04 * _bgController.value),
-                          const Color(0xFF8B5CF6).withOpacity(
-                              0.06 - 0.04 * _bgController.value),
-                          const Color(0xFF00E5FF).withOpacity(
-                              0.01 + 0.04 * _bgController.value),
+                        colors: <Color>[
+                          const Color(0xFF00E5FF).withValues(
+                              alpha: 0.01 + 0.04 * _bgController.value),
+                          const Color(0xFF8B5CF6).withValues(
+                              alpha: 0.06 - 0.04 * _bgController.value),
+                          const Color(0xFF00E5FF).withValues(
+                              alpha: 0.01 + 0.04 * _bgController.value),
                         ],
                         begin: Alignment.topLeft,
                         end: Alignment.bottomRight,
@@ -165,9 +175,9 @@ class _ZetraBottomNavBarState extends State<ZetraBottomNavBar>
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: List.generate(
+                children: List<Widget>.generate(
                   bottomNavs.length,
-                  (index) => _buildRiveNavItem(index, isDark),
+                  (int index) => _buildRiveNavItem(index, isDark),
                 ),
               ),
             );
@@ -189,7 +199,7 @@ class _ZetraBottomNavBarState extends State<ZetraBottomNavBar>
         height: 64,
         child: Stack(
           alignment: Alignment.center,
-          children: [
+          children: <Widget>[
             // Neon active backdrop circle
             AnimatedOpacity(
               duration: const Duration(milliseconds: 300),
@@ -199,16 +209,16 @@ class _ZetraBottomNavBarState extends State<ZetraBottomNavBar>
                 height: 42,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: activeColor.withOpacity(0.15),
+                  color: activeColor.withValues(alpha: 0.15),
                   boxShadow: isDark
-                      ? [
+                      ? <BoxShadow>[
                           BoxShadow(
-                            color: activeColor.withOpacity(0.4),
+                            color: activeColor.withValues(alpha: 0.4),
                             blurRadius: 14,
                             spreadRadius: 2,
                           )
                         ]
-                      : [],
+                      : const <BoxShadow>[],
                 ),
               ),
             ),
@@ -225,7 +235,7 @@ class _ZetraBottomNavBarState extends State<ZetraBottomNavBar>
                 child: RiveAnimation.asset(
                   'assets/RiveAssets/icons.riv',
                   artboard: bottomNavs[index].artboard,
-                  onInit: (artboard) => _onRiveInit(artboard, index),
+                  onInit: (Artboard artboard) => _onRiveInit(artboard, index),
                 ),
               ),
             ),
@@ -244,14 +254,14 @@ class _ZetraBottomNavBarState extends State<ZetraBottomNavBar>
                     color: activeColor,
                     shape: BoxShape.circle,
                     boxShadow: isDark
-                        ? [
+                        ? <BoxShadow>[
                             BoxShadow(
                               color: activeColor,
                               blurRadius: 6,
                               spreadRadius: 1,
                             )
                           ]
-                        : [],
+                        : const <BoxShadow>[],
                   ),
                 ),
               ),

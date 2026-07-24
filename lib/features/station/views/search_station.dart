@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:go_router/go_router.dart';
 import 'package:zetra/app/themes/app_colors.dart';
 import 'package:zetra/app/themes/app_typography.dart';
+import 'package:zetra/core/l10n/app_localizations.dart';
 import 'package:zetra/features/station/bloc/search_station_bloc.dart';
 import 'package:zetra/features/station/bloc/search_station_event.dart';
 import 'package:zetra/features/station/bloc/search_station_state.dart';
@@ -84,7 +85,7 @@ class _SearchStationState extends State<SearchStation> {
                                 ),
                                 decoration: InputDecoration(
                                   border: InputBorder.none,
-                                  hintText: 'Search location or station',
+                                  hintText: AppLocalizations.of(context).searchLocationOrStation,
                                   hintStyle: AppTypography.bodyMedium.copyWith(
                                     fontSize: 14.sp,
                                     color: isDark
@@ -122,7 +123,7 @@ class _SearchStationState extends State<SearchStation> {
                   child: Row(
                     children: <Widget>[
                       Text(
-                        'Stations Near You',
+                        AppLocalizations.of(context).stationsNearYou,
                         style: AppTypography.bodyLarge.copyWith(
                           fontSize: 17.sp,
                           fontWeight: FontWeight.w700,
@@ -134,7 +135,7 @@ class _SearchStationState extends State<SearchStation> {
                       const Spacer(),
                       if (state.status == SearchStationStatus.loaded)
                         Text(
-                          '${state.filteredStations.length} results',
+                          AppLocalizations.of(context).resultsCount(state.filteredStations.length.toString()),
                           style: AppTypography.bodySmall.copyWith(
                             color: isDark
                                 ? AppColors.textSecondary
@@ -176,7 +177,7 @@ class _SearchStationState extends State<SearchStation> {
               ),
               SizedBox(height: 16.h),
               Text(
-                'Finding stations near you…',
+                AppLocalizations.of(context).findingStationsNearYou,
                 style: AppTypography.bodyMedium.copyWith(
                   color: isDark ? AppColors.textSecondary : AppColors.textSecondaryLight,
                 ),
@@ -199,7 +200,7 @@ class _SearchStationState extends State<SearchStation> {
                 ),
                 SizedBox(height: 16.h),
                 Text(
-                  state.errorMessage ?? 'Failed to load stations',
+                  state.errorMessage ?? AppLocalizations.of(context).failedToLoadStations,
                   textAlign: TextAlign.center,
                   style: AppTypography.bodyMedium.copyWith(
                     color: isDark ? AppColors.textSecondary : AppColors.textSecondaryLight,
@@ -218,7 +219,7 @@ class _SearchStationState extends State<SearchStation> {
                   },
                   icon: const Icon(Icons.refresh_rounded, size: 18),
                   label: Text(
-                    'Retry',
+                    AppLocalizations.of(context).retry,
                     style: AppTypography.bodyMedium.copyWith(
                       fontWeight: FontWeight.w700,
                       color: AppColors.whiteColor,
@@ -234,7 +235,7 @@ class _SearchStationState extends State<SearchStation> {
         if (state.filteredStations.isEmpty) {
           return Center(
             child: Text(
-              'No stations found.\nTry a different location or keyword.',
+              AppLocalizations.of(context).noStationsFound,
               textAlign: TextAlign.center,
               style: AppTypography.bodyMedium.copyWith(
                 color: isDark ? AppColors.textSecondary : AppColors.textSecondaryLight,

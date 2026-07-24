@@ -7,6 +7,7 @@ import 'package:go_router/go_router.dart';
 import 'package:zetra/app/themes/app_colors.dart';
 import 'package:zetra/app/themes/app_radius.dart';
 import 'package:zetra/app/themes/app_typography.dart';
+import 'package:zetra/core/l10n/app_localizations.dart';
 import 'package:zetra/core/widgets/bottom_nav_bar.dart';
 import 'package:zetra/features/wallet/bloc/wallet_bloc.dart';
 import 'package:zetra/features/wallet/bloc/wallet_event.dart';
@@ -101,14 +102,15 @@ class _WalletState extends State<Wallet> with TickerProviderStateMixin {
                   )
                 )
               ),
-              ZetraBottomNavBar(
+              const ZetraBottomNavBar(
                 // onTap: (int idx) {
-
+                //
                 //   if (idx == 0) {
-
+                //
                 //     context.go('/home');
-
+                //
                 //   }
+                //
 
                 // }
               )
@@ -147,7 +149,7 @@ class _WalletState extends State<Wallet> with TickerProviderStateMixin {
           child: Row(
             children: <Widget>[
               Text(
-                'Wallet',
+                AppLocalizations.of(context).wallet,
                 style: AppTypography.h3.copyWith(
                   fontSize: 22.sp,
                   fontWeight: FontWeight.w700,
@@ -212,7 +214,7 @@ class _WalletState extends State<Wallet> with TickerProviderStateMixin {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  'Current Balance',
+                  AppLocalizations.of(context).currentBalance,
                   style: AppTypography.bodySmall.copyWith(
                     fontSize: 12.sp,
                     color: textSecondary
@@ -314,7 +316,7 @@ class _WalletState extends State<Wallet> with TickerProviderStateMixin {
                   width: 4.w
               ),
               Text(
-                'Low Balance',
+                AppLocalizations.of(context).lowBalance,
                 style: AppTypography.bodySmall.copyWith(
                   fontSize: 10.sp,
                   color: AppColors.chargingRed,
@@ -404,7 +406,7 @@ class _WalletState extends State<Wallet> with TickerProviderStateMixin {
                     height: 10.h
                 ),
                 Text(
-                  'Add money to continue charging',
+                  AppLocalizations.of(context).addMoneyContinue,
                   style: AppTypography.bodyMedium.copyWith(
                     fontSize: 13.sp,
                     color: isDark ? AppColors.textPrimary : AppColors.textPrimaryLight,
@@ -449,7 +451,7 @@ class _WalletState extends State<Wallet> with TickerProviderStateMixin {
                       ]
                     ),
                     child: Text(
-                      'Add Money',
+                      AppLocalizations.of(context).addMoney,
                       style: AppTypography.bodyMedium.copyWith(
                         fontSize: 14.sp,
                         fontWeight: FontWeight.w700,
@@ -481,7 +483,7 @@ class _WalletState extends State<Wallet> with TickerProviderStateMixin {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: <Widget>[
         Text(
-          'Recent Transactions',
+          AppLocalizations.of(context).recentTransactions,
           style: AppTypography.bodyLarge.copyWith(
             fontSize: 16.sp,
             fontWeight: FontWeight.w700,
@@ -491,7 +493,7 @@ class _WalletState extends State<Wallet> with TickerProviderStateMixin {
         GestureDetector(
           onTap: () {},
           child: Text(
-            'View All',
+            AppLocalizations.of(context).viewAll,
             style: AppTypography.bodySmall.copyWith(
               fontSize: 13.sp,
               color: AppColors.primary,

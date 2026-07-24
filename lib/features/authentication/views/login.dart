@@ -9,6 +9,7 @@ import 'package:zetra/app/themes/app_colors.dart';
 import 'package:zetra/app/themes/app_radius.dart';
 import 'package:zetra/app/themes/app_spacing.dart';
 import 'package:zetra/app/themes/app_typography.dart';
+import 'package:zetra/core/l10n/app_localizations.dart';
 import 'package:zetra/features/authentication/bloc/auth_bloc.dart';
 import 'package:zetra/features/authentication/bloc/auth_event.dart';
 import 'package:zetra/features/authentication/bloc/auth_state.dart';
@@ -256,7 +257,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                       width: 6.w
                   ),
                   Text(
-                    'EV CHARGING NETWORK',
+                    AppLocalizations.of(context).evChargingNetwork,
                     style: AppTypography.labelSmall.copyWith(
                       fontSize: 9,
                       color: isDark ? AppColors.textSecondary : AppColors.textSecondaryLight,
@@ -401,7 +402,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                     height: AppSpacing.mw
                 ),
                 Text(
-                  'Welcome Back 👋',
+                  AppLocalizations.of(context).welcomeBack,
                   style: AppTypography.bodyLarge.copyWith(
                     fontSize: 20.sp,
                     fontWeight: FontWeight.w800,
@@ -413,7 +414,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                     height: 4.sp
                 ),
                 Text(
-                  'Enter your phone number to continue',
+                  AppLocalizations.of(context).enterPhoneToContinue,
                   style: AppTypography.bodyMedium.copyWith(
                     color: textSecondary,
                     fontSize: 12.sp
@@ -521,13 +522,13 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
 
                             if (value == null || value.isEmpty) {
 
-                              return 'Please enter your phone number';
+                              return AppLocalizations.of(context).phoneValidationRequired;
 
                             }
 
                             if (value.trim().length != 10) {
 
-                              return 'Phone number must be 10 digits';
+                              return AppLocalizations.of(context).phoneValidationLength;
 
                             }
 
@@ -603,7 +604,7 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
                           Text(
-                            'Get OTP',
+                            AppLocalizations.of(context).getOtp,
                             style: AppTypography.labelLarge.copyWith(
                               color: state.isPhoneValid ? AppColors.whiteColor : (isDark ? AppColors.textTertiary : AppColors.textTertiaryLight),
                               fontSize: 13.5.sp,
@@ -633,34 +634,36 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
                     Text(
-                      'New user? ',
+                      AppLocalizations.of(context).newUser,
                       style: AppTypography.bodyMedium.copyWith(
                         color: textSecondary,
-                        fontSize: 13.sp,
+                        fontSize: 13.sp
                       ),
                     ),
                     GestureDetector(
                       onTap: () {
+
                         HapticFeedback.lightImpact();
                         context.push('/signup');
+
                       },
                       child: Text(
-                        'SignUp',
+                        AppLocalizations.of(context).signUp,
                         style: AppTypography.bodyMedium.copyWith(
                           color: AppColors.primary,
                           fontWeight: FontWeight.bold,
-                          fontSize: 13.sp,
-                        ),
-                      ),
-                    ),
-                  ],
+                          fontSize: 13.sp
+                        )
+                      )
+                    )
+                  ]
                 ),
                 SizedBox(
                     height: AppSpacing.sh
                 ),
                 Center(
                   child: Text(
-                    'By continuing you agree to our Terms & Privacy Policy',
+                    AppLocalizations.of(context).termsPrivacyPrompt,
                     style: AppTypography.bodySmall.copyWith(
                       fontSize: 10.sp,
                       color: isDark ? AppColors.textTertiary : AppColors.textTertiaryLight

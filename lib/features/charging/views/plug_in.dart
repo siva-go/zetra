@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:zetra/core/l10n/app_localizations.dart';
 
 import '../../../../app/themes/app_colors.dart';
 import '../../../../app/themes/app_spacing.dart';
@@ -88,7 +89,7 @@ class _PlugInScreenState extends State<PlugInScreen> {
                 child: Column(
                   children: [
                     Text(
-                      'Charging at',
+                      AppLocalizations.of(context).chargingAt,
                       style: AppTypography.bodyMedium.copyWith(
                         color: AppColors.success,
                         fontWeight: FontWeight.w600,
@@ -106,7 +107,7 @@ class _PlugInScreenState extends State<PlugInScreen> {
                     ),
                     const SizedBox(height: AppSpacing.xxs),
                     Text(
-                      'ORDER ID: #2CASB796',
+                      AppLocalizations.of(context).orderId,
                       style: AppTypography.bodySmall.copyWith(
                         color: AppColors.textSecondary,
                         fontSize: 12,
@@ -168,7 +169,7 @@ class _PlugInScreenState extends State<PlugInScreen> {
 
                           // ── Title & Description ──
                           Text(
-                            'Waiting for Plug-In',
+                            AppLocalizations.of(context).waitingForPlugIn,
                             textAlign: TextAlign.center,
                             style: AppTypography.labelLarge.copyWith(
                               fontSize: 22,
@@ -180,7 +181,7 @@ class _PlugInScreenState extends State<PlugInScreen> {
                           Padding(
                             padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
                             child: Text(
-                              'Please connect the premium high-speed plug to your vehicle.',
+                              AppLocalizations.of(context).connectHighSpeedPlug,
                               textAlign: TextAlign.center,
                               style: AppTypography.bodyMedium.copyWith(
                                 color: AppColors.textSecondary,
@@ -199,23 +200,23 @@ class _PlugInScreenState extends State<PlugInScreen> {
                               return Column(
                                 children: [
                                   _StepRow(
-                                    title: 'Session Initiated',
+                                    title: AppLocalizations.of(context).sessionInitiated,
                                     status: state.sessionInitiated,
                                   ),
                                   _StepRow(
-                                    title: 'Payment Successful',
+                                    title: AppLocalizations.of(context).paymentSuccessful,
                                     status: state.paymentSuccessful,
                                   ),
                                   _StepRow(
-                                    title: 'Waiting for Plug-In',
+                                    title: AppLocalizations.of(context).waitingForPlugIn,
                                     status: state.waitingForPlugIn,
                                   ),
                                   _StepRow(
-                                    title: 'Vehicle Connected',
+                                    title: AppLocalizations.of(context).vehicleConnected,
                                     status: state.vehicleConnected,
                                   ),
                                   _StepRow(
-                                    title: 'Charging Autostart',
+                                    title: AppLocalizations.of(context).chargingAutostart,
                                     status: state.chargingAutostart,
                                     leftIconOverride: Icons.electric_bolt_rounded,
                                   ),
@@ -241,9 +242,9 @@ class _PlugInScreenState extends State<PlugInScreen> {
                     final bool isConnecting = state.status == PluginStatus.connecting;
                     final bool isCompleted = state.status == PluginStatus.completed;
 
-                    String btnText = "Let's Charge";
-                    if (isConnecting) btnText = 'Establishing Connection...';
-                    if (isCompleted) btnText = 'Connected';
+                    String btnText = AppLocalizations.of(context).letsCharge;
+                    if (isConnecting) btnText = AppLocalizations.of(context).establishingConnection;
+                    if (isCompleted) btnText = AppLocalizations.of(context).connected;
 
                     return PrimaryButton(
                       text: btnText,

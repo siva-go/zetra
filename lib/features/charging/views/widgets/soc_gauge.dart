@@ -1,131 +1,143 @@
 import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
-import '../../../../app/themes/app_colors.dart';
-import '../../../../app/themes/app_typography.dart';
-import '../../../../app/themes/app_spacing.dart';
+import 'package:zetra/app/themes/app_colors.dart';
+import 'package:zetra/app/themes/app_spacing.dart';
+import 'package:zetra/app/themes/app_typography.dart';
 
 /// A premium circular gauge showing the State of Charge (SOC) percentage.
 class SocGauge extends StatelessWidget {
+
   final double percentage; // value between 0.0 and 1.0
   final Color activeColor;
   final Color trackColor;
 
-  const SocGauge({
-    super.key,
-    required this.percentage,
-    this.activeColor = AppColors.chargingRed,
-    this.trackColor = AppColors.border,
-  });
+  const SocGauge({super.key, required this.percentage, this.activeColor = AppColors.chargingRed, this.trackColor = AppColors.border});
 
   @override
   Widget build(BuildContext context) {
+
     return SizedBox(
       width: 220,
       height: 220,
       child: Stack(
         alignment: Alignment.center,
-        children: [
+        children: <Widget>[
           // Circular Progress Arc
           Positioned.fill(
             child: CustomPaint(
               painter: _SocGaugePainter(
                 percentage: percentage,
                 activeColor: activeColor,
-                trackColor: trackColor,
-              ),
-            ),
+                trackColor: trackColor
+              )
+            )
           ),
-          
           // Inside Gauge Content
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: [
+            children: <Widget>[
               Text(
                 'SOC',
                 style: AppTypography.bodySmall.copyWith(
                   color: AppColors.textSecondary,
-                  letterSpacing: 2.0,
+                  letterSpacing: 2,
                   fontWeight: FontWeight.w600,
-                  fontSize: 13,
-                ),
+                  fontSize: 13
+                )
               ),
-              const SizedBox(height: AppSpacing.xs),
+              const SizedBox(
+                  height: AppSpacing.xs
+              ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
+                children: <Widget>[
                   Text(
                     '${(percentage * 100).toInt()}',
                     style: AppTypography.socPercentage.copyWith(
                       fontSize: 62,
-                      fontWeight: FontWeight.w800,
-                    ),
+                      fontWeight: FontWeight.w800
+                    )
                   ),
-                  const SizedBox(width: AppSpacing.xxs),
+                  const SizedBox(
+                      width: AppSpacing.xxs
+                  ),
                   Text(
                     '%',
                     style: AppTypography.socPercentage.copyWith(
                       fontSize: 26,
                       color: AppColors.textSecondary,
-                      fontWeight: FontWeight.w400,
-                    ),
+                      fontWeight: FontWeight.w400
+                    )
                   ),
-                  const SizedBox(width: AppSpacing.xs),
+                  const SizedBox(
+                      width: AppSpacing.xs
+                  ),
                   Icon(
                     Icons.electric_bolt_rounded,
                     color: activeColor,
                     size: 32,
-                    shadows: [
+                    shadows: <Shadow>[
                       Shadow(
-                        color: activeColor.withValues(alpha: 0.8),
-                        blurRadius: 12.0,
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ],
-      ),
+                        color: activeColor.withValues(
+                            alpha: 0.8
+                        ),
+                        blurRadius: 12
+                      )
+                    ]
+                  )
+                ]
+              )
+            ]
+          )
+        ]
+      )
     );
+
   }
+
 }
 
 class _SocGaugePainter extends CustomPainter {
+
   final double percentage;
   final Color activeColor;
   final Color trackColor;
 
-  const _SocGaugePainter({
-    required this.percentage,
-    required this.activeColor,
-    required this.trackColor,
-  });
+  const _SocGaugePainter({required this.percentage, required this.activeColor, required this.trackColor});
 
   @override
   void paint(Canvas canvas, Size size) {
-    final center = Offset(size.width / 2, size.height / 2);
-    final radius = (size.width - 20) / 2;
-    const strokeWidth = 12.0;
+
+    final Offset center = Offset(size.width / 2, size.height / 2);
+    final double radius = (size.width - 20) / 2;
+    const double strokeWidth = 12;
 
     // Track Paint
-    final trackPaint = Paint()
-      ..color = trackColor.withValues(alpha: 0.12)
+    final Paint trackPaint = Paint()
+      ..color = trackColor.withValues(
+          alpha: 0.12
+      )
       ..style = PaintingStyle.stroke
       ..strokeWidth = strokeWidth;
 
     canvas.drawCircle(center, radius, trackPaint);
 
     // We start from 12 o'clock (-pi/2)
-    const startAngle = -math.pi / 2;
-    final sweepAngle = 2 * math.pi * percentage;
-    final rect = Rect.fromCircle(center: center, radius: radius);
+    const double startAngle = -math.pi / 2;
+    final double sweepAngle = 2 * math.pi * percentage;
+    final Rect rect = Rect.fromCircle(
+        center: center,
+        radius: radius
+    );
 
     if (percentage > 0) {
+
       // 1. Outer Soft Wide Glow
-      final glowPaint1 = Paint()
-        ..color = activeColor.withValues(alpha: 0.22)
+      final Paint glowPaint1 = Paint()
+        ..color = activeColor.withValues(
+            alpha: 0.22
+        )
         ..style = PaintingStyle.stroke
         ..strokeWidth = strokeWidth + 18.0
         ..strokeCap = StrokeCap.round
@@ -133,7 +145,7 @@ class _SocGaugePainter extends CustomPainter {
       canvas.drawArc(rect, startAngle, sweepAngle, false, glowPaint1);
 
       // 2. Intense Mid-Glow
-      final glowPaint2 = Paint()
+      final Paint glowPaint2 = Paint()
         ..color = activeColor.withValues(alpha: 0.55)
         ..style = PaintingStyle.stroke
         ..strokeWidth = strokeWidth + 6.0
@@ -142,7 +154,7 @@ class _SocGaugePainter extends CustomPainter {
       canvas.drawArc(rect, startAngle, sweepAngle, false, glowPaint2);
 
       // 3. Main Neon Tube (Saturated)
-      final activePaint = Paint()
+      final Paint activePaint = Paint()
         ..color = activeColor
         ..style = PaintingStyle.stroke
         ..strokeWidth = strokeWidth
@@ -150,19 +162,22 @@ class _SocGaugePainter extends CustomPainter {
       canvas.drawArc(rect, startAngle, sweepAngle, false, activePaint);
 
       // 4. Glass Core / Hot Core (Bright white glittering center line)
-      final corePaint = Paint()
-        ..color = Colors.white
+      final Paint corePaint = Paint()
+        ..color = AppColors.whiteColor
         ..style = PaintingStyle.stroke
         ..strokeWidth = strokeWidth * 0.35 // thin bright white core
         ..strokeCap = StrokeCap.round;
       canvas.drawArc(rect, startAngle, sweepAngle, false, corePaint);
+
     }
+
   }
 
   @override
   bool shouldRepaint(covariant _SocGaugePainter oldDelegate) {
-    return oldDelegate.percentage != percentage ||
-        oldDelegate.activeColor != activeColor ||
-        oldDelegate.trackColor != trackColor;
+
+    return oldDelegate.percentage != percentage || oldDelegate.activeColor != activeColor || oldDelegate.trackColor != trackColor;
+
   }
+
 }

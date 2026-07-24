@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:zetra/core/l10n/app_localizations.dart';
 
 import '../../../../app/themes/app_radius.dart';
 import '../../../../app/themes/app_spacing.dart';
@@ -52,7 +53,7 @@ class _PlugInScreenLightState extends State<PlugInScreenLight> {
                 child: Column(
                   children: [
                     Text(
-                      'Charging at',
+                      AppLocalizations.of(context).chargingAt,
                       style: AppTypography.bodyMedium.copyWith(
                         color: AppLightColors.chargingGreen,
                         fontWeight: FontWeight.w600,
@@ -70,7 +71,7 @@ class _PlugInScreenLightState extends State<PlugInScreenLight> {
                     ),
                     const SizedBox(height: AppSpacing.xxs),
                     Text(
-                      'ORDER ID: #GC458796',
+                      AppLocalizations.of(context).orderId,
                       style: AppTypography.bodySmall.copyWith(
                         color: AppLightColors.textSecondary,
                         fontSize: 12,
@@ -129,7 +130,7 @@ class _PlugInScreenLightState extends State<PlugInScreenLight> {
 
                           // ── Title & Subtitle ──────────────────────────
                           Text(
-                            'Waiting for Plug-In',
+                            AppLocalizations.of(context).waitingForPlugIn,
                             textAlign: TextAlign.center,
                             style: AppTypography.labelLarge.copyWith(
                               fontSize: 20,
@@ -142,7 +143,7 @@ class _PlugInScreenLightState extends State<PlugInScreenLight> {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: AppSpacing.sm),
                             child: Text(
-                              'Please connect the premium high-speed plug to your vehicle.',
+                              AppLocalizations.of(context).connectHighSpeedPlug,
                               textAlign: TextAlign.center,
                               style: AppTypography.bodyMedium.copyWith(
                                 color: AppLightColors.textSecondary,
@@ -162,23 +163,23 @@ class _PlugInScreenLightState extends State<PlugInScreenLight> {
                               return Column(
                                 children: [
                                   _LightStepRow(
-                                    title: 'Session Initiated',
+                                    title: AppLocalizations.of(context).sessionInitiated,
                                     status: state.sessionInitiated,
                                   ),
                                   _LightStepRow(
-                                    title: 'Payment Successful',
+                                    title: AppLocalizations.of(context).paymentSuccessful,
                                     status: state.paymentSuccessful,
                                   ),
                                   _LightStepRow(
-                                    title: 'Waiting for Plug-In',
+                                    title: AppLocalizations.of(context).waitingForPlugIn,
                                     status: state.waitingForPlugIn,
                                   ),
                                   _LightStepRow(
-                                    title: 'Vehicle Connected',
+                                    title: AppLocalizations.of(context).vehicleConnected,
                                     status: state.vehicleConnected,
                                   ),
                                   _LightStepRow(
-                                    title: 'Charging Autostart',
+                                    title: AppLocalizations.of(context).chargingAutostart,
                                     status: state.chargingAutostart,
                                     leftIconOverride:
                                         Icons.electric_bolt_rounded,
@@ -208,8 +209,8 @@ class _PlugInScreenLightState extends State<PlugInScreenLight> {
                         state.status == PluginStatus.completed;
 
                     String btnText = 'Simulate Plug-In';
-                    if (isConnecting) btnText = 'Establishing Connection...';
-                    if (isCompleted) btnText = 'Connected';
+                    if (isConnecting) btnText = AppLocalizations.of(context).establishingConnection;
+                    if (isCompleted) btnText = AppLocalizations.of(context).connected;
 
                     return _LightPrimaryButton(
                       text: btnText,

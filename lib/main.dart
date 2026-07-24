@@ -2,14 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:zetra/app/routes/app_router.dart';
 import 'package:zetra/app/themes/app_colors.dart';
 import 'package:zetra/core/services/di.dart';
 import 'package:zetra/features/authentication/bloc/auth_bloc.dart';
-import 'package:zetra/features/charging/presentation/bloc/charging_bloc.dart';
-import 'package:zetra/features/charging/presentation/bloc/plugin_bloc.dart';
+import 'package:zetra/features/charging/bloc/charging_bloc.dart';
+import 'package:zetra/features/charging/bloc/plugin_bloc.dart';
 import 'package:zetra/features/home/bloc/home_bloc.dart';
+import 'package:zetra/features/wallet/bloc/wallet_bloc.dart';
 
 void main() async {
 
@@ -35,37 +35,40 @@ class ZetraApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    ScreenUtil.init(context);
 
     return MultiBlocProvider(
       providers: <BlocProvider<dynamic>>[
-        BlocProvider<ChargingBloc>(
-          create: (_) => getIt<ChargingBloc>()
-        ),
         BlocProvider<AuthBloc>(
-          create: (_) => getIt<AuthBloc>()
+          create: (_) => getIt<AuthBloc>(),
+        ),
+        BlocProvider<ChargingBloc>(
+          create: (_) => getIt<ChargingBloc>(),
         ),
         BlocProvider<HomeBloc>(
-          create: (_) => getIt<HomeBloc>()
+          create: (_) => getIt<HomeBloc>(),
         ),
         BlocProvider<PlugInBloc>(
-          create: (_) => getIt<PlugInBloc>()
-        )
+          create: (_) => getIt<PlugInBloc>(),
+        ),
+        BlocProvider<WalletBloc>(
+          create: (_) => getIt<WalletBloc>(),
+        ),
       ],
-      child: MaterialApp.router(
-        title: 'ZETRA EV Charging',
-        debugShowCheckedModeBanner: false,
-        theme: ThemeData.light().copyWith(
-          scaffoldBackgroundColor: AppColors.scaffoldLight,
-          cardColor: AppColors.cardLight,
-          textTheme: GoogleFonts.urbanistTextTheme(ThemeData.light().textTheme)
-        ),
-        darkTheme: ThemeData.dark().copyWith(
-          scaffoldBackgroundColor: AppColors.scaffoldDark,
-          cardColor: AppColors.cardDark,
-          textTheme: GoogleFonts.urbanistTextTheme(ThemeData.dark().textTheme)
-        ),
-        routerConfig: appRouter
+      child: ScreenUtilInit(
+        designSize: const Size(375, 812),
+        minTextAdapt: true,
+        splitScreenMode: true,
+        builder: (BuildContext context, Widget? child) {
+          return MaterialApp.router(
+            title: 'ZETRA EV Charging',
+            debugShowCheckedModeBanner: false,
+            themeMode: ThemeMode.dark,
+            darkTheme: ThemeData.dark().copyWith(
+              scaffoldBackgroundColor: AppColors.scaffoldDark
+            ),
+            routerConfig: appRouter
+          );
+        },
       )
     );
 

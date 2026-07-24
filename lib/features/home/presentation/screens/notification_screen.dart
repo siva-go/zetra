@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:zetra/core/l10n/app_localizations.dart';
 
 import '../../../../app/themes/app_colors.dart';
 import '../../../../app/themes/app_radius.dart';
@@ -103,7 +104,7 @@ class NotificationScreen extends StatelessWidget {
                   ),
                   const SizedBox(width: AppSpacing.sm),
                   Text(
-                    'Notifications',
+                    AppLocalizations.of(context).notifications,
                     style: AppTypography.labelLarge.copyWith(
                       fontSize: 22,
                       fontWeight: FontWeight.w800,
@@ -164,6 +165,42 @@ class NotificationScreen extends StatelessWidget {
   }
 }
 
+class _NotifContent {
+  final String title;
+  final String body;
+  const _NotifContent({required this.title, required this.body});
+}
+
+_NotifContent _localizeNotification(BuildContext context, _NotifType type) {
+  switch (type) {
+    case _NotifType.pluggedIn:
+      return _NotifContent(
+        title: AppLocalizations.of(context).pluggedIn,
+        body: AppLocalizations.of(context).vehicleConnectedSuccess,
+      );
+    case _NotifType.chargingStarted:
+      return _NotifContent(
+        title: AppLocalizations.of(context).chargingStarted,
+        body: AppLocalizations.of(context).sessionHasStarted,
+      );
+    case _NotifType.lowBalance:
+      return _NotifContent(
+        title: AppLocalizations.of(context).lowBalance,
+        body: AppLocalizations.of(context).walletBalanceIsLow,
+      );
+    case _NotifType.chargingCompleted:
+      return _NotifContent(
+        title: AppLocalizations.of(context).chargingCompleted,
+        body: AppLocalizations.of(context).sessionCompletedAt,
+      );
+    case _NotifType.newOffer:
+      return _NotifContent(
+        title: AppLocalizations.of(context).newOffer,
+        body: AppLocalizations.of(context).offerCashbackBody,
+      );
+  }
+}
+
 // ── Notification Card ─────────────────────────────────────────────────────────
 class _NotifCard extends StatelessWidget {
   final _NotifItem item;
@@ -219,6 +256,7 @@ class _NotifCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final style = _resolveStyle(item.type);
     final isLowBalance = item.type == _NotifType.lowBalance;
+    final localized = _localizeNotification(context, item.type);
 
     return Container(
       padding: const EdgeInsets.all(AppSpacing.sm),
@@ -273,7 +311,7 @@ class _NotifCard extends StatelessWidget {
                   children: [
                     Expanded(
                       child: Text(
-                        item.title,
+                        localized.title,
                         style: AppTypography.bodyMedium.copyWith(
                           color: isLowBalance
                               ? AppColors.chargingRedGlow
@@ -297,7 +335,7 @@ class _NotifCard extends StatelessWidget {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  item.body,
+                  localized.body,
                   style: AppTypography.bodySmall.copyWith(
                     color: AppColors.textSecondary,
                     fontSize: 12,

@@ -201,7 +201,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                 infoWindow: InfoWindow(
                     title: station.city
                 ),
-                zIndexInt: isSelected ? 2 : 1,
+                zIndex: isSelected ? 2.0 : 1.0,
                 onTap: () {
 
                   HapticFeedback.selectionClick();

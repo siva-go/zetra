@@ -7,10 +7,13 @@ import 'package:zetra/core/network/interceptors/token_interceptor.dart';
 import 'package:zetra/core/storage/database/app_database.dart';
 import 'package:zetra/core/storage/secure_storage.dart';
 import 'package:zetra/features/authentication/bloc/auth_bloc.dart';
-import 'package:zetra/features/charging/presentation/bloc/charging_bloc.dart';
+import 'package:zetra/features/charging/bloc/charging_bloc.dart';
+import 'package:zetra/features/charging/bloc/plugin_bloc.dart';
 import 'package:zetra/features/home/bloc/home_bloc.dart';
-import 'package:zetra/features/charging/presentation/bloc/plugin_bloc.dart';
 import 'package:zetra/features/station/bloc/search_station_bloc.dart';
+import 'package:zetra/features/station/bloc/scan_qr_bloc.dart';
+import 'package:zetra/features/charging/bloc/charging_history_bloc.dart';
+import 'package:zetra/features/wallet/bloc/wallet_bloc.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -66,6 +69,15 @@ Future<void> setupDependencies() async {
   );
   getIt.registerFactory<SearchStationBloc>(
     () => SearchStationBloc(getIt<ApiClient>())
+  );
+  getIt.registerFactory<ScanQrBloc>(
+    () => ScanQrBloc()
+  );
+  getIt.registerFactory<ChargingHistoryBloc>(
+    () => ChargingHistoryBloc()
+  );
+  getIt.registerFactory<WalletBloc>(
+    () => WalletBloc()
   );
 
 }

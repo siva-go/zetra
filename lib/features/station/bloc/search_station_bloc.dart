@@ -12,6 +12,7 @@ class SearchStationBloc extends Bloc<SearchStationEvent, SearchStationState> {
 
   final ApiClient _apiClient;
 
+
   static const List<StationInfo> _mockStations = <StationInfo>[
     StationInfo(
       id: 'ZGH',

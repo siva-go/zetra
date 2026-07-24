@@ -2,14 +2,13 @@ import 'package:flutter/material.dart';
 
 class AppRadius {
 
-  static const double xs = 4.0;
-  static const double sm = 8.0;
-  static const double md = 12.0;
-  static const double lg = 16.0;
-  static const double xl = 20.0;
-  static const double xxl = 24.0;
-  static const double round = 100.0;
-
+  static const double xs = 4;
+  static const double sm = 8;
+  static const double md = 12;
+  static const double lg = 16;
+  static const double xl = 20;
+  static const double xxl = 24;
+  static const double round = 100;
   static BorderRadius get xsBorder => BorderRadius.circular(xs);
   static BorderRadius get smBorder => BorderRadius.circular(sm);
   static BorderRadius get mdBorder => BorderRadius.circular(md);

@@ -13,8 +13,8 @@ class AppSpacing {
   static const double huge = 80;
   static const double massive = 96;
   static const double gigantic = 128;
-  static double lh = 30.h;
-  static double mw = 22.w;
-  static double sh = 14.h;
+  static double get lh => 30.h;
+  static double get mw => 22.w;
+  static double get sh => 14.h;
 
 }

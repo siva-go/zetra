@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:zetra/core/l10n/app_localizations.dart';
 import '../../../../app/themes/app_colors.dart';
 import '../../../../app/themes/app_spacing.dart';
 import '../../../../app/themes/app_radius.dart';
@@ -55,52 +56,52 @@ class ProfileScreen extends StatelessWidget {
                   ),
                   child: ClipRRect(
                     borderRadius: AppRadius.lgBorder,
-                    child: ListView(
-                      padding: const EdgeInsets.symmetric(vertical: 4),
-                      children: [
-                        _MenuOptionItem(
-                          icon: Icons.credit_card_rounded,
-                          title: 'Payment Methods',
-                          neonColor: const Color(0xFF8B5CF6),
-                          onTap: () {},
-                        ),
-                        _buildDivider(),
-                        _MenuOptionItem(
-                          icon: Icons.pin_drop_rounded,
-                          title: 'Saved Stations',
-                          neonColor: const Color(0xFF00FF66),
-                          onTap: () {},
-                        ),
-                        _buildDivider(),
-                        _MenuOptionItem(
-                          icon: Icons.history_rounded,
-                          title: 'Charging History',
-                          neonColor: const Color(0xFFFF7F00),
-                          onTap: () => context.push('/charging-history'),
-                        ),
-                        _buildDivider(),
-                        _MenuOptionItem(
-                          icon: Icons.receipt_long_rounded,
-                          title: 'Invoice',
-                          neonColor: const Color(0xFFFF2D55),
-                          onTap: () => context.push('/invoice'),
-                        ),
-                        _buildDivider(),
-                        _MenuOptionItem(
-                          icon: Icons.settings_rounded,
-                          title: 'Settings',
-                          neonColor: const Color(0xFFFFD600),
-                          onTap: () {},
-                        ),
-                        _buildDivider(),
-                        _MenuOptionItem(
-                          icon: Icons.help_outline_rounded,
-                          title: 'Help & Support',
-                          neonColor: const Color(0xFF00FFCC),
-                          onTap: () {},
-                        ),
-                      ],
-                    ),
+                      child: ListView(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        children: [
+                          _MenuOptionItem(
+                            icon: Icons.credit_card_rounded,
+                            title: AppLocalizations.of(context).paymentMethods,
+                            neonColor: const Color(0xFF8B5CF6),
+                            onTap: () {},
+                          ),
+                          _buildDivider(),
+                          _MenuOptionItem(
+                            icon: Icons.pin_drop_rounded,
+                            title: AppLocalizations.of(context).savedStations,
+                            neonColor: const Color(0xFF00FF66),
+                            onTap: () {},
+                          ),
+                          _buildDivider(),
+                          _MenuOptionItem(
+                            icon: Icons.history_rounded,
+                            title: AppLocalizations.of(context).chargingHistory,
+                            neonColor: const Color(0xFFFF7F00),
+                            onTap: () => context.push('/charging-history'),
+                          ),
+                          _buildDivider(),
+                          _MenuOptionItem(
+                            icon: Icons.receipt_long_rounded,
+                            title: AppLocalizations.of(context).invoice,
+                            neonColor: const Color(0xFFFF2D55),
+                            onTap: () => context.push('/invoice'),
+                          ),
+                          _buildDivider(),
+                          _MenuOptionItem(
+                            icon: Icons.settings_rounded,
+                            title: AppLocalizations.of(context).settings,
+                            neonColor: const Color(0xFFFFD600),
+                            onTap: () {},
+                          ),
+                          _buildDivider(),
+                          _MenuOptionItem(
+                            icon: Icons.help_outline_rounded,
+                            title: AppLocalizations.of(context).helpSupport,
+                            neonColor: const Color(0xFF00FFCC),
+                            onTap: () {},
+                          ),
+                        ],
+                      ),
                   ),
                 ),
               ),
@@ -247,7 +248,7 @@ class _WalletCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Wallet Balance',
+                AppLocalizations.of(context).walletBalance,
                 style: AppTypography.bodySmall.copyWith(
                   color: AppColors.textSecondary,
                   fontSize: 11,
@@ -280,7 +281,7 @@ class _WalletCard extends StatelessWidget {
             ),
             onPressed: () {},
             child: Text(
-              '+ Add Money',
+              AppLocalizations.of(context).addMoney,
               style: AppTypography.bodyMedium.copyWith(
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
