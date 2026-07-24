@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:zetra/app/routes/app_router.dart';
 import 'package:zetra/app/themes/app_colors.dart';
+import 'package:zetra/core/l10n/app_localizations.dart';
 import 'package:zetra/core/services/di.dart';
 import 'package:zetra/features/authentication/bloc/auth_bloc.dart';
 import 'package:zetra/features/charging/bloc/charging_bloc.dart';
@@ -66,6 +67,8 @@ class ZetraApp extends StatelessWidget {
             darkTheme: ThemeData.dark().copyWith(
               scaffoldBackgroundColor: AppColors.scaffoldDark
             ),
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
             routerConfig: appRouter
           );
         },
