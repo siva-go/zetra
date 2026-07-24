@@ -27,15 +27,22 @@ class LiveActivityService {
   }
 
   /// Starts the lock screen live activity / custom notification.
-  Future<void> start({required double soc, required int timeRemainingMins, required double speedKw, required double costRm}) async {
+  Future<void> start({
+    required double soc,
+    required int timeRemainingMins,
+    required double speedKw,
+    required double costRm,
+    required bool isDarkMode,
+  }) async {
 
     try {
 
-      await _channel.invokeMethod('startLiveActivity', <String, num>{
+      await _channel.invokeMethod('startLiveActivity', {
         'soc': soc,
         'timeRemainingMins': timeRemainingMins,
         'speedKw': speedKw,
-        'costRm': costRm
+        'costRm': costRm,
+        'isDarkMode': isDarkMode,
       });
 
     } on PlatformException catch (e) {
@@ -48,15 +55,22 @@ class LiveActivityService {
   }
 
   /// Updates the lock screen live activity / custom notification with new metrics.
-  Future<void> update({required double soc, required int timeRemainingMins, required double speedKw, required double costRm}) async {
+  Future<void> update({
+    required double soc,
+    required int timeRemainingMins,
+    required double speedKw,
+    required double costRm,
+    required bool isDarkMode,
+  }) async {
 
     try {
 
-      await _channel.invokeMethod('updateLiveActivity', <String, num>{
+      await _channel.invokeMethod('updateLiveActivity', {
         'soc': soc,
         'timeRemainingMins': timeRemainingMins,
         'speedKw': speedKw,
-        'costRm': costRm
+        'costRm': costRm,
+        'isDarkMode': isDarkMode,
       });
 
     } on PlatformException catch (e) {

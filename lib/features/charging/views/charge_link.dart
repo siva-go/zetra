@@ -402,8 +402,8 @@ class _ChargeLinkScreenState extends State<ChargeLinkScreen> with TickerProvider
                       )
                     ),
                     onPressed: () {
-
-                      context.read<ChargingBloc>().add(StartCharging());
+                      final bool isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
+                      context.read<ChargingBloc>().add(StartCharging(isDarkMode: isDark));
                       context.go('/charging');
 
                     },

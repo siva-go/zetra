@@ -60,6 +60,7 @@ class ZetraApp extends StatelessWidget {
         minTextAdapt: true,
         splitScreenMode: true,
         builder: (BuildContext context, Widget? child) {
+
           return MaterialApp.router(
             title: 'ZETRA EV Charging',
             debugShowCheckedModeBanner: false,
@@ -71,7 +72,8 @@ class ZetraApp extends StatelessWidget {
             supportedLocales: AppLocalizations.supportedLocales,
             routerConfig: appRouter
           );
-        },
+
+        }
       )
     );
 

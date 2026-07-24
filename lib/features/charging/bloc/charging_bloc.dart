@@ -41,14 +41,16 @@ class ChargingBloc extends Bloc<ChargingEvent, ChargingState> {
     emit(state.copyWith(
       status: ChargingStatus.charging,
       chargingSpeed: initialSpeed,
-      cost: initialCost
+      cost: initialCost,
+      isDarkMode: event.isDarkMode,
     ));
 
     LiveActivityService.instance.start(
       soc: state.soc,
       timeRemainingMins: state.timeRemaining.inMinutes,
       speedKw: initialSpeed,
-      costRm: initialCost
+      costRm: initialCost,
+      isDarkMode: event.isDarkMode,
     );
 
     _ticker = Timer.periodic(const Duration(
@@ -121,7 +123,8 @@ class ChargingBloc extends Bloc<ChargingEvent, ChargingState> {
       soc: currentSoc,
       timeRemainingMins: totalMinutesLeft,
       speedKw: double.parse(newSpeed.toStringAsFixed(1)),
-      costRm: newCost
+      costRm: newCost,
+      isDarkMode: state.isDarkMode,
     );
 
   }
