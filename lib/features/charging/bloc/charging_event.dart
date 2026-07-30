@@ -4,8 +4,10 @@ import 'package:flutter/foundation.dart';
 abstract class ChargingEvent {}
 
 class StartCharging extends ChargingEvent {
-  final bool isDarkMode;
-  StartCharging({required this.isDarkMode});
+
+  final bool? isDarkMode;
+  StartCharging({this.isDarkMode});
+
 }
 
 class TickCharging extends ChargingEvent {}

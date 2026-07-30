@@ -29,7 +29,8 @@ import GoogleMaps
                   result(FlutterError(code: "INVALID_ARGUMENTS", message: "Missing arguments", details: nil))
                   return
               }
-              LiveActivityManager.shared.startLiveActivity(soc: soc, timeRemainingMins: timeRemainingMins, speedKw: speedKw, costRm: costRm)
+              let isDarkMode = args["isDarkMode"] as? Bool ?? true
+              LiveActivityManager.shared.startLiveActivity(soc: soc, timeRemainingMins: timeRemainingMins, speedKw: speedKw, costRm: costRm, isDarkMode: isDarkMode)
           }
           result(nil)
           
@@ -43,7 +44,8 @@ import GoogleMaps
                   result(FlutterError(code: "INVALID_ARGUMENTS", message: "Missing arguments", details: nil))
                   return
               }
-              LiveActivityManager.shared.updateLiveActivity(soc: soc, timeRemainingMins: timeRemainingMins, speedKw: speedKw, costRm: costRm)
+              let isDarkMode = args["isDarkMode"] as? Bool ?? true
+              LiveActivityManager.shared.updateLiveActivity(soc: soc, timeRemainingMins: timeRemainingMins, speedKw: speedKw, costRm: costRm, isDarkMode: isDarkMode)
           }
           result(nil)
           

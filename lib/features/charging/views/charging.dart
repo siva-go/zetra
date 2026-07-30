@@ -115,39 +115,21 @@ class HomeScreen extends StatelessWidget {
                           )
                         ]
                       ),
-                      Row(
-                        children: <Widget>[
-                          IconButton(
-                            icon: const Icon(
-                                Icons.mobile_screen_share_rounded,
-                                color: AppColors.whiteColor
-                            ),
-                            tooltip: 'Simulate Lock Screen Widget',
-                            onPressed: () {
-                              // Navigator.of(context).push(
-                              //   MaterialPageRoute(
-                              //     builder: (_) => const LockScreenSimulator(),
-                              //   ),
-                              // );
-                            }
-                          ),
-                          IconButton(
-                            icon: const Icon(
-                                Icons.info_outline_rounded,
-                                color: AppColors.whiteColor
-                            ),
-                            onPressed: () {
+                      IconButton(
+                        icon: const Icon(
+                            Icons.info_outline_rounded,
+                            color: AppColors.whiteColor
+                        ),
+                        onPressed: () {
 
-                              AppDialog.show(
-                                context: context,
-                                title: AppLocalizations.of(context).stationInfo,
-                                content: AppLocalizations.of(context).stationInfoDetails,
-                                primaryButtonText: AppLocalizations.of(context).ok
-                              );
+                          AppDialog.show(
+                            context: context,
+                            title: AppLocalizations.of(context).stationInfo,
+                            content: AppLocalizations.of(context).stationInfoDetails,
+                            primaryButtonText: AppLocalizations.of(context).ok
+                          );
 
-                            }
-                          )
-                        ]
+                        }
                       )
                     ]
                   )

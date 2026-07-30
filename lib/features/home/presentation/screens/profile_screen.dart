@@ -1,6 +1,11 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'package:zetra/core/storage/secure_storage.dart';
+import 'package:zetra/features/authentication/bloc/auth_bloc.dart';
+import 'package:zetra/features/authentication/bloc/auth_event.dart';
 import 'package:zetra/core/l10n/app_localizations.dart';
 import '../../../../app/themes/app_colors.dart';
 import '../../../../app/themes/app_spacing.dart';
@@ -99,6 +104,19 @@ class ProfileScreen extends StatelessWidget {
                             title: AppLocalizations.of(context).helpSupport,
                             neonColor: const Color(0xFF00FFCC),
                             onTap: () {},
+                          ),
+                          _buildDivider(),
+                          _MenuOptionItem(
+                            icon: Icons.logout_rounded,
+                            title: 'Logout',
+                            neonColor: const Color(0xFFFF3B30),
+                            onTap: () async {
+                              context.read<AuthBloc>().add(LogoutRequested());
+                              await GetIt.instance<SecureStorage>().clearTokens();
+                              if (context.mounted) {
+                                context.go('/login');
+                              }
+                            },
                           ),
                         ],
                       ),

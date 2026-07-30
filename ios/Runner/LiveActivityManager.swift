@@ -9,6 +9,7 @@ struct ChargingAttributes: ActivityAttributes {
         var timeRemainingMins: Int
         var speedKw: Double
         var costRm: Double
+        var isDarkMode: Bool
     }
     
     var sessionName: String
@@ -21,7 +22,7 @@ class LiveActivityManager {
     
     private var currentActivity: Any? = nil
     
-    func startLiveActivity(soc: Double, timeRemainingMins: Int, speedKw: Double, costRm: Double) {
+    func startLiveActivity(soc: Double, timeRemainingMins: Int, speedKw: Double, costRm: Double, isDarkMode: Bool) {
         if #available(iOS 16.1, *) {
             // End any active activity first
             stopLiveActivity()
@@ -31,7 +32,8 @@ class LiveActivityManager {
                 soc: soc,
                 timeRemainingMins: timeRemainingMins,
                 speedKw: speedKw,
-                costRm: costRm
+                costRm: costRm,
+                isDarkMode: isDarkMode
             )
             
             do {
@@ -48,13 +50,13 @@ class LiveActivityManager {
         }
     }
     
-    func updateLiveActivity(soc: Double, timeRemainingMins: Int, speedKw: Double, costRm: Double) {
+    func updateLiveActivity(soc: Double, timeRemainingMins: Int, speedKw: Double, costRm: Double, isDarkMode: Bool) {
         if #available(iOS 16.1, *) {
             guard let activity = currentActivity as? Activity<ChargingAttributes> else {
                 // Try to find any active activity
                 if let activeActivity = Activity<ChargingAttributes>.activities.first {
                     self.currentActivity = activeActivity
-                    updateLiveActivity(soc: soc, timeRemainingMins: timeRemainingMins, speedKw: speedKw, costRm: costRm)
+                    updateLiveActivity(soc: soc, timeRemainingMins: timeRemainingMins, speedKw: speedKw, costRm: costRm, isDarkMode: isDarkMode)
                 }
                 return
             }
@@ -63,7 +65,8 @@ class LiveActivityManager {
                 soc: soc,
                 timeRemainingMins: timeRemainingMins,
                 speedKw: speedKw,
-                costRm: costRm
+                costRm: costRm,
+                isDarkMode: isDarkMode
             )
             
             Task {

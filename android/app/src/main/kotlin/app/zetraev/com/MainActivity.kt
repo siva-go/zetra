@@ -97,9 +97,13 @@ class MainActivity : FlutterActivity() {
             notificationManager.createNotificationChannel(channel)
         }
 
-        // Choose layout resource based on isDarkMode
-        val layoutRes = if (isDarkMode) R.layout.layout_charging_notification else R.layout.layout_charging_notification_light
-        android.util.Log.d("ZETRA_NOTIF", "isDarkMode: $isDarkMode, layoutRes: $layoutRes")
+        // Check Android system UI mode (Night Mode vs Light Mode)
+        val isSystemNight = (resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK) == android.content.res.Configuration.UI_MODE_NIGHT_YES
+        val effectiveDark = isSystemNight || isDarkMode
+
+        // Choose layout resource based on effectiveDark
+        val layoutRes = if (effectiveDark) R.layout.layout_charging_notification else R.layout.layout_charging_notification_light
+        android.util.Log.d("ZETRA_NOTIF", "isDarkMode: $isDarkMode, isSystemNight: $isSystemNight, effectiveDark: $effectiveDark, layoutRes: $layoutRes")
 
         // Remote Views Setup
         val remoteViews = RemoteViews(packageName, layoutRes).apply {

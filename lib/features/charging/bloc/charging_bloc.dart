@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'dart:ui';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zetra/core/services/live_activity_service.dart';
 import 'package:zetra/features/charging/bloc/charging_event.dart';
@@ -37,12 +38,13 @@ class ChargingBloc extends Bloc<ChargingEvent, ChargingState> {
 
     const double initialSpeed = 82.5;
     const double initialCost = 0;
+    final bool isDark = event.isDarkMode ?? (PlatformDispatcher.instance.platformBrightness == Brightness.dark);
 
     emit(state.copyWith(
       status: ChargingStatus.charging,
       chargingSpeed: initialSpeed,
       cost: initialCost,
-      isDarkMode: event.isDarkMode,
+      isDarkMode: isDark,
     ));
 
     LiveActivityService.instance.start(
@@ -50,7 +52,7 @@ class ChargingBloc extends Bloc<ChargingEvent, ChargingState> {
       timeRemainingMins: state.timeRemaining.inMinutes,
       speedKw: initialSpeed,
       costRm: initialCost,
-      isDarkMode: event.isDarkMode,
+      isDarkMode: isDark,
     );
 
     _ticker = Timer.periodic(const Duration(
@@ -108,6 +110,7 @@ class ChargingBloc extends Bloc<ChargingEvent, ChargingState> {
     
     // cost calculated dynamically
     final double newCost = double.parse((newEnergy * 1.25).toStringAsFixed(2));
+    final bool currentIsDark = PlatformDispatcher.instance.platformBrightness == Brightness.dark;
 
     emit(state.copyWith(
       soc: currentSoc,
@@ -116,7 +119,8 @@ class ChargingBloc extends Bloc<ChargingEvent, ChargingState> {
       timeRemaining: newTimeRemaining,
       elapsedTime: newElapsedTime,
       batteryTemp: double.parse(newTemp.toStringAsFixed(1)),
-      cost: newCost
+      cost: newCost,
+      isDarkMode: currentIsDark
     ));
 
     LiveActivityService.instance.update(
@@ -124,7 +128,7 @@ class ChargingBloc extends Bloc<ChargingEvent, ChargingState> {
       timeRemainingMins: totalMinutesLeft,
       speedKw: double.parse(newSpeed.toStringAsFixed(1)),
       costRm: newCost,
-      isDarkMode: state.isDarkMode,
+      isDarkMode: currentIsDark,
     );
 
   }
