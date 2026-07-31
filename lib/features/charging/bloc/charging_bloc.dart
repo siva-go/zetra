@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:math';
+import 'dart:ui';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:zetra/core/services/live_activity_service.dart';
 import 'package:zetra/features/charging/bloc/charging_event.dart';
@@ -37,18 +38,21 @@ class ChargingBloc extends Bloc<ChargingEvent, ChargingState> {
 
     const double initialSpeed = 82.5;
     const double initialCost = 0;
+    final bool isDark = event.isDarkMode ?? (PlatformDispatcher.instance.platformBrightness == Brightness.dark);
 
     emit(state.copyWith(
       status: ChargingStatus.charging,
       chargingSpeed: initialSpeed,
-      cost: initialCost
+      cost: initialCost,
+      isDarkMode: isDark,
     ));
 
     LiveActivityService.instance.start(
       soc: state.soc,
       timeRemainingMins: state.timeRemaining.inMinutes,
       speedKw: initialSpeed,
-      costRm: initialCost
+      costRm: initialCost,
+      isDarkMode: isDark,
     );
 
     _ticker = Timer.periodic(const Duration(
@@ -106,6 +110,7 @@ class ChargingBloc extends Bloc<ChargingEvent, ChargingState> {
     
     // cost calculated dynamically
     final double newCost = double.parse((newEnergy * 1.25).toStringAsFixed(2));
+    final bool currentIsDark = PlatformDispatcher.instance.platformBrightness == Brightness.dark;
 
     emit(state.copyWith(
       soc: currentSoc,
@@ -114,14 +119,16 @@ class ChargingBloc extends Bloc<ChargingEvent, ChargingState> {
       timeRemaining: newTimeRemaining,
       elapsedTime: newElapsedTime,
       batteryTemp: double.parse(newTemp.toStringAsFixed(1)),
-      cost: newCost
+      cost: newCost,
+      isDarkMode: currentIsDark
     ));
 
     LiveActivityService.instance.update(
       soc: currentSoc,
       timeRemainingMins: totalMinutesLeft,
       speedKw: double.parse(newSpeed.toStringAsFixed(1)),
-      costRm: newCost
+      costRm: newCost,
+      isDarkMode: currentIsDark,
     );
 
   }

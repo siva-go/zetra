@@ -60,18 +60,30 @@ class ZetraApp extends StatelessWidget {
         minTextAdapt: true,
         splitScreenMode: true,
         builder: (BuildContext context, Widget? child) {
+
           return MaterialApp.router(
             title: 'ZETRA EV Charging',
             debugShowCheckedModeBanner: false,
-            themeMode: ThemeMode.dark,
+            theme: ThemeData.light().copyWith(
+              scaffoldBackgroundColor: AppColors.scaffoldLight,
+              colorScheme: const ColorScheme.light(
+                primary: AppColors.primary,
+                surface: AppColors.scaffoldLight
+              )
+            ),
             darkTheme: ThemeData.dark().copyWith(
-              scaffoldBackgroundColor: AppColors.scaffoldDark
+              scaffoldBackgroundColor: AppColors.scaffoldDark,
+              colorScheme: const ColorScheme.dark(
+                primary: AppColors.primary,
+                surface: AppColors.scaffoldDark
+              )
             ),
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
             routerConfig: appRouter
           );
-        },
+
+        }
       )
     );
 

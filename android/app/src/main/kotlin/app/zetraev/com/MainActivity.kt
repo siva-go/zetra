@@ -1,5 +1,9 @@
 package app.zetraev.com
 
+import android.Manifest
+import android.content.pm.PackageManager
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -26,6 +30,14 @@ class MainActivity : FlutterActivity() {
         }
     }
 
+    private fun checkAndRequestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.POST_NOTIFICATIONS), 101)
+            }
+        }
+    }
+
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
         methodChannel = MethodChannel(flutterEngine.dartExecutor.binaryMessenger, CHANNEL)
@@ -40,11 +52,13 @@ class MainActivity : FlutterActivity() {
         methodChannel?.setMethodCallHandler { call, result ->
             when (call.method) {
                 "startLiveActivity" -> {
+                    checkAndRequestNotificationPermission()
                     val soc = call.argument<Double>("soc") ?: 0.0
                     val timeRemainingMins = call.argument<Int>("timeRemainingMins") ?: 0
                     val speedKw = call.argument<Double>("speedKw") ?: 0.0
                     val costRm = call.argument<Double>("costRm") ?: 0.0
-                    showNotification(soc, timeRemainingMins, speedKw, costRm)
+                    val isDarkMode = call.argument<Boolean>("isDarkMode") ?: true
+                    showNotification(soc, timeRemainingMins, speedKw, costRm, isDarkMode)
                     result.success(null)
                 }
                 "updateLiveActivity" -> {
@@ -52,7 +66,8 @@ class MainActivity : FlutterActivity() {
                     val timeRemainingMins = call.argument<Int>("timeRemainingMins") ?: 0
                     val speedKw = call.argument<Double>("speedKw") ?: 0.0
                     val costRm = call.argument<Double>("costRm") ?: 0.0
-                    showNotification(soc, timeRemainingMins, speedKw, costRm)
+                    val isDarkMode = call.argument<Boolean>("isDarkMode") ?: true
+                    showNotification(soc, timeRemainingMins, speedKw, costRm, isDarkMode)
                     result.success(null)
                 }
                 "stopLiveActivity" -> {
@@ -66,7 +81,7 @@ class MainActivity : FlutterActivity() {
         }
     }
 
-    private fun showNotification(soc: Double, timeRemainingMins: Int, speedKw: Double, costRm: Double) {
+    private fun showNotification(soc: Double, timeRemainingMins: Int, speedKw: Double, costRm: Double, isDarkMode: Boolean) {
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         
         // Create Channel if Android 8.0+
@@ -74,7 +89,7 @@ class MainActivity : FlutterActivity() {
             val channel = NotificationChannel(
                 CHANNEL_ID,
                 "Active Charging Session",
-                NotificationManager.IMPORTANCE_LOW
+                NotificationManager.IMPORTANCE_DEFAULT
             ).apply {
                 description = "Shows real-time EV charging status on the lock screen."
                 setShowBadge(false)
@@ -82,8 +97,16 @@ class MainActivity : FlutterActivity() {
             notificationManager.createNotificationChannel(channel)
         }
 
+        // Check Android system UI mode (Night Mode vs Light Mode)
+        val isSystemNight = (resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK) == android.content.res.Configuration.UI_MODE_NIGHT_YES
+        val effectiveDark = isSystemNight || isDarkMode
+
+        // Choose layout resource based on effectiveDark
+        val layoutRes = if (effectiveDark) R.layout.layout_charging_notification else R.layout.layout_charging_notification_light
+        android.util.Log.d("ZETRA_NOTIF", "isDarkMode: $isDarkMode, isSystemNight: $isSystemNight, effectiveDark: $effectiveDark, layoutRes: $layoutRes")
+
         // Remote Views Setup
-        val remoteViews = RemoteViews(packageName, R.layout.layout_charging_notification).apply {
+        val remoteViews = RemoteViews(packageName, layoutRes).apply {
             setTextViewText(R.id.txt_soc_percentage, "${(soc * 100).toInt()}")
             setTextViewText(R.id.txt_time_remaining, "🕒 $timeRemainingMins mins left")
             setTextViewText(R.id.txt_rate_value, "$speedKw kW")
@@ -93,7 +116,9 @@ class MainActivity : FlutterActivity() {
         }
 
         // Stop Action Intent
-        val stopIntent = Intent("app.zetraev.com.STOP_CHARGING")
+        val stopIntent = Intent("app.zetraev.com.STOP_CHARGING").apply {
+            setPackage(packageName)
+        }
         val flag = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         } else {
@@ -108,6 +133,7 @@ class MainActivity : FlutterActivity() {
 
         val builder = NotificationCompat.Builder(this, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_dialog_info)
+            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setStyle(NotificationCompat.DecoratedCustomViewStyle())
             .setCustomContentView(remoteViews)
             .setCustomBigContentView(remoteViews)

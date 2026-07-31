@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-enum AuthStatus { initial, sendingOtp, otpSent, verifyingOtp, verified, error, registered }
+enum AuthStatus { initial, sendingOtp, otpSent, verifyingOtp, verified, error, registered, authenticated, unauthenticated }
 
 @immutable
 class AuthState {

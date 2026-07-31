@@ -1,13 +1,17 @@
 import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:zetra/app/themes/app_colors.dart';
-import 'package:zetra/app/themes/app_radius.dart';
-import 'package:zetra/app/themes/app_spacing.dart';
-import 'package:zetra/app/themes/app_typography.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+import 'package:zetra/core/storage/secure_storage.dart';
+import 'package:zetra/features/authentication/bloc/auth_bloc.dart';
+import 'package:zetra/features/authentication/bloc/auth_event.dart';
 import 'package:zetra/core/l10n/app_localizations.dart';
-import 'package:zetra/core/widgets/bottom_nav_bar.dart';
+import '../../../../app/themes/app_colors.dart';
+import '../../../../app/themes/app_spacing.dart';
+import '../../../../app/themes/app_radius.dart';
+import '../../../../app/themes/app_typography.dart';
+import '../../../../core/widgets/bottom_nav_bar.dart';
 
 /// Dark-themed Profile screen for the ZETRA application.
 class ProfileScreen extends StatelessWidget {
@@ -22,9 +26,9 @@ class ProfileScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
+          children: [
             // ── Profile Photo Header ──────────────────────────────────────
-            const _ProfileHeader(blueNeon: blueNeon),
+            _ProfileHeader(blueNeon: blueNeon),
 
             // ── Wallet Balance Card ───────────────────────────────────────
             const Padding(
@@ -45,8 +49,9 @@ class ProfileScreen extends StatelessWidget {
                     borderRadius: AppRadius.lgBorder,
                     border: Border.all(
                       color: AppColors.border.withValues(alpha: 0.6),
+                      width: 1,
                     ),
-                    boxShadow: <BoxShadow>[
+                    boxShadow: [
                       BoxShadow(
                         color: Colors.black.withValues(alpha: 0.25),
                         blurRadius: 10,
@@ -58,7 +63,7 @@ class ProfileScreen extends StatelessWidget {
                     borderRadius: AppRadius.lgBorder,
                       child: ListView(
                         padding: const EdgeInsets.symmetric(vertical: 4),
-                        children: <Widget>[
+                        children: [
                           _MenuOptionItem(
                             icon: Icons.credit_card_rounded,
                             title: AppLocalizations.of(context).paymentMethods,
@@ -100,6 +105,19 @@ class ProfileScreen extends StatelessWidget {
                             neonColor: const Color(0xFF00FFCC),
                             onTap: () {},
                           ),
+                          _buildDivider(),
+                          _MenuOptionItem(
+                            icon: Icons.logout_rounded,
+                            title: 'Logout',
+                            neonColor: const Color(0xFFFF3B30),
+                            onTap: () async {
+                              context.read<AuthBloc>().add(LogoutRequested());
+                              await GetIt.instance<SecureStorage>().clearTokens();
+                              if (context.mounted) {
+                                context.go('/login');
+                              }
+                            },
+                          ),
                         ],
                       ),
                   ),
@@ -110,7 +128,7 @@ class ProfileScreen extends StatelessWidget {
             const SizedBox(height: AppSpacing.sm),
 
             // ── Bottom Nav ────────────────────────────────────────────────
-            const ZetraBottomNavBar(currentIndex: 2),
+            const ZetraBottomNavBar(currentIndex: 3),
           ],
         ),
       ),
@@ -138,7 +156,7 @@ class _ProfileHeader extends StatelessWidget {
         (MediaQuery.of(context).size.height * 0.28).clamp(160.0, 220.0);
 
     return Stack(
-      children: <Widget>[
+      children: [
         Container(
           height: headerHeight,
           width: double.infinity,
@@ -156,13 +174,13 @@ class _ProfileHeader extends StatelessWidget {
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: <Color>[
+                colors: [
                   Colors.transparent,
                   Colors.black.withValues(alpha: 0.15),
                   AppColors.scaffoldDark.withValues(alpha: 0.7),
                   AppColors.scaffoldDark,
                 ],
-                stops: const <double>[0, 0.4, 0.85, 1],
+                stops: const [0.0, 0.4, 0.85, 1.0],
               ),
             ),
           ),
@@ -173,14 +191,14 @@ class _ProfileHeader extends StatelessWidget {
           right: AppSpacing.md,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
+            children: [
               Text(
                 'Hi Karan! 👋',
                 style: AppTypography.labelLarge.copyWith(
                   fontSize: 22,
                   fontWeight: FontWeight.w800,
                   color: Colors.white,
-                  shadows: const <Shadow>[
+                  shadows: const [
                     Shadow(
                         color: Colors.black87,
                         offset: Offset(0, 1.5),
@@ -204,7 +222,7 @@ class _ProfileHeader extends StatelessWidget {
           top: AppSpacing.sm,
           left: AppSpacing.md,
           child: CustomPaint(
-            painter: HexagonPainter(glowColor: blueNeon),
+            painter: HexagonPainter(glowColor: blueNeon, strokeWidth: 2.0),
             child: Container(
               width: 44,
               height: 44,
@@ -234,8 +252,8 @@ class _WalletCard extends StatelessWidget {
         color: AppColors.cardDark,
         borderRadius: AppRadius.lgBorder,
         border: Border.all(
-            color: AppColors.border.withValues(alpha: 0.6)),
-        boxShadow: <BoxShadow>[
+            color: AppColors.border.withValues(alpha: 0.6), width: 1),
+        boxShadow: [
           BoxShadow(
               color: Colors.black.withValues(alpha: 0.25),
               blurRadius: 10,
@@ -243,10 +261,10 @@ class _WalletCard extends StatelessWidget {
         ],
       ),
       child: Row(
-        children: <Widget>[
+        children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
+            children: [
               Text(
                 AppLocalizations.of(context).walletBalance,
                 style: AppTypography.bodySmall.copyWith(
@@ -286,7 +304,7 @@ class _WalletCard extends StatelessWidget {
                 color: Colors.white,
                 fontWeight: FontWeight.bold,
                 fontSize: 12.5,
-                shadows: <Shadow>[Shadow(color: blueNeon, blurRadius: 4)],
+                shadows: [Shadow(color: blueNeon, blurRadius: 4)],
               ),
             ),
           ),
@@ -327,7 +345,7 @@ class _MenuOptionItem extends StatelessWidget {
           shape: BoxShape.circle,
           border: Border.all(
               color: neonColor.withValues(alpha: 0.3), width: 1.5),
-          boxShadow: <BoxShadow>[
+          boxShadow: [
             BoxShadow(
                 color: neonColor.withValues(alpha: 0.25),
                 blurRadius: 10,
@@ -364,23 +382,20 @@ class HexagonPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final double w = size.width;
-    final double h = size.height;
-    final double cx = w / 2;
-    final double cy = h / 2;
-    final double padding = 6.0 + strokeWidth;
-    final double radius = (math.min(w, h) / 2) - padding;
+    final w = size.width;
+    final h = size.height;
+    final cx = w / 2;
+    final cy = h / 2;
+    final padding = 6.0 + strokeWidth;
+    final radius = (math.min(w, h) / 2) - padding;
 
-    final Path path = Path();
+    final path = Path();
     for (int i = 0; i < 6; i++) {
-      final double angle = -math.pi / 2 + (i * math.pi / 3);
-      final double x = cx + radius * math.cos(angle);
-      final double y = cy + radius * math.sin(angle);
-      if (i == 0) {
-        path.moveTo(x, y);
-      } else {
-        path.lineTo(x, y);
-      }
+      final angle = -math.pi / 2 + (i * math.pi / 3);
+      final x = cx + radius * math.cos(angle);
+      final y = cy + radius * math.sin(angle);
+      if (i == 0) path.moveTo(x, y);
+      else path.lineTo(x, y);
     }
     path.close();
 

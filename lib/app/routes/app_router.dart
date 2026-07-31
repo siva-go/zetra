@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:go_router/go_router.dart';
+import 'package:zetra/core/storage/secure_storage.dart';
 import 'package:zetra/features/authentication/views/login.dart';
 import 'package:zetra/features/authentication/views/login_otp.dart';
 import 'package:zetra/features/authentication/views/signup.dart';
@@ -29,6 +30,26 @@ import 'package:zetra/features/station/views/station_details.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/login',
+  redirect: (BuildContext context, GoRouterState state) async {
+
+    final bool loggedIn = await GetIt.instance<SecureStorage>().hasAccessToken();
+    final bool isLoggingIn = state.matchedLocation == '/login' || state.matchedLocation == '/signup' || state.matchedLocation == '/otp';
+
+    if (!loggedIn && !isLoggingIn) {
+
+      return '/login';
+
+    }
+
+    if (loggedIn && isLoggingIn) {
+
+      return '/home';
+
+    }
+
+    return null;
+
+  },
   routes: <RouteBase>[
     GoRoute(
       path: '/login',

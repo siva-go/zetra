@@ -45,3 +45,7 @@ class SignUpSubmitted extends AuthEvent {
   });
 
 }
+
+class CheckAuthStatus extends AuthEvent {}
+
+class LogoutRequested extends AuthEvent {}

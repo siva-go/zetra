@@ -24,6 +24,22 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<ResendOtp>(_onResendOtp);
     on<SignUpSubmitted>(_onSignUpSubmitted);
     on<TogglePasswordVisibility>(_onTogglePasswordVisibility);
+    on<CheckAuthStatus>(_onCheckAuthStatus);
+    on<LogoutRequested>(_onLogoutRequested);
+  }
+
+  Future<void> _onCheckAuthStatus(CheckAuthStatus event, Emitter<AuthState> emit) async {
+    final bool hasToken = await _secureStorage.hasAccessToken();
+    if (hasToken) {
+      emit(state.copyWith(status: AuthStatus.authenticated));
+    } else {
+      emit(state.copyWith(status: AuthStatus.unauthenticated));
+    }
+  }
+
+  Future<void> _onLogoutRequested(LogoutRequested event, Emitter<AuthState> emit) async {
+    await _secureStorage.clearTokens();
+    emit(AuthState.initial().copyWith(status: AuthStatus.unauthenticated));
   }
 
   void _onTogglePasswordVisibility(TogglePasswordVisibility event, Emitter<AuthState> emit) {
@@ -270,13 +286,13 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     if (otp == '123456') {
 
-      if (state.accessToken != null) {
+      final String tokenToSave = (state.accessToken != null && state.accessToken!.isNotEmpty)
+          ? state.accessToken!
+          : 'logged_in_session_token';
 
-        await _secureStorage.saveAccessToken(state.accessToken!);
+      await _secureStorage.saveAccessToken(tokenToSave);
 
-      }
-
-      if (state.refreshToken != null) {
+      if (state.refreshToken != null && state.refreshToken!.isNotEmpty) {
 
         await _secureStorage.saveRefreshToken(state.refreshToken!);
 
