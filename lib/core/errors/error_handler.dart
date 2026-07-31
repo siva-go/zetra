@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
-import 'app_exception.dart';
-import 'failure.dart';
+import 'package:zetra/core/errors/app_exception.dart';
+import 'package:zetra/core/errors/failure.dart';
 
 /// ZETRA Core — Error Handler
 ///

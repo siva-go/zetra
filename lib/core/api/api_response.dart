@@ -34,7 +34,7 @@ class ApiResponse<T> {
   }
 
   Map<String, dynamic> toJson(Object? Function(T? value) toJsonT) {
-    return {
+    return <String, dynamic>{
       'status': status,
       'message': message,
       'code': code,

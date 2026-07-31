@@ -123,7 +123,7 @@ class ChargingHistoryScreen extends StatelessWidget {
                   )
                 ),
                 const ZetraBottomNavBar(
-                    currentIndex: 2
+                    
                 )
               ]
             );

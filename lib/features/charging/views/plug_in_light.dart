@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:zetra/app/themes/app_radius.dart';
+import 'package:zetra/app/themes/app_spacing.dart';
+import 'package:zetra/app/themes/app_typography.dart';
+import 'package:zetra/app/themes/light/app_light_colors.dart';
+import 'package:zetra/app/themes/light/app_light_shadows.dart';
 import 'package:zetra/core/l10n/app_localizations.dart';
-
-import '../../../../app/themes/app_radius.dart';
-import '../../../../app/themes/app_spacing.dart';
-import '../../../../app/themes/app_typography.dart';
-import '../../../../app/themes/light/app_light_colors.dart';
-import '../../../../app/themes/light/app_light_shadows.dart';
-import '../../../../core/widgets/light_bottom_nav_bar.dart';
-import '../bloc/plugin_bloc.dart';
-import '../bloc/plugin_event.dart';
-import '../bloc/plugin_state.dart';
+import 'package:zetra/core/widgets/light_bottom_nav_bar.dart';
+import 'package:zetra/features/charging/bloc/plugin_bloc.dart';
+import 'package:zetra/features/charging/bloc/plugin_event.dart';
+import 'package:zetra/features/charging/bloc/plugin_state.dart';
 
 /// Light-themed Plug-In screen.
 /// Matches the reference mockup — white scaffold, light card surface,
@@ -36,14 +35,14 @@ class _PlugInScreenLightState extends State<PlugInScreenLight> {
       backgroundColor: AppLightColors.scaffold,
       body: SafeArea(
         child: BlocListener<PlugInBloc, PlugInState>(
-          listenWhen: (prev, curr) => prev.status != curr.status,
-          listener: (context, state) {
+          listenWhen: (PlugInState prev, PlugInState curr) => prev.status != curr.status,
+          listener: (BuildContext context, PlugInState state) {
             if (state.status == PluginStatus.completed) {
               context.go('/charge-link');
             }
           },
           child: Column(
-            children: [
+            children: <Widget>[
               const SizedBox(height: AppSpacing.md),
 
               // ── Header / Station Info ──────────────────────────────────
@@ -51,7 +50,7 @@ class _PlugInScreenLightState extends State<PlugInScreenLight> {
                 padding:
                     const EdgeInsets.symmetric(horizontal: AppSpacing.md),
                 child: Column(
-                  children: [
+                  children: <Widget>[
                     Text(
                       AppLocalizations.of(context).chargingAt,
                       style: AppTypography.bodyMedium.copyWith(
@@ -102,7 +101,7 @@ class _PlugInScreenLightState extends State<PlugInScreenLight> {
                       physics: const BouncingScrollPhysics(),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
+                        children: <Widget>[
                           // ── Image (square, cyan border, soft glow) ──
                           Container(
                             decoration: BoxDecoration(
@@ -117,7 +116,7 @@ class _PlugInScreenLightState extends State<PlugInScreenLight> {
                             child: ClipRRect(
                               borderRadius: AppRadius.lgBorder,
                               child: AspectRatio(
-                                aspectRatio: 1.0,
+                                aspectRatio: 1,
                                 child: Image.asset(
                                   'assets/images/plug_in.png',
                                   fit: BoxFit.cover,
@@ -153,15 +152,15 @@ class _PlugInScreenLightState extends State<PlugInScreenLight> {
                           ),
 
                           const SizedBox(height: AppSpacing.md),
-                          Divider(
+                          const Divider(
                               color: AppLightColors.divider, height: 1),
                           const SizedBox(height: AppSpacing.sm),
 
                           // ── Checklist Steps ───────────────────────────
                           BlocBuilder<PlugInBloc, PlugInState>(
-                            builder: (context, state) {
+                            builder: (BuildContext context, PlugInState state) {
                               return Column(
-                                children: [
+                                children: <Widget>[
                                   _LightStepRow(
                                     title: AppLocalizations.of(context).sessionInitiated,
                                     status: state.sessionInitiated,
@@ -202,7 +201,7 @@ class _PlugInScreenLightState extends State<PlugInScreenLight> {
                 padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg)
                     .copyWith(bottom: AppSpacing.lg),
                 child: BlocBuilder<PlugInBloc, PlugInState>(
-                  builder: (context, state) {
+                  builder: (BuildContext context, PlugInState state) {
                     final bool isConnecting =
                         state.status == PluginStatus.connecting;
                     final bool isCompleted =
@@ -227,8 +226,7 @@ class _PlugInScreenLightState extends State<PlugInScreenLight> {
 
               // ── Bottom Nav ─────────────────────────────────────────────
               ZetraLightBottomNavBar(
-                currentIndex: 0,
-                onTap: (index) {
+                onTap: (int index) {
                   if (index == 0) context.go('/home');
                 },
               ),
@@ -268,7 +266,7 @@ class _LightStepRow extends StatelessWidget {
             border: Border.all(
                 color: AppLightColors.chargingGreen, width: 2),
           ),
-          child: Icon(Icons.check_rounded,
+          child: const Icon(Icons.check_rounded,
               color: AppLightColors.chargingGreen, size: 13),
         );
         break;
@@ -287,7 +285,7 @@ class _LightStepRow extends StatelessWidget {
           child: Container(
             width: 8,
             height: 8,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               shape: BoxShape.circle,
               color: AppLightColors.accent,
             ),
@@ -326,7 +324,7 @@ class _LightStepRow extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
       child: Row(
-        children: [
+        children: <Widget>[
           leftWidget,
           const SizedBox(width: AppSpacing.sm),
           Expanded(
@@ -370,12 +368,10 @@ class _LightPrimaryButton extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: isEnabled
             ? const LinearGradient(
-                colors: [
+                colors: <Color>[
                   AppLightColors.buttonGradientStart,
                   AppLightColors.buttonGradientEnd,
                 ],
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
               )
             : null,
         color: isEnabled ? null : AppLightColors.border,

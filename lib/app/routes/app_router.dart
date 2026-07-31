@@ -5,11 +5,11 @@ import 'package:go_router/go_router.dart';
 import 'package:zetra/features/authentication/views/login.dart';
 import 'package:zetra/features/authentication/views/login_otp.dart';
 import 'package:zetra/features/authentication/views/signup.dart';
+import 'package:zetra/features/charging/bloc/charging_history_bloc.dart';
+import 'package:zetra/features/charging/bloc/charging_history_event.dart';
 import 'package:zetra/features/charging/views/charge_link.dart';
 import 'package:zetra/features/charging/views/charging.dart' as charging;
 import 'package:zetra/features/charging/views/charging_history_screen.dart';
-import 'package:zetra/features/charging/bloc/charging_history_bloc.dart';
-import 'package:zetra/features/charging/bloc/charging_history_event.dart';
 import 'package:zetra/features/charging/views/invoice_screen.dart';
 import 'package:zetra/features/charging/views/plug_in.dart';
 import 'package:zetra/features/charging/views/plug_in_light.dart';
@@ -20,6 +20,8 @@ import 'package:zetra/features/home/views/home.dart';
 import 'package:zetra/features/station/bloc/scan_qr_bloc.dart';
 import 'package:zetra/features/station/bloc/search_station_bloc.dart';
 import 'package:zetra/features/station/bloc/search_station_event.dart';
+import 'package:zetra/features/station/bloc/station_detail_bloc.dart';
+import 'package:zetra/features/station/bloc/station_detail_event.dart';
 import 'package:zetra/features/station/models/station_info.dart';
 import 'package:zetra/features/station/views/scan_qr_screen.dart';
 import 'package:zetra/features/station/views/search_station.dart';
@@ -174,8 +176,15 @@ final GoRouter appRouter = GoRouter(
 
         }
 
-        return StationDetails(
-            station: station
+        return BlocProvider<StationDetailBloc>(
+          create: (_) => GetIt.instance<StationDetailBloc>()..add(
+            FetchStationDetail(
+              stationId: station.id,
+              userLat: station.latitude,
+              userLng: station.longitude,
+            ),
+          ),
+          child: StationDetails(station: station),
         );
 
       }

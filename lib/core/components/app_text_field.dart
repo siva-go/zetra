@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../app/themes/app_colors.dart';
-import '../../app/themes/app_radius.dart';
-import '../../app/themes/app_spacing.dart';
-import '../../app/themes/app_typography.dart';
+import 'package:zetra/app/themes/app_colors.dart';
+import 'package:zetra/app/themes/app_radius.dart';
+import 'package:zetra/app/themes/app_spacing.dart';
+import 'package:zetra/app/themes/app_typography.dart';
 
 class AppTextField extends StatelessWidget {
   final TextEditingController? controller;
@@ -53,7 +53,6 @@ class AppTextField extends StatelessWidget {
           borderRadius: AppRadius.mdBorder,
           borderSide: BorderSide(
             color: AppColors.border.withValues(alpha: 0.5),
-            width: 1.0,
           ),
         ),
         focusedBorder: OutlineInputBorder(
@@ -67,7 +66,6 @@ class AppTextField extends StatelessWidget {
           borderRadius: AppRadius.mdBorder,
           borderSide: const BorderSide(
             color: AppColors.error,
-            width: 1.0,
           ),
         ),
         focusedErrorBorder: OutlineInputBorder(

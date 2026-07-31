@@ -12,5 +12,5 @@ class CachedStationsTable extends Table {
   TextColumn get address => text().nullable()();
 
   @override
-  Set<Column> get primaryKey => {id};
+  Set<Column> get primaryKey => <Column<Object>>{id};
 }

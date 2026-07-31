@@ -254,7 +254,7 @@ class HomeScreen extends StatelessWidget {
                 ),
                 // ── Navigation Bar ──
                 const ZetraBottomNavBar(
-                    currentIndex: 2
+                    
                 )
               ]
             )

@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+import 'package:zetra/app/themes/app_colors.dart';
+import 'package:zetra/app/themes/app_radius.dart';
+import 'package:zetra/app/themes/app_spacing.dart';
+import 'package:zetra/app/themes/app_typography.dart';
+import 'package:zetra/core/components/app_card.dart';
+import 'package:zetra/core/components/primary_button.dart';
 import 'package:zetra/core/l10n/app_localizations.dart';
-
-import '../../../../app/themes/app_colors.dart';
-import '../../../../app/themes/app_spacing.dart';
-import '../../../../app/themes/app_radius.dart';
-import '../../../../app/themes/app_typography.dart';
-import '../../../../core/components/app_card.dart';
-import '../../../../core/components/primary_button.dart';
-import '../bloc/plugin_bloc.dart';
-import '../bloc/plugin_event.dart';
-import '../bloc/plugin_state.dart';
+import 'package:zetra/features/charging/bloc/plugin_bloc.dart';
+import 'package:zetra/features/charging/bloc/plugin_event.dart';
+import 'package:zetra/features/charging/bloc/plugin_state.dart';
 
 /// Screen that prompts the user to plug in their EV.
 /// Simulates the connection steps sequentially:
@@ -41,15 +40,15 @@ class _PlugInScreenState extends State<PlugInScreen> {
       backgroundColor: AppColors.scaffoldDark,
       body: SafeArea(
         child: BlocListener<PlugInBloc, PlugInState>(
-          listenWhen: (previous, current) => previous.status != current.status,
-          listener: (context, state) {
+          listenWhen: (PlugInState previous, PlugInState current) => previous.status != current.status,
+          listener: (BuildContext context, PlugInState state) {
             if (state.status == PluginStatus.completed) {
               // Smooth auto-navigation to charge-link page when simulation finishes
               context.go('/charge-link');
             }
           },
           child: Column(
-            children: [
+            children: <Widget>[
               // ── Top Bar with Back Arrow ───────────────────────────────────
               Padding(
                 padding: const EdgeInsets.symmetric(
@@ -57,7 +56,7 @@ class _PlugInScreenState extends State<PlugInScreen> {
                   vertical: AppSpacing.xs,
                 ),
                 child: Row(
-                  children: [
+                  children: <Widget>[
                     GestureDetector(
                       onTap: () => context.go('/home'),
                       behavior: HitTestBehavior.opaque,
@@ -69,7 +68,6 @@ class _PlugInScreenState extends State<PlugInScreen> {
                           shape: BoxShape.circle,
                           border: Border.all(
                             color: AppColors.border.withValues(alpha: 0.5),
-                            width: 1,
                           ),
                         ),
                         child: const Icon(
@@ -87,7 +85,7 @@ class _PlugInScreenState extends State<PlugInScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
                 child: Column(
-                  children: [
+                  children: <Widget>[
                     Text(
                       AppLocalizations.of(context).chargingAt,
                       style: AppTypography.bodyMedium.copyWith(
@@ -131,12 +129,12 @@ class _PlugInScreenState extends State<PlugInScreen> {
                       physics: const BouncingScrollPhysics(),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
+                        children: <Widget>[
                           // ── Central Image (Square, occupied fully, neon border) ──
                           Container(
                             decoration: BoxDecoration(
                               borderRadius: AppRadius.lgBorder,
-                              boxShadow: [
+                              boxShadow: <BoxShadow>[
                                 BoxShadow(
                                   color: const Color(0xFF00E5FF).withValues(alpha: 0.25), // Neon cyan glow
                                   blurRadius: 18,
@@ -156,7 +154,7 @@ class _PlugInScreenState extends State<PlugInScreen> {
                             child: ClipRRect(
                               borderRadius: AppRadius.lgBorder,
                               child: AspectRatio(
-                                aspectRatio: 1.0,
+                                aspectRatio: 1,
                                 child: Image.asset(
                                   'assets/images/plug_in.png',
                                   fit: BoxFit.cover,
@@ -196,9 +194,9 @@ class _PlugInScreenState extends State<PlugInScreen> {
 
                           // ── Checklist Steps ──
                           BlocBuilder<PlugInBloc, PlugInState>(
-                            builder: (context, state) {
+                            builder: (BuildContext context, PlugInState state) {
                               return Column(
-                                children: [
+                                children: <Widget>[
                                   _StepRow(
                                     title: AppLocalizations.of(context).sessionInitiated,
                                     status: state.sessionInitiated,
@@ -238,7 +236,7 @@ class _PlugInScreenState extends State<PlugInScreen> {
                 padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg)
                     .copyWith(bottom: AppSpacing.lg),
                 child: BlocBuilder<PlugInBloc, PlugInState>(
-                  builder: (context, state) {
+                  builder: (BuildContext context, PlugInState state) {
                     final bool isConnecting = state.status == PluginStatus.connecting;
                     final bool isCompleted = state.status == PluginStatus.completed;
 
@@ -350,7 +348,7 @@ class _StepRow extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
       child: Row(
-        children: [
+        children: <Widget>[
           leftWidget,
           const SizedBox(width: AppSpacing.sm),
           Expanded(

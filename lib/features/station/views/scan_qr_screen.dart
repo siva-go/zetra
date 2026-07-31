@@ -181,7 +181,7 @@ class _ScanQrScreenState extends State<ScanQrScreen> with SingleTickerProviderSt
                             )
                         )
                     ),
-                    ZetraBottomNavBar(
+                    const ZetraBottomNavBar(
                         currentIndex: 1,
                         // onTap: (int idx) {
                         //

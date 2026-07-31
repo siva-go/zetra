@@ -25,7 +25,7 @@ sealed class Result<S> {
 
   /// Returns the success value or `null`.
   S? get dataOrNull => switch (this) {
-        Success(:final data) => data,
+        Success(:final S data) => data,
         Failure() => null,
       };
 
@@ -41,7 +41,7 @@ sealed class Result<S> {
     required T Function(dynamic failure) onFailure,
   }) =>
       switch (this) {
-        Success(:final data) => onSuccess(data),
+        Success(:final S data) => onSuccess(data),
         Failure(:final failure) => onFailure(failure),
       };
 }

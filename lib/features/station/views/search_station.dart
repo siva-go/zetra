@@ -53,8 +53,8 @@ class _SearchStationState extends State<SearchStation> {
                       child: Container(
                         decoration: BoxDecoration(
                           color: isDark
-                              ? AppColors.cardDark.withOpacity(0.88)
-                              : AppColors.whiteColor.withOpacity(0.96),
+                              ? AppColors.cardDark.withValues(alpha: 0.88)
+                              : AppColors.whiteColor.withValues(alpha: 0.96),
                           borderRadius: BorderRadius.circular(14.r),
                           border: Border.all(
                             color: isDark ? AppColors.border : AppColors.borderLight,
@@ -167,12 +167,12 @@ class _SearchStationState extends State<SearchStation> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              SizedBox(
+              const SizedBox(
                 width: 32,
                 height: 32,
                 child: CircularProgressIndicator(
                   strokeWidth: 2.5,
-                  valueColor: const AlwaysStoppedAnimation<Color>(AppColors.primary),
+                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
                 ),
               ),
               SizedBox(height: 16.h),

@@ -1,12 +1,12 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:zetra/core/errors/error_handler.dart';
 import 'package:zetra/core/errors/failure.dart';
-import 'package:dio/dio.dart';
 
 void main() {
   group('ErrorHandler.handle', () {
     test('maps DioExceptionType.connectionError to NetworkFailure', () {
-      final dio = DioException(
+      final DioException dio = DioException(
         type: DioExceptionType.connectionError,
         requestOptions: RequestOptions(),
       );
@@ -14,7 +14,7 @@ void main() {
     });
 
     test('maps DioExceptionType.connectionTimeout to TimeoutFailure', () {
-      final dio = DioException(
+      final DioException dio = DioException(
         type: DioExceptionType.connectionTimeout,
         requestOptions: RequestOptions(),
       );
@@ -22,7 +22,7 @@ void main() {
     });
 
     test('maps 401 HTTP to UnauthorizedFailure', () {
-      final dio = DioException(
+      final DioException dio = DioException(
         type: DioExceptionType.badResponse,
         requestOptions: RequestOptions(),
         response: Response(
@@ -34,7 +34,7 @@ void main() {
     });
 
     test('maps 404 HTTP to NotFoundFailure', () {
-      final dio = DioException(
+      final DioException dio = DioException(
         type: DioExceptionType.badResponse,
         requestOptions: RequestOptions(),
         response: Response(
@@ -46,7 +46,7 @@ void main() {
     });
 
     test('maps 500 HTTP to ServerFailure', () {
-      final dio = DioException(
+      final DioException dio = DioException(
         type: DioExceptionType.badResponse,
         requestOptions: RequestOptions(),
         response: Response(
@@ -54,7 +54,7 @@ void main() {
           statusCode: 500,
         ),
       );
-      final result = ErrorHandler.handle(dio);
+      final Failure result = ErrorHandler.handle(dio);
       expect(result, isA<ServerFailure>());
       expect((result as ServerFailure).code, 500);
     });

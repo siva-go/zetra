@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import '../../app/themes/app_colors.dart';
-import '../../app/themes/app_radius.dart';
-import '../../app/themes/app_spacing.dart';
-import '../../app/themes/app_typography.dart';
-import 'primary_button.dart';
-import 'secondary_button.dart';
+import 'package:zetra/app/themes/app_colors.dart';
+import 'package:zetra/app/themes/app_radius.dart';
+import 'package:zetra/app/themes/app_spacing.dart';
+import 'package:zetra/app/themes/app_typography.dart';
+import 'package:zetra/core/components/primary_button.dart';
+import 'package:zetra/core/components/secondary_button.dart';
 
 class AppDialog extends StatelessWidget {
   final String title;
@@ -42,7 +42,7 @@ class AppDialog extends StatelessWidget {
     return showDialog<bool>(
       context: context,
       barrierColor: Colors.black.withValues(alpha: 0.7),
-      builder: (context) {
+      builder: (BuildContext context) {
         return AppDialog(
           title: title,
           content: content,
@@ -68,14 +68,13 @@ class AppDialog extends StatelessWidget {
           borderRadius: AppRadius.xxlBorder,
           border: Border.all(
             color: AppColors.border.withValues(alpha: 0.4),
-            width: 1.0,
           ),
         ),
         padding: const EdgeInsets.all(AppSpacing.md),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: [
-            if (icon != null) ...[
+          children: <Widget>[
+            if (icon != null) ...<Widget>[
               Container(
                 width: 64,
                 height: 64,
@@ -109,8 +108,8 @@ class AppDialog extends StatelessWidget {
             ),
             const SizedBox(height: AppSpacing.md),
             Row(
-              children: [
-                if (secondaryButtonText != null) ...[
+              children: <Widget>[
+                if (secondaryButtonText != null) ...<Widget>[
                   Expanded(
                     child: SecondaryButton(
                       text: secondaryButtonText!,
@@ -124,8 +123,8 @@ class AppDialog extends StatelessWidget {
                     text: primaryButtonText,
                     onPressed: onPrimaryPressed ?? () => Navigator.of(context).pop(true),
                     gradientColors: iconColor == AppColors.error
-                        ? const [Color(0xFFFF073A), Color(0xFFFF7694)]
-                        : const [Color(0xFF7B2FF7), Color(0xFF4A90E2)],
+                        ? const <Color>[Color(0xFFFF073A), Color(0xFFFF7694)]
+                        : const <Color>[Color(0xFF7B2FF7), Color(0xFF4A90E2)],
                   ),
                 ),
               ],

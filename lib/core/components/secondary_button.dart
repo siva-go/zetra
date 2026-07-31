@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../app/themes/app_colors.dart';
-import '../../app/themes/app_radius.dart';
-import '../../app/themes/app_typography.dart';
+import 'package:zetra/app/themes/app_colors.dart';
+import 'package:zetra/app/themes/app_radius.dart';
+import 'package:zetra/app/themes/app_typography.dart';
 
 class SecondaryButton extends StatelessWidget {
   final String text;

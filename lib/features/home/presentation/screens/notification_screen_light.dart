@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:zetra/app/themes/app_radius.dart';
+import 'package:zetra/app/themes/app_spacing.dart';
+import 'package:zetra/app/themes/app_typography.dart';
+import 'package:zetra/app/themes/light/app_light_colors.dart';
+import 'package:zetra/app/themes/light/app_light_shadows.dart';
 import 'package:zetra/core/l10n/app_localizations.dart';
-
-import '../../../../app/themes/app_radius.dart';
-import '../../../../app/themes/app_spacing.dart';
-import '../../../../app/themes/app_typography.dart';
-import '../../../../app/themes/light/app_light_colors.dart';
-import '../../../../app/themes/light/app_light_shadows.dart';
-import '../../../../core/widgets/light_bottom_nav_bar.dart';
+import 'package:zetra/core/widgets/light_bottom_nav_bar.dart';
 
 // ── Notification data model ───────────────────────────────────────────────────
 enum _NotifType { pluggedIn, chargingStarted, lowBalance, chargingCompleted, newOffer }
@@ -31,7 +30,7 @@ class _NotifItem {
 class NotificationScreenLight extends StatelessWidget {
   const NotificationScreenLight({super.key});
 
-  static const List<_NotifItem> _notifications = [
+  static const List<_NotifItem> _notifications = <_NotifItem>[
     _NotifItem(
       type: _NotifType.pluggedIn,
       title: 'Plugged In',
@@ -70,7 +69,7 @@ class NotificationScreenLight extends StatelessWidget {
       backgroundColor: AppLightColors.scaffold,
       body: SafeArea(
         child: Column(
-          children: [
+          children: <Widget>[
             // ── Header ────────────────────────────────────────────────────
             Padding(
               padding: const EdgeInsets.symmetric(
@@ -78,7 +77,7 @@ class NotificationScreenLight extends StatelessWidget {
                 vertical: AppSpacing.sm,
               ),
               child: Row(
-                children: [
+                children: <Widget>[
                   // Back button
                   GestureDetector(
                     onTap: () => context.pop(),
@@ -136,9 +135,9 @@ class NotificationScreenLight extends StatelessWidget {
                   vertical: AppSpacing.xs,
                 ),
                 itemCount: _notifications.length,
-                separatorBuilder: (context, index) =>
+                separatorBuilder: (BuildContext context, int index) =>
                     const SizedBox(height: AppSpacing.sm),
-                itemBuilder: (context, index) {
+                itemBuilder: (BuildContext context, int index) {
                   return _LightNotifCard(item: _notifications[index]);
                 },
               ),
@@ -146,8 +145,7 @@ class NotificationScreenLight extends StatelessWidget {
 
             // ── Bottom Nav ────────────────────────────────────────────────
             ZetraLightBottomNavBar(
-              currentIndex: 0,
-              onTap: (index) {
+              onTap: (int index) {
                 if (index == 0) context.go('/home');
               },
             ),
@@ -246,19 +244,19 @@ class _LightNotifCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final style = _resolveStyle(item.type);
-    final isLowBalance = item.type == _NotifType.lowBalance;
-    final localized = _localizeNotification(context, item.type);
+    final _IconStyle style = _resolveStyle(item.type);
+    final bool isLowBalance = item.type == _NotifType.lowBalance;
+    final _NotifContent localized = _localizeNotification(context, item.type);
 
     // Low-balance card gets a very subtle pinkish tint
-    final cardBg = isLowBalance
+    final Color cardBg = isLowBalance
         ? const Color(0xFFFFF5F5)
         : AppLightColors.card;
-    final cardBorder = isLowBalance
+    final Color cardBorder = isLowBalance
         ? AppLightColors.chargingRed.withValues(alpha: 0.25)
         : AppLightColors.border;
 
-    final glowShadow = isLowBalance
+    final List<BoxShadow> glowShadow = isLowBalance
         ? AppLightShadows.redGlow
         : style.isGreen
             ? AppLightShadows.greenGlow
@@ -269,15 +267,15 @@ class _LightNotifCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: cardBg,
         borderRadius: AppRadius.lgBorder,
-        border: Border.all(color: cardBorder, width: 1),
-        boxShadow: [
+        border: Border.all(color: cardBorder),
+        boxShadow: <BoxShadow>[
           ...AppLightShadows.card,
           ...glowShadow,
         ],
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+        children: <Widget>[
           // Icon badge
           Container(
             width: 46,
@@ -297,9 +295,9 @@ class _LightNotifCard extends StatelessWidget {
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
+              children: <Widget>[
                 Row(
-                  children: [
+                  children: <Widget>[
                     Expanded(
                       child: Text(
                         localized.title,

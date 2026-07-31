@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
-import '../constants/app_constants.dart';
-import '../network/interceptors/auth_interceptor.dart';
-import '../network/interceptors/logger_interceptor.dart';
-import '../network/interceptors/token_interceptor.dart';
+import 'package:zetra/core/constants/app_constants.dart';
+import 'package:zetra/core/network/interceptors/auth_interceptor.dart';
+import 'package:zetra/core/network/interceptors/logger_interceptor.dart';
+import 'package:zetra/core/network/interceptors/token_interceptor.dart';
 
 /// ZETRA Core — API Client
 ///
@@ -26,14 +26,14 @@ class ApiClient {
         connectTimeout: AppConstants.connectTimeout,
         receiveTimeout: AppConstants.receiveTimeout,
         sendTimeout: AppConstants.sendTimeout,
-        headers: {
+        headers: <String, dynamic>{
           'Accept': 'application/json',
           'Content-Type': 'application/json',
         },
       ),
     );
 
-    dio.interceptors.addAll([
+    dio.interceptors.addAll(<Interceptor>[
       authInterceptor,
       tokenInterceptor,
       loggerInterceptor,

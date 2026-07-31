@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:zetra/app/themes/app_colors.dart';
+import 'package:zetra/app/themes/app_radius.dart';
+import 'package:zetra/app/themes/app_spacing.dart';
+import 'package:zetra/app/themes/app_typography.dart';
 import 'package:zetra/core/l10n/app_localizations.dart';
-
-import '../../../../app/themes/app_colors.dart';
-import '../../../../app/themes/app_radius.dart';
-import '../../../../app/themes/app_spacing.dart';
-import '../../../../app/themes/app_typography.dart';
-import '../../../../core/widgets/bottom_nav_bar.dart';
+import 'package:zetra/core/widgets/bottom_nav_bar.dart';
 
 /// Main home screen of the ZETRA app.
 /// Provides navigation cards to the three charging flow screens and
@@ -21,7 +20,7 @@ class ZetraHomeScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+          children: <Widget>[
             // ── Top App Bar ──────────────────────────────────────────────
             Padding(
               padding: const EdgeInsets.symmetric(
@@ -29,15 +28,14 @@ class ZetraHomeScreen extends StatelessWidget {
                 vertical: AppSpacing.sm,
               ),
               child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
+                children: <Widget>[
                   // ZETRA Logo / Title
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+                    children: <Widget>[
                       ShaderMask(
-                        shaderCallback: (bounds) => const LinearGradient(
-                          colors: [Color(0xFF69F0AE), Color(0xFF2EFE58)],
+                        shaderCallback: (Rect bounds) => const LinearGradient(
+                          colors: <Color>[Color(0xFF69F0AE), Color(0xFF2EFE58)],
                         ).createShader(bounds),
                         blendMode: BlendMode.srcIn,
                         child: Text(
@@ -71,9 +69,8 @@ class ZetraHomeScreen extends StatelessWidget {
                         shape: BoxShape.circle,
                         border: Border.all(
                           color: AppColors.border.withValues(alpha: 0.5),
-                          width: 1,
                         ),
-                        boxShadow: [
+                        boxShadow: <BoxShadow>[
                           BoxShadow(
                             color: AppColors.chargingGreenGlow.withValues(alpha: 0.15),
                             blurRadius: 12,
@@ -83,7 +80,7 @@ class ZetraHomeScreen extends StatelessWidget {
                       ),
                       child: Stack(
                         alignment: Alignment.center,
-                        children: [
+                        children: <Widget>[
                           const Icon(
                             Icons.notifications_outlined,
                             color: Colors.white,
@@ -99,7 +96,7 @@ class ZetraHomeScreen extends StatelessWidget {
                               decoration: BoxDecoration(
                                 color: AppColors.chargingGreenGlow,
                                 shape: BoxShape.circle,
-                                boxShadow: [
+                                boxShadow: <BoxShadow>[
                                   BoxShadow(
                                     color: AppColors.chargingGreenGlow.withValues(alpha: 0.8),
                                     blurRadius: 6,
@@ -124,7 +121,7 @@ class ZetraHomeScreen extends StatelessWidget {
               padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   Text(
                     AppLocalizations.of(context).welcomeBackGreeting,
                     style: AppTypography.bodyMedium.copyWith(
@@ -151,7 +148,7 @@ class ZetraHomeScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
               child: Row(
-                children: [
+                children: <Widget>[
                   _StatChip(
                     icon: Icons.bolt_rounded,
                     iconColor: AppColors.chargingGreenGlow,
@@ -199,14 +196,14 @@ class ZetraHomeScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
+                  children: <Widget>[
                     // Plug-In Card (dark)
                     _NavCard(
                       step: '01',
                       title: AppLocalizations.of(context).plugIn,
                       subtitle: AppLocalizations.of(context).connectEvToCharger,
                       icon: Icons.power_rounded,
-                      gradientColors: const [Color(0xFF1A1F33), Color(0xFF0D1020)],
+                      gradientColors: const <Color>[Color(0xFF1A1F33), Color(0xFF0D1020)],
                       accentColor: const Color(0xFF00E5FF),
                       glowColor: const Color(0xFF00E5FF),
                       onTap: () => context.go('/plug-in'),
@@ -218,7 +215,7 @@ class ZetraHomeScreen extends StatelessWidget {
                       title: AppLocalizations.of(context).powerLink,
                       subtitle: AppLocalizations.of(context).vehicleConnectedReady,
                       icon: Icons.link_rounded,
-                      gradientColors: const [Color(0xFF1A1F33), Color(0xFF0D1020)],
+                      gradientColors: const <Color>[Color(0xFF1A1F33), Color(0xFF0D1020)],
                       accentColor: AppColors.chargingGreenGlow,
                       glowColor: AppColors.chargingGreenGlow,
                       onTap: () => context.go('/charge-link'),
@@ -230,7 +227,7 @@ class ZetraHomeScreen extends StatelessWidget {
                       title: AppLocalizations.of(context).chargingSession,
                       subtitle: AppLocalizations.of(context).monitorLiveStats,
                       icon: Icons.electric_bolt_rounded,
-                      gradientColors: const [Color(0xFF1A1F33), Color(0xFF0D1020)],
+                      gradientColors: const <Color>[Color(0xFF1A1F33), Color(0xFF0D1020)],
                       accentColor: const Color(0xFF7B2FF7),
                       glowColor: const Color(0xFF7B2FF7),
                       onTap: () => context.go('/charging'),
@@ -242,7 +239,7 @@ class ZetraHomeScreen extends StatelessWidget {
                       title: AppLocalizations.of(context).chargingHistory,
                       subtitle: AppLocalizations.of(context).viewPastSessions,
                       icon: Icons.history_rounded,
-                      gradientColors: const [Color(0xFF1C1B2E), Color(0xFF0F0E1C)],
+                      gradientColors: const <Color>[Color(0xFF1C1B2E), Color(0xFF0F0E1C)],
                       accentColor: const Color(0xFFFFD600),
                       glowColor: const Color(0xFFFFD600),
                       onTap: () => context.go('/charging-history'),
@@ -254,7 +251,7 @@ class ZetraHomeScreen extends StatelessWidget {
                       title: AppLocalizations.of(context).invoice,
                       subtitle: AppLocalizations.of(context).downloadViewInvoice,
                       icon: Icons.receipt_long_rounded,
-                      gradientColors: const [Color(0xFF1E1A10), Color(0xFF110F06)],
+                      gradientColors: const <Color>[Color(0xFF1E1A10), Color(0xFF110F06)],
                       accentColor: const Color(0xFFFF6D00),
                       glowColor: const Color(0xFFFF6D00),
                       onTap: () => context.go('/invoice'),
@@ -264,7 +261,7 @@ class ZetraHomeScreen extends StatelessWidget {
 
                     // ── Light Theme Section Label ─────────────────────────
                     Row(
-                      children: [
+                      children: <Widget>[
                         Container(
                           padding: const EdgeInsets.symmetric(
                               horizontal: AppSpacing.sm, vertical: 4),
@@ -277,7 +274,7 @@ class ZetraHomeScreen extends StatelessWidget {
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
-                            children: [
+                            children: <Widget>[
                               const Icon(Icons.light_mode_rounded,
                                   size: 12, color: Color(0xFF8B5CF6)),
                               const SizedBox(width: 4),
@@ -304,7 +301,7 @@ class ZetraHomeScreen extends StatelessWidget {
                       title: AppLocalizations.of(context).plugInLight,
                       subtitle: AppLocalizations.of(context).lightThemeConnectEv,
                       icon: Icons.power_rounded,
-                      gradientColors: const [Color(0xFF1E2440), Color(0xFF151A2E)],
+                      gradientColors: const <Color>[Color(0xFF1E2440), Color(0xFF151A2E)],
                       accentColor: const Color(0xFF8B5CF6),
                       glowColor: const Color(0xFF8B5CF6),
                       onTap: () => context.go('/plug-in-light'),
@@ -316,7 +313,7 @@ class ZetraHomeScreen extends StatelessWidget {
                       title: AppLocalizations.of(context).notificationsLight,
                       subtitle: AppLocalizations.of(context).lightThemeSessionAlerts,
                       icon: Icons.notifications_outlined,
-                      gradientColors: const [Color(0xFF1E2440), Color(0xFF151A2E)],
+                      gradientColors: const <Color>[Color(0xFF1E2440), Color(0xFF151A2E)],
                       accentColor: const Color(0xFF8B5CF6),
                       glowColor: const Color(0xFF8B5CF6),
                       onTap: () => context.go('/notifications-light'),
@@ -330,7 +327,7 @@ class ZetraHomeScreen extends StatelessWidget {
             const SizedBox(height: AppSpacing.sm),
 
             // ── Bottom Nav ────────────────────────────────────────────────
-            const ZetraBottomNavBar(currentIndex: 0),
+            const ZetraBottomNavBar(),
           ],
         ),
       ),
@@ -365,11 +362,10 @@ class _StatChip extends StatelessWidget {
           borderRadius: AppRadius.mdBorder,
           border: Border.all(
             color: AppColors.border.withValues(alpha: 0.4),
-            width: 1,
           ),
         ),
         child: Column(
-          children: [
+          children: <Widget>[
             Icon(icon, color: iconColor, size: 18),
             const SizedBox(height: 4),
             Text(
@@ -432,9 +428,8 @@ class _NavCard extends StatelessWidget {
           borderRadius: AppRadius.lgBorder,
           border: Border.all(
             color: accentColor.withValues(alpha: 0.35),
-            width: 1,
           ),
-          boxShadow: [
+          boxShadow: <BoxShadow>[
             BoxShadow(
               color: glowColor.withValues(alpha: 0.12),
               blurRadius: 16,
@@ -443,7 +438,7 @@ class _NavCard extends StatelessWidget {
           ],
         ),
         child: Row(
-          children: [
+          children: <Widget>[
             // Neon icon circle
             Container(
               width: 52,
@@ -455,7 +450,7 @@ class _NavCard extends StatelessWidget {
                   color: accentColor.withValues(alpha: 0.5),
                   width: 1.5,
                 ),
-                boxShadow: [
+                boxShadow: <BoxShadow>[
                   BoxShadow(
                     color: accentColor.withValues(alpha: 0.25),
                     blurRadius: 12,
@@ -470,9 +465,9 @@ class _NavCard extends StatelessWidget {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
+                children: <Widget>[
                   Row(
-                    children: [
+                    children: <Widget>[
                       Text(
                         'STEP $step',
                         style: AppTypography.labelSmall.copyWith(

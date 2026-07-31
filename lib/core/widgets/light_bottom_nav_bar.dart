@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../app/themes/app_spacing.dart';
-import '../../app/themes/app_typography.dart';
-import '../../app/themes/light/app_light_colors.dart';
+import 'package:zetra/app/themes/app_spacing.dart';
+import 'package:zetra/app/themes/app_typography.dart';
+import 'package:zetra/app/themes/light/app_light_colors.dart';
 
 /// Light-theme bottom navigation bar for Notification and Plug-In screens.
 class ZetraLightBottomNavBar extends StatelessWidget {
@@ -19,13 +19,12 @@ class ZetraLightBottomNavBar extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: AppLightColors.navBackground,
-        border: Border(
+        border: const Border(
           top: BorderSide(
             color: AppLightColors.border,
-            width: 1,
           ),
         ),
-        boxShadow: [
+        boxShadow: <BoxShadow>[
           BoxShadow(
             color: const Color(0xFF000000).withValues(alpha: 0.05),
             blurRadius: 8,
@@ -42,7 +41,7 @@ class ZetraLightBottomNavBar extends StatelessWidget {
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
+            children: <Widget>[
               _LightNavItem(
                 icon: Icons.home_outlined,
                 activeIcon: Icons.home_rounded,
@@ -89,14 +88,14 @@ class _LightNavItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final color = isActive ? AppLightColors.navActive : AppLightColors.navInactive;
+    final Color color = isActive ? AppLightColors.navActive : AppLightColors.navInactive;
 
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        children: [
+        children: <Widget>[
           Icon(
             isActive ? activeIcon : icon,
             color: color,

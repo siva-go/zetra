@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../app/themes/app_colors.dart';
-import '../../app/themes/app_radius.dart';
-import '../../app/themes/app_spacing.dart';
-import '../../app/themes/app_typography.dart';
+import 'package:zetra/app/themes/app_colors.dart';
+import 'package:zetra/app/themes/app_radius.dart';
+import 'package:zetra/app/themes/app_spacing.dart';
+import 'package:zetra/app/themes/app_typography.dart';
 
 class AppBottomSheet extends StatelessWidget {
   final Widget child;
@@ -27,7 +27,7 @@ class AppBottomSheet extends StatelessWidget {
       backgroundColor: Colors.transparent,
       barrierColor: Colors.black.withValues(alpha: 0.6),
       isScrollControlled: true,
-      builder: (context) {
+      builder: (BuildContext context) {
         return AppBottomSheet(
           title: title,
           actions: actions,
@@ -48,7 +48,6 @@ class AppBottomSheet extends StatelessWidget {
         border: Border(
           top: BorderSide(
             color: AppColors.border.withValues(alpha: 0.4),
-            width: 1.0,
           ),
         ),
       ),
@@ -57,7 +56,7 @@ class AppBottomSheet extends StatelessWidget {
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        children: [
+        children: <Widget>[
           // Drag handle
           Container(
             width: 48,
@@ -69,11 +68,11 @@ class AppBottomSheet extends StatelessWidget {
             ),
           ),
           
-          if (title != null) ...[
+          if (title != null) ...<Widget>[
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
               child: Row(
-                children: [
+                children: <Widget>[
                   Expanded(
                     child: Text(
                       title!,

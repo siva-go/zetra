@@ -75,7 +75,7 @@ class SearchStationBloc extends Bloc<SearchStationEvent, SearchStationState> {
       double? userLat;
       double? userLng;
       try {
-        LocationPermission permission = await Geolocator.checkPermission();
+        final LocationPermission permission = await Geolocator.checkPermission();
         if (permission == LocationPermission.whileInUse || permission == LocationPermission.always) {
           final Position position = await Geolocator.getCurrentPosition(
             locationSettings: const LocationSettings(
@@ -112,13 +112,13 @@ class SearchStationBloc extends Bloc<SearchStationEvent, SearchStationState> {
       print('[ZETRA DEBUG] API Response Status Code: ${response.statusCode}');
       final dynamic responseData = response.data;
       print('[ZETRA DEBUG] API Raw Response Data: $responseData');
-      List<dynamic> rawList = [];
+      List<dynamic> rawList = <dynamic>[];
 
       if (responseData is Map) {
         rawList = (responseData['data'] as List<dynamic>?) ??
                   (responseData['items'] as List<dynamic>?) ??
                   (responseData['stations'] as List<dynamic>?) ??
-                  [];
+                  <dynamic>[];
       } else if (responseData is List) {
         rawList = responseData;
       } else if (responseData is String) {
@@ -129,7 +129,7 @@ class SearchStationBloc extends Bloc<SearchStationEvent, SearchStationState> {
           rawList = (decoded['data'] as List<dynamic>?) ??
                     (decoded['items'] as List<dynamic>?) ??
                     (decoded['stations'] as List<dynamic>?) ??
-                    [];
+                    <dynamic>[];
         }
       }
 

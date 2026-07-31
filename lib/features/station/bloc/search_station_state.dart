@@ -24,9 +24,8 @@ class SearchStationState {
     return const SearchStationState(
       status: SearchStationStatus.initial,
       query: '',
-      stations: [],
-      filteredStations: [],
-      errorMessage: null,
+      stations: <StationInfo>[],
+      filteredStations: <StationInfo>[],
     );
   }
 

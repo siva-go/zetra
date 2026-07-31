@@ -34,8 +34,7 @@ class AuthState {
       isPhoneValid: false,
       otpDigits: List<String>.filled(6, ''),
       timerSeconds: 30,
-      status: AuthStatus.initial,
-      isPasswordVisible: false
+      status: AuthStatus.initial
     );
 
   }

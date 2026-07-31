@@ -41,7 +41,7 @@ class LiveActivityWidget extends StatelessWidget {
         ),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: AppColors.blackColor.withOpacity(isDarkMode ? 0.3 : 0.08),
+            color: AppColors.blackColor.withValues(alpha: isDarkMode ? 0.3 : 0.08),
             blurRadius: 16,
             offset: const Offset(0, 8)
           )
@@ -99,7 +99,7 @@ class LiveActivityWidget extends StatelessWidget {
                     color: stopBtnBg,
                     borderRadius: BorderRadius.circular(20),
                     border: Border.all(
-                      color: stopBtnText.withOpacity(0.3)
+                      color: stopBtnText.withValues(alpha: 0.3)
                     )
                   ),
                   child: Row(

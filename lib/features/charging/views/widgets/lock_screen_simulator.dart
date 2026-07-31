@@ -1,7 +1,5 @@
-import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:zetra/app/themes/app_colors.dart';
 import 'package:zetra/features/charging/bloc/charging_bloc.dart';
 import 'package:zetra/features/charging/bloc/charging_event.dart';
@@ -165,7 +163,7 @@ class _LockScreenSimulatorState extends State<LockScreenSimulator> {
                     Text(
                       'Tuesday, September 12',
                       style: TextStyle(
-                        color: Colors.white.withOpacity(0.9),
+                        color: Colors.white.withValues(alpha: 0.9),
                         fontSize: 20,
                         fontWeight: FontWeight.w400,
                       ),
@@ -240,7 +238,7 @@ class _LockScreenSimulatorState extends State<LockScreenSimulator> {
                     width: 140,
                     height: 5,
                     decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.5),
+                      color: Colors.white.withValues(alpha: 0.5),
                       borderRadius: BorderRadius.circular(2.5),
                     ),
                   ),
@@ -259,7 +257,7 @@ class WavePainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     final Paint paint = Paint()
-      ..color = Colors.blue.withOpacity(0.2)
+      ..color = Colors.blue.withValues(alpha: 0.2)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 2;
 

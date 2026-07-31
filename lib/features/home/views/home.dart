@@ -8,7 +8,6 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:zetra/app/themes/app_colors.dart';
-import 'package:zetra/app/themes/app_radius.dart';
 import 'package:zetra/app/themes/app_typography.dart';
 import 'package:zetra/core/widgets/bottom_nav_bar.dart';
 import 'package:zetra/features/home/bloc/home_bloc.dart';
@@ -279,7 +278,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                   )
                 ),
                 const ZetraBottomNavBar(
-                  currentIndex: 0,
+                  
                 )
               ]
             );

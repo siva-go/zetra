@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../app/themes/app_colors.dart';
-import '../../app/themes/app_spacing.dart';
-import '../../app/themes/app_typography.dart';
-import 'primary_button.dart';
+import 'package:zetra/app/themes/app_colors.dart';
+import 'package:zetra/app/themes/app_spacing.dart';
+import 'package:zetra/app/themes/app_typography.dart';
+import 'package:zetra/core/components/primary_button.dart';
 
 class AppEmptyState extends StatelessWidget {
   final String title;
@@ -27,7 +27,7 @@ class AppEmptyState extends StatelessWidget {
         padding: const EdgeInsets.all(AppSpacing.md),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: <Widget>[
             Icon(
               icon,
               color: AppColors.textSecondary.withValues(alpha: 0.4),
@@ -50,7 +50,7 @@ class AppEmptyState extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            if (buttonText != null && onButtonPressed != null) ...[
+            if (buttonText != null && onButtonPressed != null) ...<Widget>[
               const SizedBox(height: AppSpacing.md),
               PrimaryButton(
                 text: buttonText!,

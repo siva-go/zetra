@@ -92,7 +92,7 @@ class InvoiceScreen extends StatelessWidget {
                 ),
                 // ── Bottom nav ────────────────────────────────────────────
                 const ZetraBottomNavBar(
-                    currentIndex: 3
+                    currentIndex: 2
                 )
               ]
             );

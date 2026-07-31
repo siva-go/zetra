@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../app/themes/app_colors.dart';
-import '../../app/themes/app_spacing.dart';
-import '../../app/themes/app_typography.dart';
+import 'package:zetra/app/themes/app_colors.dart';
+import 'package:zetra/app/themes/app_spacing.dart';
+import 'package:zetra/app/themes/app_typography.dart';
 
 class AppLoader extends StatelessWidget {
   final String? message;
@@ -19,7 +19,7 @@ class AppLoader extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         mainAxisSize: MainAxisSize.min,
-        children: [
+        children: <Widget>[
           SizedBox(
             width: 48,
             height: 48,
@@ -28,7 +28,7 @@ class AppLoader extends StatelessWidget {
               strokeWidth: 3.5,
             ),
           ),
-          if (message != null) ...[
+          if (message != null) ...<Widget>[
             const SizedBox(height: AppSpacing.sm),
             Text(
               message!,

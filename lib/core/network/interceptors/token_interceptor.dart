@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
-import '../../storage/secure_storage.dart';
-import '../../errors/app_exception.dart';
+import 'package:zetra/core/errors/app_exception.dart';
+import 'package:zetra/core/storage/secure_storage.dart';
 
 /// Handles 401 responses by attempting a token refresh.
 ///
@@ -25,13 +25,13 @@ class TokenInterceptor extends Interceptor {
     if (err.response?.statusCode == 401 && !_isRefreshing) {
       _isRefreshing = true;
       try {
-        final refreshed = await _refreshToken();
+        final bool refreshed = await _refreshToken();
         if (refreshed) {
           // Retry original request with fresh token
-          final token = await _storage.getAccessToken();
-          final opts = err.requestOptions;
+          final String? token = await _storage.getAccessToken();
+          final RequestOptions opts = err.requestOptions;
           opts.headers['Authorization'] = 'Bearer $token';
-          final response = await dio.fetch(opts);
+          final Response<dynamic> response = await dio.fetch(opts);
           handler.resolve(response);
           return;
         }
@@ -58,15 +58,15 @@ class TokenInterceptor extends Interceptor {
   /// Calls the refresh endpoint and persists new tokens.
   /// Returns `true` on success, `false` otherwise.
   Future<bool> _refreshToken() async {
-    final refreshToken = await _storage.getRefreshToken();
+    final String? refreshToken = await _storage.getRefreshToken();
     if (refreshToken == null) return false;
 
     try {
-      final response = await dio.post(
+      final Response<dynamic> response = await dio.post(
         '/auth/refresh',
-        data: {'refresh_token': refreshToken},
+        data: <String, String>{'refresh_token': refreshToken},
       );
-      final data = response.data as Map<String, dynamic>;
+      final Map<String, dynamic> data = response.data as Map<String, dynamic>;
       await _storage.saveAccessToken(data['access_token'] as String);
       if (data.containsKey('refresh_token')) {
         await _storage.saveRefreshToken(data['refresh_token'] as String);

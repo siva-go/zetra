@@ -15,5 +15,5 @@ class ChargingHistoryTable extends Table {
   DateTimeColumn get endedAt => dateTime().nullable()();
 
   @override
-  Set<Column> get primaryKey => {sessionId};
+  Set<Column> get primaryKey => <Column<Object>>{sessionId};
 }

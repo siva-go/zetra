@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../app/themes/app_radius.dart';
-import '../../app/themes/app_typography.dart';
-import '../../app/themes/app_shadows.dart';
+import 'package:zetra/app/themes/app_radius.dart';
+import 'package:zetra/app/themes/app_shadows.dart';
+import 'package:zetra/app/themes/app_typography.dart';
 
 class PrimaryButton extends StatelessWidget {
   final String text;
@@ -18,7 +18,7 @@ class PrimaryButton extends StatelessWidget {
     this.isLoading = false,
     this.width,
     this.height = 56,
-    this.gradientColors = const [Color(0xFF7B2FF7), Color(0xFF4A90E2)],
+    this.gradientColors = const <Color>[Color(0xFF7B2FF7), Color(0xFF4A90E2)],
   });
 
   @override
@@ -32,8 +32,6 @@ class PrimaryButton extends StatelessWidget {
         gradient: isEnabled
             ? LinearGradient(
                 colors: gradientColors,
-                begin: Alignment.centerLeft,
-                end: Alignment.centerRight,
               )
             : null,
         color: isEnabled ? null : Colors.white.withValues(alpha: 0.1),

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../app/themes/app_colors.dart';
-import '../../app/themes/app_radius.dart';
-import '../../app/themes/app_spacing.dart';
-import '../../app/themes/app_typography.dart';
+import 'package:zetra/app/themes/app_colors.dart';
+import 'package:zetra/app/themes/app_radius.dart';
+import 'package:zetra/app/themes/app_spacing.dart';
+import 'package:zetra/app/themes/app_typography.dart';
 
 class AppSnackbar {
   AppSnackbar._();
@@ -16,7 +16,7 @@ class AppSnackbar {
     Color? iconColor,
     Duration duration = const Duration(seconds: 3),
   }) {
-    final snackBar = SnackBar(
+    final SnackBar snackBar = SnackBar(
       backgroundColor: Colors.transparent,
       elevation: 0,
       duration: duration,
@@ -30,9 +30,8 @@ class AppSnackbar {
           borderRadius: AppRadius.mdBorder,
           border: Border.all(
             color: Colors.white.withValues(alpha: 0.1),
-            width: 1,
           ),
-          boxShadow: [
+          boxShadow: <BoxShadow>[
             BoxShadow(
               color: Colors.black.withValues(alpha: 0.3),
               blurRadius: 10,
@@ -41,8 +40,8 @@ class AppSnackbar {
           ],
         ),
         child: Row(
-          children: [
-            if (icon != null) ...[
+          children: <Widget>[
+            if (icon != null) ...<Widget>[
               Icon(
                 icon,
                 color: iconColor ?? textColor,

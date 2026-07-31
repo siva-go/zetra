@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import '../../app/themes/app_colors.dart';
-import '../../app/themes/app_spacing.dart';
-import '../../app/themes/app_typography.dart';
-import 'primary_button.dart';
+import 'package:zetra/app/themes/app_colors.dart';
+import 'package:zetra/app/themes/app_spacing.dart';
+import 'package:zetra/app/themes/app_typography.dart';
+import 'package:zetra/core/components/primary_button.dart';
 
 class AppErrorState extends StatelessWidget {
   final String errorMessage;
@@ -23,7 +23,7 @@ class AppErrorState extends StatelessWidget {
         padding: const EdgeInsets.all(AppSpacing.md),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          children: [
+          children: <Widget>[
             Container(
               width: 72,
               height: 72,
@@ -54,14 +54,14 @@ class AppErrorState extends StatelessWidget {
               ),
               textAlign: TextAlign.center,
             ),
-            if (onRetry != null) ...[
+            if (onRetry != null) ...<Widget>[
               const SizedBox(height: AppSpacing.md),
               PrimaryButton(
                 text: 'Retry',
                 onPressed: onRetry!,
                 width: 150,
                 height: 48,
-                gradientColors: const [Color(0xFFFF073A), Color(0xFFFF7694)],
+                gradientColors: const <Color>[Color(0xFFFF073A), Color(0xFFFF7694)],
               ),
             ],
           ],
