@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 
 @DataClassName('ChargingHistoryEntry')
 class ChargingHistoryTable extends Table {
+
   TextColumn get sessionId => text()();
   TextColumn get stationId => text()();
   TextColumn get status => text()();
@@ -16,4 +17,5 @@ class ChargingHistoryTable extends Table {
 
   @override
   Set<Column> get primaryKey => <Column<Object>>{sessionId};
+
 }

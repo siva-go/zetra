@@ -1,23 +1,99 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:zetra/core/api/result.dart';
 import 'package:zetra/features/wallet/bloc/wallet_event.dart';
 import 'package:zetra/features/wallet/bloc/wallet_state.dart';
+import 'package:zetra/features/wallet/models/wallet_model.dart';
+import 'package:zetra/features/wallet/repository/wallet_repository.dart';
 
 class WalletBloc extends Bloc<WalletEvent, WalletState> {
 
-  WalletBloc() : super(WalletState.initial()) {
-    on<WalletInitialized>(_onInitialized);
+  final WalletRepository _repository;
+
+  WalletBloc(this._repository) : super(WalletState.initial()) {
+    on<WalletInitialized>((WalletInitialized event, Emitter<WalletState> emit) => add(const WalletLoadRequested()));
+    on<WalletLoadRequested>(_onLoadRequested);
+    on<WalletTransactionsLoadMore>(_onLoadMoreTransactions);
     on<AmountChanged>(_onAmountChanged);
     on<QuickAmountSelected>(_onQuickAmountSelected);
     on<PaymentMethodSelected>(_onPaymentMethodSelected);
     on<PaymentInitiated>(_onPaymentInitiated);
+    on<WalletTopupInitiated>(_onTopupInitiated);
+    on<WalletVoucherRedeemed>(_onVoucherRedeemed);
+    on<WalletTopupVerified>(_onTopupVerified);
     on<PaymentResultReceived>(_onPaymentResultReceived);
   }
 
-  void _onInitialized(WalletInitialized event, Emitter<WalletState> emit) {
+  Future<void> _onLoadRequested(WalletLoadRequested event, Emitter<WalletState> emit) async {
 
     emit(state.copyWith(
-        status: WalletStatus.loaded
+        status: WalletStatus.loading
     ));
+
+    final Result<WalletModel> walletRes = await _repository.fetchWallet();
+    final Result<WalletTransactionsPage> txnsRes = await _repository.fetchTransactions();
+
+    if (walletRes.isSuccess) {
+
+      final WalletModel wallet = walletRes.dataOrNull!;
+      final List<WalletTransactionModel> txns = txnsRes.dataOrNull?.data ?? <WalletTransactionModel>[];
+      final bool hasMore = txnsRes.dataOrNull?.hasMore ?? false;
+
+      emit(state.copyWith(
+        status: WalletStatus.loaded,
+        walletId: wallet.id,
+        balancePaise: wallet.balancePaise,
+        balance: wallet.balance,
+        isLowBalance: wallet.balancePaise < 20000,
+        recentTransactions: txns,
+        transactionPage: 1,
+        hasMoreTransactions: hasMore
+      ));
+
+    } else {
+
+      emit(state.copyWith(
+        status: WalletStatus.error,
+        errorMessage: walletRes.failureOrNull?.toString() ?? 'Failed to load wallet details'
+      ));
+
+    }
+
+  }
+
+  Future<void> _onLoadMoreTransactions(WalletTransactionsLoadMore event, Emitter<WalletState> emit) async {
+
+    if (!state.hasMoreTransactions || state.isLoadingTransactions) {
+
+      return;
+
+    }
+
+    emit(state.copyWith(
+        isLoadingTransactions: true
+    ));
+
+    final int nextPage = state.transactionPage + 1;
+    final Result<WalletTransactionsPage> res = await _repository.fetchTransactions(
+        page: nextPage
+    );
+
+    if (res.isSuccess) {
+
+      final WalletTransactionsPage page = res.dataOrNull!;
+      emit(state.copyWith(
+        recentTransactions: <WalletTransactionModel>[...state.recentTransactions, ...page.data],
+        transactionPage: nextPage,
+        hasMoreTransactions: page.hasMore,
+        isLoadingTransactions: false
+      ));
+
+    } else {
+
+      emit(state.copyWith(
+          isLoadingTransactions: false
+      ));
+
+    }
 
   }
 
@@ -58,38 +134,102 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
       emit(state.copyWith(
           errorMessage: 'Please enter a valid amount'
       ));
-
       return;
 
     }
+
+    final int amountPaise = (amount * 100).round();
+    add(WalletTopupInitiated(amountPaise));
+
+  }
+
+  Future<void> _onTopupInitiated(WalletTopupInitiated event, Emitter<WalletState> emit) async {
 
     emit(state.copyWith(
         status: WalletStatus.paying,
-        clearError: true
+        clearError: true,
+        clearCheckoutUrl: true
     ));
 
-    await Future<void>.delayed(const Duration(
-        milliseconds: 1500
-    ));
+    final String idempotencyKey = 'topup_${DateTime.now().millisecondsSinceEpoch}';
+    final Result<TopupResponseModel> res = await _repository.initiateTopup(
+      amountPaise: event.amountPaise,
+      idempotencyKey: idempotencyKey
+    );
 
-    if (amount == 999) {
+    if (res.isSuccess) {
+
+      final TopupResponseModel topup = res.dataOrNull!;
+      emit(state.copyWith(
+        status: WalletStatus.loaded,
+        checkoutUrl: topup.checkoutUrl,
+        paymentId: topup.paymentId
+      ));
+
+    } else {
 
       emit(state.copyWith(
         status: WalletStatus.error,
-        errorMessage: 'Transaction declined by bank'
+        errorMessage: res.failureOrNull?.toString() ?? 'Failed to initiate wallet top-up'
       ));
-
-      return;
 
     }
 
-    final double newBalance = state.balance + amount;
+  }
+
+  Future<void> _onVoucherRedeemed(WalletVoucherRedeemed event, Emitter<WalletState> emit) async {
 
     emit(state.copyWith(
-      status: WalletStatus.success,
-      balance: newBalance,
-      isLowBalance: newBalance < 200
+        status: WalletStatus.loading,
+        clearError: true
     ));
+
+    final Result<WalletModel> res = await _repository.redeemVoucher(event.code);
+
+    if (res.isSuccess) {
+
+      final WalletModel wallet = res.dataOrNull!;
+      emit(state.copyWith(
+        status: WalletStatus.success,
+        balancePaise: wallet.balancePaise,
+        balance: wallet.balance,
+        isLowBalance: wallet.balancePaise < 20000
+      ));
+
+      add(const WalletLoadRequested());
+
+    } else {
+
+      emit(state.copyWith(
+        status: WalletStatus.error,
+        errorMessage: res.failureOrNull?.toString() ?? 'Voucher redemption failed'
+      ));
+
+    }
+
+  }
+
+  Future<void> _onTopupVerified(WalletTopupVerified event, Emitter<WalletState> emit) async {
+
+    emit(state.copyWith(
+        status: WalletStatus.loading,
+        clearError: true
+    ));
+
+    final Result<void> res = await _repository.verifyTopup(event.paymentId);
+
+    if (res.isSuccess) {
+
+      add(const WalletLoadRequested());
+
+    } else {
+
+      emit(state.copyWith(
+        status: WalletStatus.error,
+        errorMessage: res.failureOrNull?.toString() ?? 'Verification failed'
+      ));
+
+    }
 
   }
 

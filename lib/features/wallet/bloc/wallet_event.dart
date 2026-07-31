@@ -13,6 +13,18 @@ class WalletInitialized extends WalletEvent {
 
 }
 
+class WalletLoadRequested extends WalletEvent {
+
+  const WalletLoadRequested();
+
+}
+
+class WalletTransactionsLoadMore extends WalletEvent {
+
+  const WalletTransactionsLoadMore();
+
+}
+
 class AddMoneyNavigated extends WalletEvent {
 
   const AddMoneyNavigated();
@@ -22,7 +34,6 @@ class AddMoneyNavigated extends WalletEvent {
 class AmountChanged extends WalletEvent {
 
   final String amount;
-
   const AmountChanged(this.amount);
 
 }
@@ -41,6 +52,13 @@ class PaymentMethodSelected extends WalletEvent {
 
 }
 
+class WalletTopupInitiated extends WalletEvent {
+
+  final int amountPaise;
+  const WalletTopupInitiated(this.amountPaise);
+
+}
+
 class PaymentInitiated extends WalletEvent {
 
   const PaymentInitiated();
@@ -50,7 +68,20 @@ class PaymentInitiated extends WalletEvent {
 class PaymentResultReceived extends WalletEvent {
 
   final bool success;
-
   const PaymentResultReceived(this.success);
+
+}
+
+class WalletVoucherRedeemed extends WalletEvent {
+
+  final String code;
+  const WalletVoucherRedeemed(this.code);
+
+}
+
+class WalletTopupVerified extends WalletEvent {
+
+  final String paymentId;
+  const WalletTopupVerified(this.paymentId);
 
 }

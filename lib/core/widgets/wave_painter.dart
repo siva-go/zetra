@@ -8,12 +8,7 @@ class WaveLiquidPainter extends CustomPainter {
   final Color glowColor;
   final double fillLevel;
 
-  WaveLiquidPainter({
-    required this.animationValue,
-    required this.color,
-    required this.glowColor,
-    required this.fillLevel,
-  });
+  WaveLiquidPainter({required this.animationValue, required this.color, required this.glowColor, required this.fillLevel});
 
   @override
   void paint(Canvas canvas, Size size) {

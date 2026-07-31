@@ -15,6 +15,7 @@ import 'package:zetra/features/station/bloc/scan_qr_bloc.dart';
 import 'package:zetra/features/station/bloc/search_station_bloc.dart';
 import 'package:zetra/features/station/bloc/station_detail_bloc.dart';
 import 'package:zetra/features/wallet/bloc/wallet_bloc.dart';
+import 'package:zetra/features/wallet/repository/wallet_repository.dart';
 
 final GetIt getIt = GetIt.instance;
 
@@ -52,6 +53,11 @@ Future<void> setupDependencies() async {
     }
   );
 
+  /// Repositories
+  getIt.registerLazySingleton<WalletRepository>(
+    () => WalletRepository(getIt<ApiClient>())
+  );
+
   /// Blocs
   getIt.registerFactory<ChargingBloc>(
     () => ChargingBloc()
@@ -81,7 +87,7 @@ Future<void> setupDependencies() async {
     () => ChargingHistoryBloc()
   );
   getIt.registerFactory<WalletBloc>(
-    () => WalletBloc()
+    () => WalletBloc(getIt<WalletRepository>())
   );
 
 }

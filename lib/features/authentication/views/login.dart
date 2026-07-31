@@ -176,7 +176,9 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                   shape: BoxShape.circle,
                   gradient: RadialGradient(
                     colors: <Color>[
-                      AppColors.primary.withValues(alpha: isDark ? 0.12 : 0.06),
+                      AppColors.primary.withValues(
+                          alpha: isDark ? 0.12 : 0.06
+                      ),
                       Colors.transparent
                     ]
                   )
@@ -199,7 +201,9 @@ class _LoginState extends State<Login> with TickerProviderStateMixin {
                   shape: BoxShape.circle,
                   gradient: RadialGradient(
                     colors: <Color>[
-                      const Color(0xFF7B2FF7).withValues(alpha: isDark ? 0.15 : 0.07),
+                      const Color(0xFF7B2FF7).withValues(
+                          alpha: isDark ? 0.15 : 0.07
+                      ),
                       Colors.transparent
                     ]
                   )

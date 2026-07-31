@@ -7,6 +7,7 @@ import 'package:zetra/core/components/primary_button.dart';
 import 'package:zetra/core/components/secondary_button.dart';
 
 class AppDialog extends StatelessWidget {
+
   final String title;
   final String content;
   final String primaryButtonText;
@@ -25,7 +26,7 @@ class AppDialog extends StatelessWidget {
     this.secondaryButtonText,
     this.onSecondaryPressed,
     this.icon,
-    this.iconColor = AppColors.primary,
+    this.iconColor = AppColors.primary
   });
 
   static Future<bool?> show({
@@ -39,9 +40,12 @@ class AppDialog extends StatelessWidget {
     IconData? icon,
     Color iconColor = AppColors.primary,
   }) {
+
     return showDialog<bool>(
       context: context,
-      barrierColor: Colors.black.withValues(alpha: 0.7),
+      barrierColor: AppColors.blackColor.withValues(
+          alpha: 0.7
+      ),
       builder: (BuildContext context) {
         return AppDialog(
           title: title,
@@ -51,24 +55,31 @@ class AppDialog extends StatelessWidget {
           secondaryButtonText: secondaryButtonText,
           onSecondaryPressed: onSecondaryPressed,
           icon: icon,
-          iconColor: iconColor,
+          iconColor: iconColor
         );
-      },
+
+      }
     );
+
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Dialog(
       backgroundColor: Colors.transparent,
-      insetPadding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+      insetPadding: const EdgeInsets.symmetric(
+          horizontal: AppSpacing.md
+      ),
       child: Container(
         decoration: BoxDecoration(
           color: AppColors.cardDark,
           borderRadius: AppRadius.xxlBorder,
           border: Border.all(
-            color: AppColors.border.withValues(alpha: 0.4),
-          ),
+            color: AppColors.border.withValues(
+                alpha: 0.4
+            )
+          )
         ),
         padding: const EdgeInsets.all(AppSpacing.md),
         child: Column(
@@ -80,58 +91,69 @@ class AppDialog extends StatelessWidget {
                 height: 64,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  color: iconColor.withValues(alpha: 0.1),
+                  color: iconColor.withValues(
+                      alpha: 0.1
+                  )
                 ),
                 child: Icon(
                   icon,
                   color: iconColor,
-                  size: 32,
-                ),
+                  size: 32
+                )
               ),
-              const SizedBox(height: AppSpacing.sm),
+              const SizedBox(
+                  height: AppSpacing.sm
+              )
             ],
             Text(
               title,
               style: AppTypography.subtitle1.copyWith(
                 fontSize: 20,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.bold
               ),
-              textAlign: TextAlign.center,
+              textAlign: TextAlign.center
             ),
-            const SizedBox(height: AppSpacing.xs),
+            const SizedBox(
+                height: AppSpacing.xs
+            ),
             Text(
               content,
               style: AppTypography.bodyMedium.copyWith(
-                color: AppColors.textSecondary,
+                color: AppColors.textSecondary
               ),
-              textAlign: TextAlign.center,
+              textAlign: TextAlign.center
             ),
-            const SizedBox(height: AppSpacing.md),
+            const SizedBox(
+                height: AppSpacing.md
+            ),
             Row(
               children: <Widget>[
                 if (secondaryButtonText != null) ...<Widget>[
                   Expanded(
                     child: SecondaryButton(
                       text: secondaryButtonText!,
-                      onPressed: onSecondaryPressed ?? () => Navigator.of(context).pop(false),
-                    ),
+                      onPressed: onSecondaryPressed ?? () => Navigator.of(context).pop(false)
+                    )
                   ),
-                  const SizedBox(width: AppSpacing.xs),
+                  const SizedBox(
+                      width: AppSpacing.xs
+                  )
                 ],
                 Expanded(
                   child: PrimaryButton(
                     text: primaryButtonText,
                     onPressed: onPrimaryPressed ?? () => Navigator.of(context).pop(true),
-                    gradientColors: iconColor == AppColors.error
-                        ? const <Color>[Color(0xFFFF073A), Color(0xFFFF7694)]
-                        : const <Color>[Color(0xFF7B2FF7), Color(0xFF4A90E2)],
-                  ),
-                ),
-              ],
-            ),
-          ],
-        ),
-      ),
+                    gradientColors: iconColor == AppColors.error ? const <Color>[Color(0xFFFF073A), Color(0xFFFF7694)]
+                        : const <Color>[Color(0xFF7B2FF7), Color(0xFF4A90E2)]
+                  )
+                )
+              ]
+            )
+          ]
+        )
+      )
     );
+
   }
+
 }

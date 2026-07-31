@@ -5,6 +5,7 @@ import 'package:zetra/app/themes/app_shadows.dart';
 import 'package:zetra/app/themes/app_spacing.dart';
 
 class AppCard extends StatelessWidget {
+
   final Widget child;
   final EdgeInsetsGeometry? padding;
   final EdgeInsetsGeometry? margin;
@@ -25,11 +26,12 @@ class AppCard extends StatelessWidget {
     this.borderWidth = 1.0,
     this.width,
     this.height,
-    this.shadow,
+    this.shadow
   });
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
       width: width,
       height: height,
@@ -39,12 +41,16 @@ class AppCard extends StatelessWidget {
         color: backgroundColor,
         borderRadius: AppRadius.lgBorder,
         border: Border.all(
-          color: borderColor.withValues(alpha: 0.3),
+          color: borderColor.withValues(
+              alpha: 0.3
+          ),
           width: borderWidth,
         ),
         boxShadow: shadow ?? AppShadows.cardShadow,
       ),
-      child: child,
+      child: child
     );
+
   }
+
 }

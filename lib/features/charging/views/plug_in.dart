@@ -27,25 +27,33 @@ class PlugInScreen extends StatefulWidget {
 }
 
 class _PlugInScreenState extends State<PlugInScreen> {
+
   @override
   void initState() {
+
     super.initState();
     // Ensure state is clean when arriving on this screen
     context.read<PlugInBloc>().add(ResetPlugin());
+
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: AppColors.scaffoldDark,
       body: SafeArea(
         child: BlocListener<PlugInBloc, PlugInState>(
           listenWhen: (PlugInState previous, PlugInState current) => previous.status != current.status,
           listener: (BuildContext context, PlugInState state) {
+
             if (state.status == PluginStatus.completed) {
+
               // Smooth auto-navigation to charge-link page when simulation finishes
               context.go('/charge-link');
+
             }
+
           },
           child: Column(
             children: <Widget>[
@@ -53,7 +61,7 @@ class _PlugInScreenState extends State<PlugInScreen> {
               Padding(
                 padding: const EdgeInsets.symmetric(
                   horizontal: AppSpacing.sm,
-                  vertical: AppSpacing.xs,
+                  vertical: AppSpacing.xs
                 ),
                 child: Row(
                   children: <Widget>[
@@ -67,23 +75,26 @@ class _PlugInScreenState extends State<PlugInScreen> {
                           color: AppColors.cardDark,
                           shape: BoxShape.circle,
                           border: Border.all(
-                            color: AppColors.border.withValues(alpha: 0.5),
-                          ),
+                            color: AppColors.border.withValues(
+                                alpha: 0.5
+                            )
+                          )
                         ),
                         child: const Icon(
                           Icons.chevron_left_rounded,
-                          color: Colors.white,
-                          size: 20,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
+                          color: AppColors.whiteColor,
+                          size: 20
+                        )
+                      )
+                    )
+                  ]
+                )
               ),
-
               // ── Header / Station Info ──
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.md
+                ),
                 child: Column(
                   children: <Widget>[
                     Text(
@@ -91,38 +102,44 @@ class _PlugInScreenState extends State<PlugInScreen> {
                       style: AppTypography.bodyMedium.copyWith(
                         color: AppColors.success,
                         fontWeight: FontWeight.w600,
-                        letterSpacing: 0.5,
-                      ),
+                        letterSpacing: 0.5
+                      )
                     ),
-                    const SizedBox(height: AppSpacing.xxs),
+                    const SizedBox(
+                        height: AppSpacing.xxs
+                    ),
                     Text(
                       'ZETRA GreenCharge Hub',
                       style: AppTypography.labelLarge.copyWith(
                         fontSize: 24,
                         fontWeight: FontWeight.w800,
-                        color: Colors.white,
-                      ),
+                        color: AppColors.whiteColor
+                      )
                     ),
-                    const SizedBox(height: AppSpacing.xxs),
+                    const SizedBox(
+                        height: AppSpacing.xxs
+                    ),
                     Text(
                       AppLocalizations.of(context).orderId,
                       style: AppTypography.bodySmall.copyWith(
                         color: AppColors.textSecondary,
                         fontSize: 12,
                         letterSpacing: 0.8,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
-                ),
+                        fontWeight: FontWeight.w500
+                      )
+                    )
+                  ]
+                )
               ),
-
-              const SizedBox(height: AppSpacing.md),
-
+              const SizedBox(
+                  height: AppSpacing.md
+              ),
               // ── Main Content Card ──
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.md
+                  ),
                   child: AppCard(
                     padding: const EdgeInsets.all(AppSpacing.md),
                     child: SingleChildScrollView(
@@ -136,20 +153,26 @@ class _PlugInScreenState extends State<PlugInScreen> {
                               borderRadius: AppRadius.lgBorder,
                               boxShadow: <BoxShadow>[
                                 BoxShadow(
-                                  color: const Color(0xFF00E5FF).withValues(alpha: 0.25), // Neon cyan glow
+                                  color: const Color(0xFF00E5FF).withValues(
+                                      alpha: 0.25
+                                  ), // Neon cyan glow
                                   blurRadius: 18,
-                                  spreadRadius: 2,
+                                  spreadRadius: 2
                                 ),
                                 BoxShadow(
-                                  color: const Color(0xFF7B2FF7).withValues(alpha: 0.15), // Muted brand purple glow overlay
+                                  color: const Color(0xFF7B2FF7).withValues(
+                                      alpha: 0.15
+                                  ), // Muted brand purple glow overlay
                                   blurRadius: 25,
-                                  spreadRadius: 1,
-                                ),
+                                  spreadRadius: 1
+                                )
                               ],
                               border: Border.all(
-                                color: const Color(0xFF00E5FF).withValues(alpha: 0.5), // Electric Cyan border
-                                width: 1.5,
-                              ),
+                                color: const Color(0xFF00E5FF).withValues(
+                                    alpha: 0.5
+                                ), // Electric Cyan border
+                                width: 1.5
+                              )
                             ),
                             child: ClipRRect(
                               borderRadius: AppRadius.lgBorder,
@@ -157,14 +180,14 @@ class _PlugInScreenState extends State<PlugInScreen> {
                                 aspectRatio: 1,
                                 child: Image.asset(
                                   'assets/images/plug_in.png',
-                                  fit: BoxFit.cover,
-                                ),
-                              ),
-                            ),
+                                  fit: BoxFit.cover
+                                )
+                              )
+                            )
                           ),
-
-                          const SizedBox(height: AppSpacing.md),
-
+                          const SizedBox(
+                              height: AppSpacing.md
+                          ),
                           // ── Title & Description ──
                           Text(
                             AppLocalizations.of(context).waitingForPlugIn,
@@ -172,117 +195,142 @@ class _PlugInScreenState extends State<PlugInScreen> {
                             style: AppTypography.labelLarge.copyWith(
                               fontSize: 22,
                               fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
+                              color: AppColors.whiteColor
+                            )
                           ),
-                          const SizedBox(height: AppSpacing.xs),
+                          const SizedBox(
+                              height: AppSpacing.xs
+                          ),
                           Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.sm),
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: AppSpacing.sm
+                            ),
                             child: Text(
                               AppLocalizations.of(context).connectHighSpeedPlug,
                               textAlign: TextAlign.center,
                               style: AppTypography.bodyMedium.copyWith(
                                 color: AppColors.textSecondary,
-                                height: 1.4,
-                              ),
-                            ),
+                                height: 1.4
+                              )
+                            )
                           ),
-
-                          const SizedBox(height: AppSpacing.md),
-                          const Divider(color: AppColors.divider, height: 1),
-                          const SizedBox(height: AppSpacing.sm),
-
+                          const SizedBox(
+                              height: AppSpacing.md
+                          ),
+                          const Divider(
+                              color: AppColors.divider,
+                              height: 1
+                          ),
+                          const SizedBox(
+                              height: AppSpacing.sm
+                          ),
                           // ── Checklist Steps ──
                           BlocBuilder<PlugInBloc, PlugInState>(
                             builder: (BuildContext context, PlugInState state) {
+
                               return Column(
                                 children: <Widget>[
                                   _StepRow(
                                     title: AppLocalizations.of(context).sessionInitiated,
-                                    status: state.sessionInitiated,
+                                    status: state.sessionInitiated
                                   ),
                                   _StepRow(
                                     title: AppLocalizations.of(context).paymentSuccessful,
-                                    status: state.paymentSuccessful,
+                                    status: state.paymentSuccessful
                                   ),
                                   _StepRow(
                                     title: AppLocalizations.of(context).waitingForPlugIn,
-                                    status: state.waitingForPlugIn,
+                                    status: state.waitingForPlugIn
                                   ),
                                   _StepRow(
                                     title: AppLocalizations.of(context).vehicleConnected,
-                                    status: state.vehicleConnected,
+                                    status: state.vehicleConnected
                                   ),
                                   _StepRow(
                                     title: AppLocalizations.of(context).chargingAutostart,
                                     status: state.chargingAutostart,
-                                    leftIconOverride: Icons.electric_bolt_rounded,
-                                  ),
-                                ],
+                                    leftIconOverride: Icons.electric_bolt_rounded
+                                  )
+                                ]
                               );
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+
+                            }
+                          )
+                        ]
+                      )
+                    )
+                  )
+                )
               ),
-
-              const SizedBox(height: AppSpacing.md),
-
+              const SizedBox(
+                  height: AppSpacing.md
+              ),
               // ── Action Button ──
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg)
-                    .copyWith(bottom: AppSpacing.lg),
+                padding: const EdgeInsets.symmetric(
+                    horizontal: AppSpacing.lg
+                ).copyWith(
+                    bottom: AppSpacing.lg
+                ),
                 child: BlocBuilder<PlugInBloc, PlugInState>(
                   builder: (BuildContext context, PlugInState state) {
+
                     final bool isConnecting = state.status == PluginStatus.connecting;
                     final bool isCompleted = state.status == PluginStatus.completed;
 
                     String btnText = AppLocalizations.of(context).letsCharge;
-                    if (isConnecting) btnText = AppLocalizations.of(context).establishingConnection;
-                    if (isCompleted) btnText = AppLocalizations.of(context).connected;
+
+                    if (isConnecting) {
+
+                      btnText = AppLocalizations.of(context).establishingConnection;
+
+                    }
+
+                    if (isCompleted) {
+
+                      btnText = AppLocalizations.of(context).connected;
+
+                    }
 
                     return PrimaryButton(
                       text: btnText,
                       isLoading: isConnecting,
-                      onPressed: (isConnecting || isCompleted)
-                          ? null
-                          : () {
-                              context
-                                  .read<PlugInBloc>()
-                                  .add(StartConnectionSimulation());
-                            },
+                      onPressed: (isConnecting || isCompleted) ? null : () {
+
+                        context.read<PlugInBloc>().add(StartConnectionSimulation());
+
+                      }
                     );
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+
+                  }
+                )
+              )
+            ]
+          )
+        )
+      )
     );
+
   }
+
 }
 
 class _StepRow extends StatelessWidget {
+
   final String title;
   final PlugInItemStatus status;
   final IconData? leftIconOverride;
 
-  const _StepRow({
-    required this.title,
-    required this.status,
-    this.leftIconOverride,
-  });
+  const _StepRow({required this.title, required this.status, this.leftIconOverride});
 
   @override
   Widget build(BuildContext context) {
+
     final Color textColor;
     final Widget badge;
 
     switch (status) {
+
       case PlugInItemStatus.completed:
         textColor = AppColors.success;
         badge = Container(
@@ -290,15 +338,19 @@ class _StepRow extends StatelessWidget {
           height: 22,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            border: Border.all(color: AppColors.success, width: 2),
+            border: Border.all(
+                color: AppColors.success,
+                width: 2
+            )
           ),
           child: const Icon(
             Icons.check_rounded,
             color: AppColors.success,
-            size: 14,
-          ),
+            size: 14
+          )
         );
         break;
+
       case PlugInItemStatus.active:
         textColor = const Color(0xFF7B2FF7);
         badge = Container(
@@ -307,18 +359,22 @@ class _StepRow extends StatelessWidget {
           alignment: Alignment.center,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            border: Border.all(color: const Color(0xFF7B2FF7), width: 2),
+            border: Border.all(
+                color: const Color(0xFF7B2FF7),
+                width: 2
+            )
           ),
           child: Container(
             width: 8,
             height: 8,
             decoration: const BoxDecoration(
               shape: BoxShape.circle,
-              color: Color(0xFF7B2FF7),
-            ),
-          ),
+              color: Color(0xFF7B2FF7)
+            )
+          )
         );
         break;
+
       case PlugInItemStatus.pending:
         textColor = AppColors.textSecondary;
         badge = Container(
@@ -326,45 +382,56 @@ class _StepRow extends StatelessWidget {
           height: 22,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            border: Border.all(color: AppColors.textTertiary, width: 2),
-          ),
+            border: Border.all(
+                color: AppColors.textTertiary,
+                width: 2
+            )
+          )
         );
         break;
+
     }
 
     final Widget leftWidget;
+
     if (leftIconOverride != null && status != PlugInItemStatus.completed) {
+
       leftWidget = Icon(
         leftIconOverride,
-        color: status == PlugInItemStatus.active
-            ? const Color(0xFF7B2FF7)
-            : AppColors.textSecondary,
-        size: 22,
+        color: status == PlugInItemStatus.active ? const Color(0xFF7B2FF7) : AppColors.textSecondary,
+        size: 22
       );
+
     } else {
+
       leftWidget = badge;
+
     }
 
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
+      padding: const EdgeInsets.symmetric(
+          vertical: AppSpacing.xs
+      ),
       child: Row(
         children: <Widget>[
           leftWidget,
-          const SizedBox(width: AppSpacing.sm),
+          const SizedBox(
+              width: AppSpacing.sm
+          ),
           Expanded(
             child: Text(
               title,
               style: AppTypography.bodyMedium.copyWith(
                 color: textColor,
-                fontWeight: status == PlugInItemStatus.active
-                    ? FontWeight.bold
-                    : FontWeight.w500,
-              ),
-            ),
+                fontWeight: status == PlugInItemStatus.active ? FontWeight.bold : FontWeight.w500
+              )
+            )
           ),
-          badge,
-        ],
-      ),
+          badge
+        ]
+      )
     );
+
   }
+
 }

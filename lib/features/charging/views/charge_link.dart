@@ -11,9 +11,6 @@ import 'package:zetra/core/l10n/app_localizations.dart';
 import 'package:zetra/features/charging/bloc/charging_bloc.dart';
 import 'package:zetra/features/charging/bloc/charging_event.dart';
 
-/// Screen shown after the vehicle is successfully connected to a charger.
-/// Displays an illustration of the car/charger connection, a success checkmark,
-/// and a "Let's Charge" call-to-action button.
 class ChargeLinkScreen extends StatefulWidget {
   const ChargeLinkScreen({super.key});
 

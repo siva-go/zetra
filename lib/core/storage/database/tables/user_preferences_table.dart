@@ -2,9 +2,11 @@ import 'package:drift/drift.dart';
 
 @DataClassName('UserPreference')
 class UserPreferencesTable extends Table {
+
   TextColumn get key => text()();
   TextColumn get value => text()();
 
   @override
   Set<Column> get primaryKey => <Column<Object>>{key};
+
 }

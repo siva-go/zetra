@@ -7,9 +7,6 @@ import 'package:zetra/app/themes/app_typography.dart';
 import 'package:zetra/core/l10n/app_localizations.dart';
 import 'package:zetra/core/widgets/bottom_nav_bar.dart';
 
-/// Invoice screen showing order ID, total paid, digital receipt link,
-/// download button, session summary and billing breakdown — matching the
-/// provided design mockup with neon / dark aesthetics.
 class InvoiceScreen extends StatelessWidget {
 
   const InvoiceScreen({super.key});

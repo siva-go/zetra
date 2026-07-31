@@ -14,6 +14,8 @@ import 'package:zetra/features/home/bloc/home_bloc.dart';
 import 'package:zetra/features/home/bloc/home_event.dart';
 import 'package:zetra/features/home/bloc/home_state.dart';
 import 'package:zetra/features/home/widgets/nearest_station_card.dart';
+import 'package:zetra/features/wallet/bloc/wallet_bloc.dart';
+import 'package:zetra/features/wallet/bloc/wallet_state.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -200,7 +202,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                 infoWindow: InfoWindow(
                     title: station.city
                 ),
-                zIndex: isSelected ? 2.0 : 1.0,
+                zIndexInt: isSelected ? 2 : 1,
                 onTap: () {
 
                   HapticFeedback.selectionClick();
@@ -220,6 +222,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
             return Column(
               children: <Widget>[
+                _buildTopAppBar(isDark),
                 Expanded(
                   child: Stack(
                     children: <Widget>[
@@ -290,7 +293,97 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
   }
 
+  Widget _buildTopAppBar(bool isDark) {
+    final Color cardBg = isDark ? AppColors.scaffoldDark : AppColors.scaffoldLight;
 
+    return Container(
+      color: cardBg,
+      padding: EdgeInsets.symmetric(
+        horizontal: 16.w,
+        vertical: 10.h,
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          // Left: ZETRA logo title
+          Text(
+            'ZETRA',
+            style: AppTypography.h3.copyWith(
+              fontSize: 22.sp,
+              fontWeight: FontWeight.w900,
+              color: const Color(0xFF2EFE58),
+              letterSpacing: 2
+            )
+          ),
+          // Right: Wallet details (Title + Balance + Icon pill)
+          BlocConsumer<WalletBloc, WalletState>(
+            listener: (BuildContext context, WalletState state) {},
+            builder: (BuildContext context, WalletState state) {
+
+              return GestureDetector(
+                onTap: () {
+
+                  HapticFeedback.lightImpact();
+                  context.push('/wallet');
+
+                },
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: <Widget>[
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        Text(
+                          'Wallet',
+                          style: AppTypography.bodySmall.copyWith(
+                            fontSize: 10.sp,
+                            color: isDark ? AppColors.textSecondary : AppColors.textSecondaryLight,
+                            fontWeight: FontWeight.w500
+                          )
+                        ),
+                        SizedBox(
+                            height: 1.h
+                        ),
+                        Text(
+                          '₹ ${state.balance.toStringAsFixed(2)}',
+                          style: AppTypography.bodyMedium.copyWith(
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w800,
+                            color: isDark ? AppColors.textPrimary : AppColors.textPrimaryLight
+                          )
+                        )
+                      ]
+                    ),
+                    SizedBox(
+                        width: 8.w
+                    ),
+                    Container(
+                      width: 30.w,
+                      height: 30.w,
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF2EFE58).withValues(
+                            alpha: 0.18
+                        ),
+                        borderRadius: BorderRadius.circular(8.r)
+                      ),
+                      child: Icon(
+                        Icons.account_balance_wallet_rounded,
+                        color: const Color(0xFF2EFE58),
+                        size: 16.sp
+                      )
+                    )
+                  ]
+                )
+              );
+
+            }
+          )
+        ]
+      )
+    );
+
+  }
 
   Widget _buildSearchBar(bool isDark) {
 
@@ -374,9 +467,6 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
                   width: 1,
                   height: 20,
                   color: borderColor
-                ),
-                SizedBox(
-                    width: 10.w
                 ),
                 GestureDetector(
                   onTap: () {},

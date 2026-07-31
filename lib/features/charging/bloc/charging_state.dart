@@ -24,7 +24,7 @@ class ChargingState {
     required this.elapsedTime,
     required this.batteryTemp,
     required this.cost,
-    required this.isDarkMode,
+    required this.isDarkMode
   });
 
   factory ChargingState.initial() {
@@ -40,22 +40,12 @@ class ChargingState {
       elapsedTime: Duration.zero,
       batteryTemp: 29.5,
       cost: 0,
-      isDarkMode: true,
+      isDarkMode: true
     );
 
   }
 
-  ChargingState copyWith({
-    ChargingStatus? status,
-    double? soc,
-    double? chargingSpeed,
-    double? energyDelivered,
-    Duration? timeRemaining,
-    Duration? elapsedTime,
-    double? batteryTemp,
-    double? cost,
-    bool? isDarkMode,
-  }) {
+  ChargingState copyWith({ChargingStatus? status, double? soc, double? chargingSpeed, double? energyDelivered, Duration? timeRemaining, Duration? elapsedTime, double? batteryTemp, double? cost, bool? isDarkMode}) {
 
     return ChargingState(
       status: status ?? this.status,
@@ -66,7 +56,7 @@ class ChargingState {
       elapsedTime: elapsedTime ?? this.elapsedTime,
       batteryTemp: batteryTemp ?? this.batteryTemp,
       cost: cost ?? this.cost,
-      isDarkMode: isDarkMode ?? this.isDarkMode,
+      isDarkMode: isDarkMode ?? this.isDarkMode
     );
 
   }

@@ -4,6 +4,7 @@ import 'package:zetra/app/themes/app_radius.dart';
 import 'package:zetra/app/themes/app_typography.dart';
 
 class SecondaryButton extends StatelessWidget {
+
   final String text;
   final VoidCallback? onPressed;
   final double? width;
@@ -18,11 +19,12 @@ class SecondaryButton extends StatelessWidget {
     this.width,
     this.height = 56,
     this.borderColor = AppColors.border,
-    this.textColor = Colors.white,
+    this.textColor = AppColors.whiteColor
   });
 
   @override
   Widget build(BuildContext context) {
+
     final bool isEnabled = onPressed != null;
 
     return SizedBox(
@@ -31,25 +33,31 @@ class SecondaryButton extends StatelessWidget {
       child: OutlinedButton(
         style: OutlinedButton.styleFrom(
           side: BorderSide(
-            color: isEnabled ? borderColor : borderColor.withValues(alpha: 0.3),
+            color: isEnabled ? borderColor : borderColor.withValues(
+                alpha: 0.3
+            ),
             width: 1.5,
           ),
           shape: RoundedRectangleBorder(
-            borderRadius: AppRadius.roundBorder,
+            borderRadius: AppRadius.roundBorder
           ),
-          padding: EdgeInsets.zero,
+          padding: EdgeInsets.zero
         ),
         onPressed: onPressed,
         child: Text(
           text,
           style: AppTypography.labelLarge.copyWith(
-            color: isEnabled ? textColor : textColor.withValues(alpha: 0.35),
+            color: isEnabled ? textColor : textColor.withValues(
+                alpha: 0.35
+            ),
             fontSize: 16,
             fontWeight: FontWeight.w600,
-            letterSpacing: 0.4,
-          ),
-        ),
-      ),
+            letterSpacing: 0.4
+          )
+        )
+      )
     );
+
   }
+
 }

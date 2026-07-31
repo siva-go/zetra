@@ -2,6 +2,7 @@ import 'package:drift/drift.dart';
 
 @DataClassName('CachedStation')
 class CachedStationsTable extends Table {
+
   TextColumn get id => text()();
   TextColumn get name => text()();
   RealColumn get latitude => real()();
@@ -13,4 +14,5 @@ class CachedStationsTable extends Table {
 
   @override
   Set<Column> get primaryKey => <Column<Object>>{id};
+
 }

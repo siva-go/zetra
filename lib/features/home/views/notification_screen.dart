@@ -7,7 +7,6 @@ import 'package:zetra/app/themes/app_typography.dart';
 import 'package:zetra/core/l10n/app_localizations.dart';
 import 'package:zetra/core/widgets/bottom_nav_bar.dart';
 
-// ── Notification data model ───────────────────────────────────────────────────
 enum _NotifType { pluggedIn, chargingStarted, lowBalance, chargingCompleted, newOffer }
 
 class _NotifItem {
@@ -22,13 +21,13 @@ class _NotifItem {
     required this.title,
     required this.body,
     required this.time,
-    this.isUnread = false,
+    this.isUnread = false
   });
+
 }
 
-/// Notification screen that mirrors the reference mockup with neon-styled
-/// notification cards matching the ZETRA dark design system.
 class NotificationScreen extends StatelessWidget {
+
   const NotificationScreen({super.key});
 
   static const List<_NotifItem> _notifications = <_NotifItem>[
@@ -37,37 +36,38 @@ class NotificationScreen extends StatelessWidget {
       title: 'Plugged In',
       body: 'Vehicle connected successfully.',
       time: '10:45 AM',
-      isUnread: true,
+      isUnread: true
     ),
     _NotifItem(
       type: _NotifType.chargingStarted,
       title: 'Charging Started',
       body: 'Your charging session has started.',
       time: '10:46 AM',
-      isUnread: true,
+      isUnread: true
     ),
     _NotifItem(
       type: _NotifType.lowBalance,
       title: 'Low Balance',
       body: 'Your wallet balance is low.',
-      time: 'Yesterday',
+      time: 'Yesterday'
     ),
     _NotifItem(
       type: _NotifType.chargingCompleted,
       title: 'Charging Completed',
       body: 'Session completed at ZETRA Hub.',
-      time: 'Yesterday',
+      time: 'Yesterday'
     ),
     _NotifItem(
       type: _NotifType.newOffer,
       title: 'New Offer',
       body: 'Get 10% cashback on your next 3 sessions!',
-      time: '2d ago',
-    ),
+      time: '2d ago'
+    )
   ];
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       backgroundColor: AppColors.scaffoldDark,
       body: SafeArea(
@@ -77,7 +77,7 @@ class NotificationScreen extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: AppSpacing.md,
-                vertical: AppSpacing.sm,
+                vertical: AppSpacing.sm
               ),
               child: Row(
                 children: <Widget>[
@@ -91,24 +91,28 @@ class NotificationScreen extends StatelessWidget {
                         color: AppColors.cardDark,
                         shape: BoxShape.circle,
                         border: Border.all(
-                          color: AppColors.border.withValues(alpha: 0.5),
-                        ),
+                          color: AppColors.border.withValues(
+                              alpha: 0.5
+                          )
+                        )
                       ),
                       child: const Icon(
                         Icons.arrow_back_ios_new_rounded,
-                        color: Colors.white,
-                        size: 16,
-                      ),
-                    ),
+                        color: AppColors.whiteColor,
+                        size: 16
+                      )
+                    )
                   ),
-                  const SizedBox(width: AppSpacing.sm),
+                  const SizedBox(
+                      width: AppSpacing.sm
+                  ),
                   Text(
                     AppLocalizations.of(context).notifications,
                     style: AppTypography.labelLarge.copyWith(
                       fontSize: 22,
                       fontWeight: FontWeight.w800,
-                      color: Colors.white,
-                    ),
+                      color: AppColors.whiteColor
+                    )
                   ),
                   const Spacer(),
                   // Bell icon with glow
@@ -119,102 +123,122 @@ class NotificationScreen extends StatelessWidget {
                       color: AppColors.cardDark,
                       shape: BoxShape.circle,
                       border: Border.all(
-                        color: AppColors.border.withValues(alpha: 0.4),
+                        color: AppColors.border.withValues(
+                            alpha: 0.4
+                        )
                       ),
                       boxShadow: <BoxShadow>[
                         BoxShadow(
-                          color: AppColors.chargingGreenGlow.withValues(alpha: 0.2),
+                          color: AppColors.chargingGreenGlow.withValues(
+                              alpha: 0.2
+                          ),
                           blurRadius: 12,
-                          spreadRadius: 1,
-                        ),
-                      ],
+                          spreadRadius: 1
+                        )
+                      ]
                     ),
                     child: const Icon(
                       Icons.notifications_active_outlined,
                       color: AppColors.chargingGreenGlow,
-                      size: 20,
-                    ),
-                  ),
-                ],
-              ),
+                      size: 20
+                    )
+                  )
+                ]
+              )
             ),
-
             // ── Notification List ─────────────────────────────────────────
             Expanded(
               child: ListView.separated(
                 padding: const EdgeInsets.symmetric(
                   horizontal: AppSpacing.md,
-                  vertical: AppSpacing.xs,
+                  vertical: AppSpacing.xs
                 ),
                 itemCount: _notifications.length,
-                separatorBuilder: (BuildContext context, int index) =>
-                    const SizedBox(height: AppSpacing.sm),
+                separatorBuilder: (BuildContext context, int index) => const SizedBox(
+                    height: AppSpacing.sm
+                ),
                 itemBuilder: (BuildContext context, int index) {
-                  return _NotifCard(item: _notifications[index]);
-                },
-              ),
-            ),
 
+                  return _NotifCard(
+                      item: _notifications[index]
+                  );
+
+                }
+              )
+            ),
             // ── Bottom Nav ────────────────────────────────────────────────
-            const ZetraBottomNavBar(currentIndex: 3),
-          ],
-        ),
-      ),
+            const ZetraBottomNavBar(
+                currentIndex: 3
+            )
+          ]
+        )
+      )
     );
+
   }
+
 }
 
 class _NotifContent {
+
   final String title;
   final String body;
   const _NotifContent({required this.title, required this.body});
+
 }
 
 _NotifContent _localizeNotification(BuildContext context, _NotifType type) {
+
   switch (type) {
-    case _NotifType.pluggedIn:
+
+  case _NotifType.pluggedIn:
       return _NotifContent(
         title: AppLocalizations.of(context).pluggedIn,
-        body: AppLocalizations.of(context).vehicleConnectedSuccess,
+        body: AppLocalizations.of(context).vehicleConnectedSuccess
       );
     case _NotifType.chargingStarted:
       return _NotifContent(
         title: AppLocalizations.of(context).chargingStarted,
-        body: AppLocalizations.of(context).sessionHasStarted,
+        body: AppLocalizations.of(context).sessionHasStarted
       );
     case _NotifType.lowBalance:
       return _NotifContent(
         title: AppLocalizations.of(context).lowBalance,
-        body: AppLocalizations.of(context).walletBalanceIsLow,
+        body: AppLocalizations.of(context).walletBalanceIsLow
       );
     case _NotifType.chargingCompleted:
       return _NotifContent(
         title: AppLocalizations.of(context).chargingCompleted,
-        body: AppLocalizations.of(context).sessionCompletedAt,
+        body: AppLocalizations.of(context).sessionCompletedAt
       );
     case _NotifType.newOffer:
       return _NotifContent(
         title: AppLocalizations.of(context).newOffer,
-        body: AppLocalizations.of(context).offerCashbackBody,
+        body: AppLocalizations.of(context).offerCashbackBody
       );
+
   }
+
 }
 
 // ── Notification Card ─────────────────────────────────────────────────────────
 class _NotifCard extends StatelessWidget {
+
   final _NotifItem item;
 
   const _NotifCard({required this.item});
 
   static _IconStyle _resolveStyle(_NotifType type) {
+
     switch (type) {
+
       case _NotifType.pluggedIn:
         return const _IconStyle(
           icon: Icons.ev_station_rounded,
           iconColor: AppColors.chargingGreenGlow,
           glowColor: AppColors.chargingGreenGlow,
           bgColor: Color(0xFF0A2A1A),
-          borderColor: AppColors.chargingGreenGlow,
+          borderColor: AppColors.chargingGreenGlow
         );
       case _NotifType.chargingStarted:
         return const _IconStyle(
@@ -222,7 +246,7 @@ class _NotifCard extends StatelessWidget {
           iconColor: AppColors.chargingGreenGlow,
           glowColor: AppColors.chargingGreenGlow,
           bgColor: Color(0xFF0A2A1A),
-          borderColor: AppColors.chargingGreenGlow,
+          borderColor: AppColors.chargingGreenGlow
         );
       case _NotifType.lowBalance:
         return const _IconStyle(
@@ -230,7 +254,7 @@ class _NotifCard extends StatelessWidget {
           iconColor: AppColors.chargingRedGlow,
           glowColor: AppColors.chargingRedGlow,
           bgColor: Color(0xFF2A0A0A),
-          borderColor: AppColors.chargingRedGlow,
+          borderColor: AppColors.chargingRedGlow
         );
       case _NotifType.chargingCompleted:
         return const _IconStyle(
@@ -238,7 +262,7 @@ class _NotifCard extends StatelessWidget {
           iconColor: AppColors.chargingGreenGlow,
           glowColor: AppColors.chargingGreenGlow,
           bgColor: Color(0xFF0A2A1A),
-          borderColor: AppColors.chargingGreenGlow,
+          borderColor: AppColors.chargingGreenGlow
         );
       case _NotifType.newOffer:
         return const _IconStyle(
@@ -246,13 +270,16 @@ class _NotifCard extends StatelessWidget {
           iconColor: AppColors.chargingOrangeGlow,
           glowColor: AppColors.chargingOrangeGlow,
           bgColor: Color(0xFF2A1A0A),
-          borderColor: AppColors.chargingOrangeGlow,
+          borderColor: AppColors.chargingOrangeGlow
         );
+
     }
+
   }
 
   @override
   Widget build(BuildContext context) {
+
     final _IconStyle style = _resolveStyle(item.type);
     final bool isLowBalance = item.type == _NotifType.lowBalance;
     final _NotifContent localized = _localizeNotification(context, item.type);
@@ -263,17 +290,21 @@ class _NotifCard extends StatelessWidget {
         color: AppColors.cardDark,
         borderRadius: AppRadius.lgBorder,
         border: Border.all(
-          color: isLowBalance
-              ? AppColors.chargingRedGlow.withValues(alpha: 0.3)
-              : AppColors.border.withValues(alpha: 0.4),
+          color: isLowBalance ? AppColors.chargingRedGlow.withValues(
+              alpha: 0.3
+          ) : AppColors.border.withValues(
+              alpha: 0.4
+          )
         ),
         boxShadow: <BoxShadow>[
           BoxShadow(
-            color: style.glowColor.withValues(alpha: 0.06),
+            color: style.glowColor.withValues(
+                alpha: 0.06
+            ),
             blurRadius: 12,
-            offset: const Offset(0, 2),
-          ),
-        ],
+            offset: const Offset(0, 2)
+          )
+        ]
       ),
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -286,20 +317,30 @@ class _NotifCard extends StatelessWidget {
               color: style.bgColor,
               shape: BoxShape.circle,
               border: Border.all(
-                color: style.borderColor.withValues(alpha: 0.55),
-                width: 1.5,
+                color: style.borderColor.withValues(
+                    alpha: 0.55
+                ),
+                width: 1.5
               ),
               boxShadow: <BoxShadow>[
                 BoxShadow(
-                  color: style.glowColor.withValues(alpha: 0.3),
+                  color: style.glowColor.withValues(
+                      alpha: 0.3
+                  ),
                   blurRadius: 10,
-                  spreadRadius: 1,
-                ),
-              ],
+                  spreadRadius: 1
+                )
+              ]
             ),
-            child: Icon(style.icon, color: style.iconColor, size: 22),
+            child: Icon(
+                style.icon,
+                color: style.iconColor,
+                size: 22
+            )
           ),
-          const SizedBox(width: AppSpacing.sm),
+          const SizedBox(
+              width: AppSpacing.sm
+          ),
           // Content
           Expanded(
             child: Column(
@@ -311,46 +352,47 @@ class _NotifCard extends StatelessWidget {
                       child: Text(
                         localized.title,
                         style: AppTypography.bodyMedium.copyWith(
-                          color: isLowBalance
-                              ? AppColors.chargingRedGlow
-                              : Colors.white,
+                          color: isLowBalance ? AppColors.chargingRedGlow : AppColors.whiteColor,
                           fontWeight: FontWeight.w700,
-                          fontSize: 14,
-                        ),
-                      ),
+                          fontSize: 14
+                        )
+                      )
                     ),
                     Text(
                       item.time,
                       style: AppTypography.bodySmall.copyWith(
-                        color: isLowBalance
-                            ? AppColors.chargingRedGlow
-                            : AppColors.textTertiary,
+                        color: isLowBalance ? AppColors.chargingRedGlow : AppColors.textTertiary,
                         fontSize: 11,
-                        fontWeight: isLowBalance ? FontWeight.w600 : FontWeight.w400,
-                      ),
-                    ),
-                  ],
+                        fontWeight: isLowBalance ? FontWeight.w600 : FontWeight.w400
+                      )
+                    )
+                  ]
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(
+                    height: 4
+                ),
                 Text(
                   localized.body,
                   style: AppTypography.bodySmall.copyWith(
                     color: AppColors.textSecondary,
                     fontSize: 12,
-                    height: 1.4,
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
+                    height: 1.4
+                  )
+                )
+              ]
+            )
+          )
+        ]
+      )
     );
+
   }
+
 }
 
 // ── Icon style helper ─────────────────────────────────────────────────────────
 class _IconStyle {
+
   final IconData icon;
   final Color iconColor;
   final Color glowColor;
@@ -362,6 +404,7 @@ class _IconStyle {
     required this.iconColor,
     required this.glowColor,
     required this.bgColor,
-    required this.borderColor,
+    required this.borderColor
   });
+
 }

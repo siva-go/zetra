@@ -7,11 +7,13 @@ import 'package:zetra/core/storage/secure_storage.dart';
 import 'package:zetra/features/authentication/bloc/auth_bloc.dart';
 import 'package:zetra/features/authentication/bloc/auth_event.dart';
 import 'package:zetra/core/l10n/app_localizations.dart';
-import '../../../../app/themes/app_colors.dart';
-import '../../../../app/themes/app_spacing.dart';
-import '../../../../app/themes/app_radius.dart';
-import '../../../../app/themes/app_typography.dart';
-import '../../../../core/widgets/bottom_nav_bar.dart';
+import 'package:zetra/features/wallet/bloc/wallet_bloc.dart';
+import 'package:zetra/features/wallet/bloc/wallet_state.dart';
+import '../../../app/themes/app_colors.dart';
+import '../../../app/themes/app_spacing.dart';
+import '../../../app/themes/app_radius.dart';
+import '../../../app/themes/app_typography.dart';
+import '../../../core/widgets/bottom_nav_bar.dart';
 
 /// Dark-themed Profile screen for the ZETRA application.
 class ProfileScreen extends StatelessWidget {
@@ -231,7 +233,7 @@ class _ProfileHeader extends StatelessWidget {
             ),
           ),
         ),
-      ],
+      ]
     );
   }
 }
@@ -245,71 +247,86 @@ class _WalletCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.md, vertical: AppSpacing.sm),
-      decoration: BoxDecoration(
-        color: AppColors.cardDark,
-        borderRadius: AppRadius.lgBorder,
-        border: Border.all(
-            color: AppColors.border.withValues(alpha: 0.6), width: 1),
-        boxShadow: [
-          BoxShadow(
-              color: Colors.black.withValues(alpha: 0.25),
-              blurRadius: 10,
-              offset: const Offset(0, 4)),
-        ],
-      ),
-      child: Row(
-        children: [
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                AppLocalizations.of(context).walletBalance,
-                style: AppTypography.bodySmall.copyWith(
-                  color: AppColors.textSecondary,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w600,
-                ),
+    return BlocConsumer<WalletBloc, WalletState>(
+      listener: (BuildContext context, WalletState state) {
+        if (state.errorMessage != null && state.errorMessage!.isNotEmpty) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text(state.errorMessage!)),
+          );
+        }
+      },
+      builder: (BuildContext context, WalletState state) {
+        return Container(
+          padding: const EdgeInsets.symmetric(
+              horizontal: AppSpacing.md, vertical: AppSpacing.sm),
+          decoration: BoxDecoration(
+            color: AppColors.cardDark,
+            borderRadius: AppRadius.lgBorder,
+            border: Border.all(
+                color: AppColors.border.withValues(alpha: 0.6)),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                  color: Colors.black.withValues(alpha: 0.25),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4)),
+            ],
+          ),
+          child: Row(
+            children: <Widget>[
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    AppLocalizations.of(context).walletBalance,
+                    style: AppTypography.bodySmall.copyWith(
+                      color: AppColors.textSecondary,
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600
+                    )
+                  ),
+                  const SizedBox(
+                      height: 4
+                  ),
+                  Text(
+                    '₹ ${state.balance.toStringAsFixed(2)}',
+                    style: AppTypography.labelLarge.copyWith(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w800,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
               ),
-              const SizedBox(height: 4),
-              Text(
-                '₹ 600.00',
-                style: AppTypography.labelLarge.copyWith(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w800,
-                  color: Colors.white,
+              const Spacer(),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: blueNeon.withValues(alpha: 0.15),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20),
+                    side: BorderSide(color: blueNeon, width: 1.5),
+                  ),
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: AppSpacing.sm, vertical: AppSpacing.xs),
+                  elevation: 6,
+                  shadowColor: blueNeon.withValues(alpha: 0.3),
+                ),
+                onPressed: () {
+                  context.push('/wallet/add-money');
+                },
+                child: Text(
+                  AppLocalizations.of(context).addMoney,
+                  style: AppTypography.bodyMedium.copyWith(
+                    color: Colors.white,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 12.5,
+                    shadows: <Shadow>[Shadow(color: blueNeon, blurRadius: 4)],
+                  ),
                 ),
               ),
             ],
           ),
-          const Spacer(),
-          ElevatedButton(
-            style: ElevatedButton.styleFrom(
-              backgroundColor: blueNeon.withValues(alpha: 0.15),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20),
-                side: BorderSide(color: blueNeon, width: 1.5),
-              ),
-              padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.sm, vertical: AppSpacing.xs),
-              elevation: 6,
-              shadowColor: blueNeon.withValues(alpha: 0.3),
-            ),
-            onPressed: () {},
-            child: Text(
-              AppLocalizations.of(context).addMoney,
-              style: AppTypography.bodyMedium.copyWith(
-                color: Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 12.5,
-                shadows: [Shadow(color: blueNeon, blurRadius: 4)],
-              ),
-            ),
-          ),
-        ],
-      ),
+        );
+      },
     );
   }
 }

@@ -44,7 +44,7 @@ class ChargingBloc extends Bloc<ChargingEvent, ChargingState> {
       status: ChargingStatus.charging,
       chargingSpeed: initialSpeed,
       cost: initialCost,
-      isDarkMode: isDark,
+      isDarkMode: isDark
     ));
 
     LiveActivityService.instance.start(
@@ -52,7 +52,7 @@ class ChargingBloc extends Bloc<ChargingEvent, ChargingState> {
       timeRemainingMins: state.timeRemaining.inMinutes,
       speedKw: initialSpeed,
       costRm: initialCost,
-      isDarkMode: isDark,
+      isDarkMode: isDark
     );
 
     _ticker = Timer.periodic(const Duration(

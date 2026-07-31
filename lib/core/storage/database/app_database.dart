@@ -13,7 +13,7 @@ part 'app_database.g.dart';
 @DriftDatabase(tables: <Type>[
   ChargingHistoryTable,
   CachedStationsTable,
-  UserPreferencesTable,
+  UserPreferencesTable
 ])
 class AppDatabase extends _$AppDatabase {
   AppDatabase() : super(_openConnection());
@@ -23,9 +23,12 @@ class AppDatabase extends _$AppDatabase {
 }
 
 QueryExecutor _openConnection() {
+
   return LazyDatabase(() async {
     final Directory dbFolder = await getApplicationDocumentsDirectory();
     final File file = File(p.join(dbFolder.path, 'zetra.db'));
     return NativeDatabase.createInBackground(file);
+
   });
+
 }

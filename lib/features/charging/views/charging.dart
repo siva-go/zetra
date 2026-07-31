@@ -235,9 +235,7 @@ class HomeScreen extends StatelessWidget {
                     height: AppSpacing.md
                 ),
                 // ── Navigation Bar ──
-                const ZetraBottomNavBar(
-                    
-                )
+                const ZetraBottomNavBar()
               ]
             )
           )

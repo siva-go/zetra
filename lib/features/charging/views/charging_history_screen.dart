@@ -12,8 +12,6 @@ import 'package:zetra/features/charging/bloc/charging_history_event.dart';
 import 'package:zetra/features/charging/bloc/charging_history_state.dart';
 import 'package:zetra/features/charging/models/session_entry.dart';
 
-/// Dark-themed Charging History screen.
-/// Shows past sessions grouped by date, with a period filter dropdown.
 class ChargingHistoryScreen extends StatelessWidget {
 
   const ChargingHistoryScreen({super.key});

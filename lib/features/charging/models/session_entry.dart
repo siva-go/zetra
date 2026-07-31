@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 /// Represents one past charging session entry in the history list.
 class SessionEntry {
+
   final String stationName;
   final String energyKwh;
   final String amountRupees;
@@ -15,17 +16,17 @@ class SessionEntry {
     required this.amountRupees,
     required this.duration,
     required this.iconColor,
-    required this.icon,
+    required this.icon
   });
+
 }
 
 /// A date-keyed group of session entries.
 class SessionGroup {
+
   final String date; // e.g. "May 26, 2024"
   final List<SessionEntry> sessions;
 
-  const SessionGroup({
-    required this.date,
-    required this.sessions,
-  });
+  const SessionGroup({required this.date, required this.sessions});
+
 }

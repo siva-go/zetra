@@ -5,54 +5,54 @@ import 'package:zetra/app/themes/app_spacing.dart';
 import 'package:zetra/app/themes/app_typography.dart';
 
 class AppBottomSheet extends StatelessWidget {
+
   final Widget child;
   final String? title;
   final List<Widget>? actions;
 
-  const AppBottomSheet({
-    super.key,
-    required this.child,
-    this.title,
-    this.actions,
-  });
+  const AppBottomSheet({super.key, required this.child, this.title, this.actions});
 
-  static Future<T?> show<T>({
-    required BuildContext context,
-    required Widget child,
-    String? title,
-    List<Widget>? actions,
-  }) {
+  static Future<T?> show<T>({required BuildContext context, required Widget child, String? title, List<Widget>? actions}) {
+
     return showModalBottomSheet<T>(
       context: context,
       backgroundColor: Colors.transparent,
-      barrierColor: Colors.black.withValues(alpha: 0.6),
+      barrierColor: Colors.black.withValues(
+          alpha: 0.6
+      ),
       isScrollControlled: true,
       builder: (BuildContext context) {
+
         return AppBottomSheet(
           title: title,
           actions: actions,
-          child: child,
+          child: child
         );
-      },
+
+      }
     );
+
   }
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
       decoration: BoxDecoration(
         color: AppColors.scaffoldDark,
         borderRadius: const BorderRadius.vertical(
-          top: Radius.circular(24),
+          top: Radius.circular(24)
         ),
         border: Border(
           top: BorderSide(
-            color: AppColors.border.withValues(alpha: 0.4),
-          ),
-        ),
+            color: AppColors.border.withValues(
+                alpha: 0.4
+            )
+          )
+        )
       ),
       padding: EdgeInsets.only(
-        bottom: MediaQuery.of(context).viewInsets.bottom + AppSpacing.md,
+        bottom: MediaQuery.of(context).viewInsets.bottom + AppSpacing.md
       ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
@@ -61,16 +61,20 @@ class AppBottomSheet extends StatelessWidget {
           Container(
             width: 48,
             height: 4.5,
-            margin: const EdgeInsets.symmetric(vertical: 12),
+            margin: const EdgeInsets.symmetric(
+                vertical: 12
+            ),
             decoration: BoxDecoration(
               color: AppColors.border,
-              borderRadius: AppRadius.smBorder,
-            ),
+              borderRadius: AppRadius.smBorder
+            )
           ),
           
           if (title != null) ...<Widget>[
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
+              padding: const EdgeInsets.symmetric(
+                  horizontal: AppSpacing.md
+              ),
               child: Row(
                 children: <Widget>[
                   Expanded(
@@ -78,23 +82,29 @@ class AppBottomSheet extends StatelessWidget {
                       title!,
                       style: AppTypography.subtitle1.copyWith(
                         fontSize: 20,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                        fontWeight: FontWeight.bold
+                      )
+                    )
                   ),
-                  if (actions != null) ...actions!,
-                ],
-              ),
+                  if (actions != null) ...actions!
+                ]
+              )
             ),
-            const Divider(color: AppColors.divider, height: 24),
+            const Divider(
+                color: AppColors.divider,
+                height: 24
+            )
           ],
-          
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
-            child: child,
-          ),
-        ],
-      ),
+            padding: const EdgeInsets.symmetric(
+                horizontal: AppSpacing.md
+            ),
+            child: child
+          )
+        ]
+      )
     );
+
   }
+
 }

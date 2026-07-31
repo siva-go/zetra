@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:zetra/app/themes/app_colors.dart';
 
 import 'package:zetra/app/themes/app_radius.dart';
 import 'package:zetra/app/themes/app_spacing.dart';
@@ -57,9 +58,9 @@ class _SlideToStopButtonState extends State<SlideToStopButton> with SingleTicker
         const double thumbSize = 52;
         final double maxDrag = maxWidth - thumbSize - AppSpacing.sm * 2;
         final Color baseColor = widget.themeColor;
-        final Color darkColor = Color.lerp(baseColor, Colors.black, 0.7) ?? baseColor;
-        final Color midColor = Color.lerp(baseColor, Colors.black, 0.1) ?? baseColor;
-        final Color thumbLight = Color.lerp(baseColor, Colors.white, 0.3) ?? baseColor;
+        final Color darkColor = Color.lerp(baseColor, AppColors.blackColor, 0.7) ?? baseColor;
+        final Color midColor = Color.lerp(baseColor, AppColors.blackColor, 0.1) ?? baseColor;
+        final Color thumbLight = Color.lerp(baseColor, AppColors.whiteColor, 0.3) ?? baseColor;
         final Color thumbDark = baseColor;
 
         return Container(
@@ -170,7 +171,7 @@ class _SlideToStopButtonState extends State<SlideToStopButton> with SingleTicker
                           widthFactor: 0.35,
                           child: Icon(
                             Icons.chevron_right_rounded,
-                            color: Colors.white,
+                            color: AppColors.whiteColor,
                             size: 22
                           )
                         ),
@@ -178,7 +179,7 @@ class _SlideToStopButtonState extends State<SlideToStopButton> with SingleTicker
                           widthFactor: 0.35,
                           child: Icon(
                             Icons.chevron_right_rounded,
-                            color: Colors.white,
+                            color: AppColors.whiteColor,
                             size: 22
                           )
                         ),
@@ -186,7 +187,7 @@ class _SlideToStopButtonState extends State<SlideToStopButton> with SingleTicker
                           widthFactor: 0.35,
                           child: Icon(
                             Icons.chevron_right_rounded,
-                            color: Colors.white,
+                            color: AppColors.whiteColor,
                             size: 22
                           )
                         )

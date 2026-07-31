@@ -14,9 +14,9 @@ import 'package:zetra/features/charging/views/charging_history_screen.dart';
 import 'package:zetra/features/charging/views/invoice_screen.dart';
 import 'package:zetra/features/charging/views/plug_in.dart';
 import 'package:zetra/features/charging/views/plug_in_light.dart';
-import 'package:zetra/features/home/presentation/screens/notification_screen.dart';
-import 'package:zetra/features/home/presentation/screens/notification_screen_light.dart';
-import 'package:zetra/features/home/presentation/screens/profile_screen.dart';
+import 'package:zetra/features/home/views/notification_screen.dart';
+import 'package:zetra/features/home/views/notification_screen_light.dart';
+import 'package:zetra/features/home/views/profile_screen.dart';
 import 'package:zetra/features/home/views/home.dart';
 import 'package:zetra/features/station/bloc/scan_qr_bloc.dart';
 import 'package:zetra/features/station/bloc/search_station_bloc.dart';
@@ -27,6 +27,10 @@ import 'package:zetra/features/station/models/station_info.dart';
 import 'package:zetra/features/station/views/scan_qr_screen.dart';
 import 'package:zetra/features/station/views/search_station.dart';
 import 'package:zetra/features/station/views/station_details.dart';
+import 'package:zetra/features/wallet/bloc/wallet_bloc.dart';
+import 'package:zetra/features/wallet/bloc/wallet_event.dart';
+import 'package:zetra/features/wallet/views/add_money.dart';
+import 'package:zetra/features/wallet/views/wallet.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/login',
@@ -164,11 +168,13 @@ final GoRouter appRouter = GoRouter(
     GoRoute(
       path: '/scan-qr',
       builder: (BuildContext context, GoRouterState state) {
+
         return BlocProvider<ScanQrBloc>(
           create: (_) => GetIt.instance<ScanQrBloc>(),
-          child: const ScanQrScreen(),
+          child: const ScanQrScreen()
         );
-      },
+
+      }
     ),
     GoRoute(
       path: '/search-station',
@@ -209,6 +215,28 @@ final GoRouter appRouter = GoRouter(
         );
 
       }
-    )
+    ),
+    GoRoute(
+      path: '/wallet',
+      builder: (BuildContext context, GoRouterState state) {
+
+        return BlocProvider<WalletBloc>(
+          create: (_) => GetIt.instance<WalletBloc>()..add(const WalletLoadRequested()),
+          child: const Wallet(),
+        );
+
+      }
+    ),
+    GoRoute(
+      path: '/wallet/add-money',
+      builder: (BuildContext context, GoRouterState state) {
+
+        return BlocProvider<WalletBloc>(
+          create: (_) => GetIt.instance<WalletBloc>(),
+          child: const AddMoney(),
+        );
+
+      }
+    ),
   ]
 );

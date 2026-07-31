@@ -28,7 +28,7 @@ class _WalletState extends State<Wallet> with TickerProviderStateMixin {
   void initState() {
 
     super.initState();
-    context.read<WalletBloc>().add(const WalletInitialized());
+    context.read<WalletBloc>().add(const WalletLoadRequested());
     _pulseController = AnimationController(
       vsync: this,
       duration: const Duration(
@@ -62,7 +62,20 @@ class _WalletState extends State<Wallet> with TickerProviderStateMixin {
 
     return Scaffold(
       backgroundColor: isDark ? AppColors.scaffoldDark : AppColors.scaffoldLight,
-      body: BlocBuilder<WalletBloc, WalletState>(
+      body: BlocConsumer<WalletBloc, WalletState>(
+        listener: (BuildContext ctx, WalletState state) {
+
+          if (state.errorMessage != null && state.errorMessage!.isNotEmpty) {
+
+            ScaffoldMessenger.of(ctx).showSnackBar(
+              SnackBar(
+                  content: Text(state.errorMessage!)
+              )
+            );
+
+          }
+
+        },
         builder: (BuildContext ctx, WalletState state) {
 
           return Column(
@@ -581,7 +594,7 @@ class _WalletState extends State<Wallet> with TickerProviderStateMixin {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
-                  txn.title,
+                  txn.description ?? (txn.isCredit ? 'Wallet Credit' : 'Wallet Charge'),
                   style: AppTypography.bodyMedium.copyWith(
                     fontSize: 13.sp,
                     fontWeight: FontWeight.w600,
@@ -594,7 +607,7 @@ class _WalletState extends State<Wallet> with TickerProviderStateMixin {
                     height: 2.h
                 ),
                 Text(
-                  txn.subtitle,
+                  '${txn.createdAt.day}/${txn.createdAt.month}/${txn.createdAt.year}',
                   style: AppTypography.bodySmall.copyWith(
                     fontSize: 11.sp,
                     color: textSecondary

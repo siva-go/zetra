@@ -5,6 +5,7 @@ import 'package:zetra/app/themes/app_spacing.dart';
 import 'package:zetra/app/themes/app_typography.dart';
 
 class AppTextField extends StatelessWidget {
+
   final TextEditingController? controller;
   final String? hintText;
   final IconData? prefixIcon;
@@ -21,61 +22,66 @@ class AppTextField extends StatelessWidget {
     this.suffixIcon,
     this.obscureText = false,
     this.keyboardType = TextInputType.text,
-    this.validator,
+    this.validator
   });
 
   @override
   Widget build(BuildContext context) {
+
     return TextFormField(
       controller: controller,
       obscureText: obscureText,
       keyboardType: keyboardType,
       validator: validator,
-      style: AppTypography.bodyLarge.copyWith(color: Colors.white),
+      style: AppTypography.bodyLarge.copyWith(
+          color: AppColors.whiteColor
+      ),
       decoration: InputDecoration(
         hintText: hintText,
         hintStyle: AppTypography.bodyMedium.copyWith(color: AppColors.textHint),
-        prefixIcon: prefixIcon != null
-            ? Icon(
-                prefixIcon,
-                color: AppColors.textSecondary,
-                size: 22,
-              )
-            : null,
+        prefixIcon: prefixIcon != null ? Icon(
+          prefixIcon,
+          color: AppColors.textSecondary,
+          size: 22
+        ) : null,
         suffixIcon: suffixIcon,
         filled: true,
         fillColor: AppColors.cardDark,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.sm,
-          vertical: AppSpacing.sm + 2,
+          vertical: AppSpacing.sm + 2
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: AppRadius.mdBorder,
           borderSide: BorderSide(
-            color: AppColors.border.withValues(alpha: 0.5),
-          ),
+            color: AppColors.border.withValues(
+                alpha: 0.5
+            )
+          )
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: AppRadius.mdBorder,
           borderSide: const BorderSide(
             color: AppColors.primary,
-            width: 1.5,
-          ),
+            width: 1.5
+          )
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: AppRadius.mdBorder,
           borderSide: const BorderSide(
-            color: AppColors.error,
-          ),
+            color: AppColors.error
+          )
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: AppRadius.mdBorder,
           borderSide: const BorderSide(
             color: AppColors.error,
-            width: 1.5,
-          ),
-        ),
-      ),
+            width: 1.5
+          )
+        )
+      )
     );
+
   }
+
 }

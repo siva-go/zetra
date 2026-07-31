@@ -5,6 +5,7 @@ import 'package:zetra/app/themes/app_typography.dart';
 import 'package:zetra/core/components/primary_button.dart';
 
 class AppEmptyState extends StatelessWidget {
+
   final String title;
   final String description;
   final IconData icon;
@@ -22,6 +23,7 @@ class AppEmptyState extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.all(AppSpacing.md),
@@ -30,38 +32,48 @@ class AppEmptyState extends StatelessWidget {
           children: <Widget>[
             Icon(
               icon,
-              color: AppColors.textSecondary.withValues(alpha: 0.4),
-              size: 72,
+              color: AppColors.textSecondary.withValues(
+                  alpha: 0.4
+              ),
+              size: 72
             ),
-            const SizedBox(height: AppSpacing.sm),
+            const SizedBox(
+                height: AppSpacing.sm
+            ),
             Text(
               title,
               style: AppTypography.subtitle1.copyWith(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
-              textAlign: TextAlign.center,
+              textAlign: TextAlign.center
             ),
-            const SizedBox(height: AppSpacing.xs),
+            const SizedBox(
+                height: AppSpacing.xs
+            ),
             Text(
               description,
               style: AppTypography.bodyMedium.copyWith(
-                color: AppColors.textSecondary,
+                color: AppColors.textSecondary
               ),
-              textAlign: TextAlign.center,
+              textAlign: TextAlign.center
             ),
             if (buttonText != null && onButtonPressed != null) ...<Widget>[
-              const SizedBox(height: AppSpacing.md),
+              const SizedBox(
+                  height: AppSpacing.md
+              ),
               PrimaryButton(
                 text: buttonText!,
                 onPressed: onButtonPressed!,
                 width: 200,
-                height: 48,
-              ),
-            ],
-          ],
-        ),
-      ),
+                height: 48
+              )
+            ]
+          ]
+        )
+      )
     );
+
   }
+
 }
