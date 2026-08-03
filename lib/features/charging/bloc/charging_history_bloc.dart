@@ -1,138 +1,48 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:zetra/core/api/result.dart';
 import 'package:zetra/features/charging/bloc/charging_history_event.dart';
 import 'package:zetra/features/charging/bloc/charging_history_state.dart';
+import 'package:zetra/features/charging/models/charging_session_model.dart';
 import 'package:zetra/features/charging/models/session_entry.dart';
+import 'package:zetra/features/charging/repository/charging_repository.dart';
 
 class ChargingHistoryBloc extends Bloc<ChargingHistoryEvent, ChargingHistoryState> {
 
-  ChargingHistoryBloc() : super(ChargingHistoryState.initial()) {
+  final ChargingRepository _repository;
+  List<ChargingSessionModel> _allSessions = <ChargingSessionModel>[];
+
+  ChargingHistoryBloc(this._repository) : super(ChargingHistoryState.initial()) {
     on<LoadChargingHistory>(_onLoadChargingHistory);
     on<FilterHistory>(_onFilterHistory);
   }
 
-  static const List<SessionGroup> _allMockHistory = <SessionGroup>[
-    SessionGroup(
-      date: 'May 26, 2024',
-      sessions: <SessionEntry>[
-        SessionEntry(
-          stationName: 'ZETRA GreenCharge Hub',
-          energyKwh: '8.4 kWh',
-          amountRupees: '₹ 120.00',
-          duration: '00:42:15',
-          iconColor: Color(0xFF2EFE58),
-          icon: Icons.ev_station_rounded
-        )
-      ]
-    ),
-    SessionGroup(
-      date: 'May 24, 2024',
-      sessions: <SessionEntry>[
-        SessionEntry(
-          stationName: 'ZETRA EcoPower Station',
-          energyKwh: '10.2 kWh',
-          amountRupees: '₹ 142.00',
-          duration: '00:55:10',
-          iconColor: Color(0xFF2EFE58),
-          icon: Icons.ev_station_rounded
-        )
-      ]
-    ),
-    SessionGroup(
-      date: 'May 22, 2024',
-      sessions: <SessionEntry>[
-        SessionEntry(
-          stationName: 'ZETRA Pulse Station – Ooty',
-          energyKwh: '12.6 kWh',
-          amountRupees: '₹ 168.00',
-          duration: '01:02:33',
-          iconColor: Color(0xFF00E5FF),
-          icon: Icons.bolt_rounded
-        )
-      ]
-    ),
-    SessionGroup(
-      date: 'May 18, 2024',
-      sessions: <SessionEntry>[
-        SessionEntry(
-          stationName: 'ZETRA GreenCharge Hub',
-          energyKwh: '9.1 kWh',
-          amountRupees: '₹ 128.00',
-          duration: '00:47:22',
-          iconColor: Color(0xFF2EFE58),
-          icon: Icons.ev_station_rounded
-        )
-      ]
-    ),
-    // April 2024 (Last Month)
-    SessionGroup(
-      date: 'April 28, 2024',
-      sessions: <SessionEntry>[
-        SessionEntry(
-          stationName: 'ZETRA EcoPower Station',
-          energyKwh: '11.5 kWh',
-          amountRupees: '₹ 155.00',
-          duration: '00:58:12',
-          iconColor: Color(0xFF2EFE58),
-          icon: Icons.ev_station_rounded
-        )
-      ]
-    ),
-    SessionGroup(
-      date: 'April 15, 2024',
-      sessions: <SessionEntry>[
-        SessionEntry(
-          stationName: 'ZETRA Pulse Station – Ooty',
-          energyKwh: '14.2 kWh',
-          amountRupees: '₹ 190.00',
-          duration: '01:10:05',
-          iconColor: Color(0xFF00E5FF),
-          icon: Icons.bolt_rounded
-        )
-      ]
-    ),
-    // March 2024 (Last 3 Months)
-    SessionGroup(
-      date: 'March 12, 2024',
-      sessions: <SessionEntry>[
-        SessionEntry(
-          stationName: 'ZETRA GreenCharge Hub',
-          energyKwh: '7.8 kWh',
-          amountRupees: '₹ 110.00',
-          duration: '00:39:45',
-          iconColor: Color(0xFF2EFE58),
-          icon: Icons.ev_station_rounded
-        )
-      ]
-    ),
-    // Older (All Time)
-    SessionGroup(
-      date: 'January 05, 2024',
-      sessions: <SessionEntry>[
-        SessionEntry(
-          stationName: 'ZETRA EcoPower Station',
-          energyKwh: '9.8 kWh',
-          amountRupees: '₹ 130.00',
-          duration: '00:50:30',
-          iconColor: Color(0xFF2EFE58),
-          icon: Icons.ev_station_rounded
-        )
-      ]
-    )
-  ];
-
-  void _onLoadChargingHistory(LoadChargingHistory event, Emitter<ChargingHistoryState> emit) {
+  Future<void> _onLoadChargingHistory(LoadChargingHistory event, Emitter<ChargingHistoryState> emit) async {
 
     emit(state.copyWith(
         status: ChargingHistoryStatus.loading
     ));
 
-    final List<SessionGroup> filtered = _getFilteredHistory(state.selectedFilter);
+    final Result<ChargingSessionsPage> result = await _repository.fetchChargingSessions();
 
-    emit(state.copyWith(
-      status: ChargingHistoryStatus.success,
-      historyGroups: filtered
-    ));
+    if (result.isSuccess) {
+
+      _allSessions = result.dataOrNull?.data ?? <ChargingSessionModel>[];
+      final List<SessionGroup> groups = _groupSessions(_filterSessions(_allSessions, state.selectedFilter));
+
+      emit(state.copyWith(
+        status: ChargingHistoryStatus.success,
+        historyGroups: groups
+      ));
+
+    } else {
+
+      emit(state.copyWith(
+        status: ChargingHistoryStatus.failure,
+        historyGroups: <SessionGroup>[]
+      ));
+
+    }
 
   }
 
@@ -143,30 +53,62 @@ class ChargingHistoryBloc extends Bloc<ChargingHistoryEvent, ChargingHistoryStat
       selectedFilter: event.filter
     ));
 
-    final List<SessionGroup> filtered = _getFilteredHistory(event.filter);
+    final List<SessionGroup> groups = _groupSessions(_filterSessions(_allSessions, event.filter));
 
     emit(state.copyWith(
       status: ChargingHistoryStatus.success,
-      historyGroups: filtered
+      historyGroups: groups
     ));
 
   }
 
-  List<SessionGroup> _getFilteredHistory(String filter) {
+  List<ChargingSessionModel> _filterSessions(List<ChargingSessionModel> sessions, String filter) {
+
+    final DateTime now = DateTime.now();
+    final DateTime startOfThisMonth = DateTime(now.year, now.month);
+    final DateTime startOfNextMonth = DateTime(now.year, now.month + 1);
+    final DateTime startOfLastMonth = DateTime(now.year, now.month - 1);
+    final DateTime startOfLast3Months = DateTime(now.year, now.month - 2);
 
     switch (filter) {
 
       case 'This Month':
-        return _allMockHistory.where((SessionGroup group) => group.date.contains('May')).toList();
+        return sessions.where((ChargingSessionModel s) => s.startTime.isAfter(startOfThisMonth.subtract(const Duration(
+            seconds: 1
+        ))) && s.startTime.isBefore(startOfNextMonth)).toList();
       case 'Last Month':
-        return _allMockHistory.where((SessionGroup group) => group.date.contains('April')).toList();
+        return sessions.where((ChargingSessionModel s) => s.startTime.isAfter(startOfLastMonth.subtract(const Duration(
+            seconds: 1
+        ))) && s.startTime.isBefore(startOfThisMonth)).toList();
       case 'Last 3 Months':
-        return _allMockHistory.where((SessionGroup group) => group.date.contains('May') || group.date.contains('April') || group.date.contains('March')).toList();
+        return sessions.where((ChargingSessionModel s) => s.startTime.isAfter(startOfLast3Months.subtract(const Duration(
+            seconds: 1
+        )))).toList();
       case 'All Time':
       default:
-        return _allMockHistory;
+        return sessions;
 
     }
+
+  }
+
+  List<SessionGroup> _groupSessions(List<ChargingSessionModel> sessions) {
+
+    final Map<String, List<SessionEntry>> groupedMap = <String, List<SessionEntry>>{};
+    final DateFormat formatter = DateFormat('MMMM dd, yyyy');
+
+    for (final ChargingSessionModel session in sessions) {
+
+      final String dateStr = formatter.format(session.startTime);
+      groupedMap.putIfAbsent(dateStr, () => <SessionEntry>[]);
+      groupedMap[dateStr]!.add(session.toSessionEntry());
+
+    }
+
+    return groupedMap.entries.map((MapEntry<String, List<SessionEntry>> e) => SessionGroup(
+        date: e.key,
+        sessions: e.value
+    )).toList();
 
   }
 

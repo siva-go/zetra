@@ -10,6 +10,7 @@ import 'package:zetra/core/widgets/bottom_nav_bar.dart';
 enum _NotifType { pluggedIn, chargingStarted, lowBalance, chargingCompleted, newOffer }
 
 class _NotifItem {
+
   final _NotifType type;
   final String title;
   final String body;

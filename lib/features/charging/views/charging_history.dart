@@ -12,17 +12,49 @@ import 'package:zetra/features/charging/bloc/charging_history_event.dart';
 import 'package:zetra/features/charging/bloc/charging_history_state.dart';
 import 'package:zetra/features/charging/models/session_entry.dart';
 
-class ChargingHistoryScreen extends StatelessWidget {
+class ChargingHistory extends StatefulWidget {
+  const ChargingHistory({super.key});
 
-  const ChargingHistoryScreen({super.key});
+  @override
+  State<ChargingHistory> createState() => _ChargingHistoryState();
+}
+
+class _ChargingHistoryState extends State<ChargingHistory> {
+
+  @override
+  void initState() {
+
+    super.initState();
+    context.read<ChargingHistoryBloc>().add(const LoadChargingHistory());
+
+  }
 
   @override
   Widget build(BuildContext context) {
 
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final Color bgColor = isDark ? AppColors.scaffoldDark : AppColors.scaffoldLight;
+    final Color titleColor = isDark ? AppColors.whiteColor : AppColors.textPrimaryLight;
+    final Color groupDateColor = isDark ? AppColors.textTertiary : AppColors.textSecondaryLight;
+
     return Scaffold(
-      backgroundColor: AppColors.scaffoldDark,
+      backgroundColor: bgColor,
       body: SafeArea(
-        child: BlocBuilder<ChargingHistoryBloc, ChargingHistoryState>(
+        child: BlocConsumer<ChargingHistoryBloc, ChargingHistoryState>(
+          listener: (BuildContext context, ChargingHistoryState state) {
+
+            if (state.status == ChargingHistoryStatus.failure) {
+
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Failed to load charging history'),
+                  backgroundColor: Colors.red
+                )
+              );
+
+            }
+
+          },
           builder: (BuildContext context, ChargingHistoryState state) {
 
             return Column(
@@ -49,7 +81,7 @@ class ChargingHistoryScreen extends StatelessWidget {
                           style: AppTypography.bodyLarge.copyWith(
                             fontWeight: FontWeight.w700,
                             fontSize: 17,
-                            color: AppColors.whiteColor
+                            color: titleColor
                           )
                         )
                       ),
@@ -60,7 +92,7 @@ class ChargingHistoryScreen extends StatelessWidget {
                       _IconBtn(
                         icon: Icons.more_vert_rounded,
                         onTap: () {
-                          // TODO: show context menu
+                          // show context menu
                         }
                       )
                     ]
@@ -103,26 +135,22 @@ class ChargingHistoryScreen extends StatelessWidget {
                             child: Text(
                               group.date,
                               style: AppTypography.bodySmall.copyWith(
-                                color: AppColors.textTertiary,
+                                color: groupDateColor,
                                 fontSize: 12,
                                 fontWeight: FontWeight.w600,
                                 letterSpacing: 0.3
                               )
                             )
-                          ), ...group.sessions.map(
-                                (SessionEntry session) => _SessionCard(
-                                    session: session
-                                )
-                          )
+                          ),...group.sessions.map((SessionEntry session) => _SessionCard(
+                              session: session
+                          ))
                         ]
                       );
 
                     }
                   )
                 ),
-                const ZetraBottomNavBar(
-                    
-                )
+                const ZetraBottomNavBar()
               ]
             );
 
@@ -146,6 +174,11 @@ class _IconBtn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final Color btnBg = isDark ? AppColors.cardDark : AppColors.whiteColor;
+    final Color borderColor = isDark ? AppColors.border.withValues(alpha: 0.5) : AppColors.borderLight;
+    final Color iconColor = isDark ? AppColors.whiteColor : AppColors.textPrimaryLight;
+
     return GestureDetector(
       onTap: onTap,
       behavior: HitTestBehavior.opaque,
@@ -153,17 +186,24 @@ class _IconBtn extends StatelessWidget {
         width: 36,
         height: 36,
         decoration: BoxDecoration(
-          color: AppColors.cardDark,
+          color: btnBg,
           shape: BoxShape.circle,
           border: Border.all(
-            color: AppColors.border.withValues(
-                alpha: 0.5
+            color: borderColor
+          ),
+          boxShadow: isDark ? const <BoxShadow>[] : <BoxShadow>[
+            BoxShadow(
+              color: AppColors.blackColor.withValues(
+                  alpha: 0.05
+              ),
+              blurRadius: 4,
+              offset: const Offset(0, 2)
             )
-          )
+          ]
         ),
         child: Icon(
             icon,
-            color: AppColors.whiteColor,
+            color: iconColor,
             size: 20
         )
       )
@@ -185,40 +225,57 @@ class _FilterDropdown extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final Color dropdownBg = isDark ? AppColors.cardDark : AppColors.whiteColor;
+    final Color borderColor = isDark ? AppColors.border.withValues(alpha: 0.6) : AppColors.borderLight;
+    final Color textColor = isDark ? AppColors.whiteColor : AppColors.textPrimaryLight;
+    final Color iconColor = isDark ? AppColors.textSecondary : AppColors.textSecondaryLight;
+
     return Container(
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.sm,
         vertical: 10
       ),
       decoration: BoxDecoration(
-        color: AppColors.cardDark,
+        color: dropdownBg,
         borderRadius: AppRadius.smBorder,
         border: Border.all(
-          color: AppColors.border.withValues(
-              alpha: 0.6
+          color: borderColor
+        ),
+        boxShadow: isDark ? const <BoxShadow>[] : <BoxShadow>[
+          BoxShadow(
+            color: AppColors.blackColor.withValues(
+                alpha: 0.04
+            ),
+            blurRadius: 6,
+            offset: const Offset(0, 2)
           )
-        )
+        ]
       ),
       child: DropdownButtonHideUnderline(
         child: DropdownButton<String>(
           value: value,
           isExpanded: true,
           isDense: true,
-          dropdownColor: AppColors.cardDark,
-          icon: const Icon(
+          dropdownColor: dropdownBg,
+          icon: Icon(
             Icons.keyboard_arrow_down_rounded,
-            color: AppColors.textSecondary,
+            color: iconColor,
             size: 20
           ),
           style: AppTypography.bodyMedium.copyWith(
-            color: AppColors.whiteColor,
+            color: textColor,
             fontSize: 14,
-            fontWeight: FontWeight.w500,
+            fontWeight: FontWeight.w500
           ),
           items: options.map((String opt) => DropdownMenuItem<String>(
               value: opt,
-              child: Text(opt)
-          )
+              child: Text(
+                opt,
+                style: TextStyle(
+                    color: textColor
+                )
+              ))
           ).toList(),
           onChanged: (String? v) {
 
@@ -238,6 +295,7 @@ class _FilterDropdown extends StatelessWidget {
 }
 
 class _SessionCard extends StatelessWidget {
+
   final SessionEntry session;
 
   const _SessionCard({required this.session});
@@ -245,24 +303,38 @@ class _SessionCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+    final bool isDark = Theme.of(context).brightness == Brightness.dark;
+    final Color cardBg = isDark ? AppColors.cardDark : AppColors.whiteColor;
+    final Color borderColor = isDark ? AppColors.border.withValues(alpha: 0.5) : AppColors.borderLight;
+    final Color stationNameColor = isDark ? AppColors.whiteColor : AppColors.textPrimaryLight;
+    final Color amountColor = isDark ? AppColors.textSecondary : AppColors.textSecondaryLight;
+    final Color durationColor = isDark ? AppColors.textTertiary : AppColors.textSecondaryLight;
+    final Color activeGreen = isDark ? session.iconColor : AppColors.primary;
+
     return Container(
       margin: const EdgeInsets.only(
           bottom: AppSpacing.xs
       ),
       decoration: BoxDecoration(
-        color: AppColors.cardDark,
+        color: cardBg,
         borderRadius: AppRadius.mdBorder,
         border: Border.all(
-          color: AppColors.border.withValues(
-              alpha: 0.5
-          )
+          color: borderColor
         ),
-        boxShadow: <BoxShadow>[
+        boxShadow: isDark ? <BoxShadow>[
           BoxShadow(
             color: AppColors.blackColor.withValues(
                 alpha: 0.25
             ),
             blurRadius: 8,
+            offset: const Offset(0, 2)
+          )
+        ] : <BoxShadow>[
+          BoxShadow(
+            color: AppColors.blackColor.withValues(
+                alpha: 0.05
+            ),
+            blurRadius: 6,
             offset: const Offset(0, 2)
           )
         ]
@@ -273,10 +345,10 @@ class _SessionCard extends StatelessWidget {
         child: InkWell(
           borderRadius: AppRadius.mdBorder,
           onTap: () {},
-          splashColor: session.iconColor.withValues(
+          splashColor: activeGreen.withValues(
               alpha: 0.08
           ),
-          highlightColor: session.iconColor.withValues(
+          highlightColor: activeGreen.withValues(
               alpha: 0.04
           ),
           child: Padding(
@@ -291,29 +363,29 @@ class _SessionCard extends StatelessWidget {
                   width: 44,
                   height: 44,
                   decoration: BoxDecoration(
-                    color: session.iconColor.withValues(
+                    color: activeGreen.withValues(
                         alpha: 0.12
                     ),
                     shape: BoxShape.circle,
                     border: Border.all(
-                      color: session.iconColor.withValues(
+                      color: activeGreen.withValues(
                           alpha: 0.3
                       ),
                       width: 1.5
                     ),
-                    boxShadow: <BoxShadow>[
+                    boxShadow: isDark ? <BoxShadow>[
                       BoxShadow(
-                        color: session.iconColor.withValues(
+                        color: activeGreen.withValues(
                             alpha: 0.25
                         ),
                         blurRadius: 10,
                         spreadRadius: 1
                       )
-                    ]
+                    ] : const <BoxShadow>[]
                   ),
                   child: Icon(
                     session.icon,
-                    color: session.iconColor,
+                    color: activeGreen,
                     size: 22
                   )
                 ),
@@ -328,7 +400,7 @@ class _SessionCard extends StatelessWidget {
                       Text(
                         session.stationName,
                         style: AppTypography.bodyMedium.copyWith(
-                          color: AppColors.whiteColor,
+                          color: stationNameColor,
                           fontWeight: FontWeight.w600,
                           fontSize: 13,
                         ),
@@ -341,7 +413,7 @@ class _SessionCard extends StatelessWidget {
                       Text(
                         session.amountRupees,
                         style: AppTypography.bodySmall.copyWith(
-                          color: AppColors.textSecondary,
+                          color: amountColor,
                           fontSize: 12
                         )
                       )
@@ -355,7 +427,7 @@ class _SessionCard extends StatelessWidget {
                     Text(
                       session.energyKwh,
                       style: AppTypography.bodyMedium.copyWith(
-                        color: session.iconColor,
+                        color: activeGreen,
                         fontWeight: FontWeight.w700,
                         fontSize: 13
                       )
@@ -366,7 +438,7 @@ class _SessionCard extends StatelessWidget {
                     Text(
                       session.duration,
                       style: AppTypography.bodySmall.copyWith(
-                        color: AppColors.textTertiary,
+                        color: durationColor,
                         fontSize: 11,
                         fontFamily: 'monospace'
                       )

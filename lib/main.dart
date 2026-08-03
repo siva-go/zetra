@@ -8,6 +8,7 @@ import 'package:zetra/core/l10n/app_localizations.dart';
 import 'package:zetra/core/services/di.dart';
 import 'package:zetra/features/authentication/bloc/auth_bloc.dart';
 import 'package:zetra/features/charging/bloc/charging_bloc.dart';
+import 'package:zetra/features/charging/bloc/charging_history_bloc.dart';
 import 'package:zetra/features/charging/bloc/plugin_bloc.dart';
 import 'package:zetra/features/home/bloc/home_bloc.dart';
 import 'package:zetra/features/wallet/bloc/wallet_bloc.dart';
@@ -40,20 +41,23 @@ class ZetraApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: <BlocProvider<dynamic>>[
         BlocProvider<AuthBloc>(
-          create: (_) => getIt<AuthBloc>(),
+          create: (_) => getIt<AuthBloc>()
         ),
         BlocProvider<ChargingBloc>(
-          create: (_) => getIt<ChargingBloc>(),
+          create: (_) => getIt<ChargingBloc>()
         ),
         BlocProvider<HomeBloc>(
-          create: (_) => getIt<HomeBloc>(),
+          create: (_) => getIt<HomeBloc>()
         ),
         BlocProvider<PlugInBloc>(
-          create: (_) => getIt<PlugInBloc>(),
+          create: (_) => getIt<PlugInBloc>()
+        ),
+        BlocProvider<ChargingHistoryBloc>(
+          create: (_) => getIt<ChargingHistoryBloc>()
         ),
         BlocProvider<WalletBloc>(
-          create: (_) => getIt<WalletBloc>(),
-        ),
+          create: (_) => getIt<WalletBloc>()
+        )
       ],
       child: ScreenUtilInit(
         designSize: const Size(375, 812),

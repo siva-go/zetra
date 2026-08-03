@@ -10,14 +10,14 @@ import 'package:zetra/features/charging/bloc/charging_history_bloc.dart';
 import 'package:zetra/features/charging/bloc/charging_history_event.dart';
 import 'package:zetra/features/charging/views/charge_link.dart';
 import 'package:zetra/features/charging/views/charging.dart' as charging;
-import 'package:zetra/features/charging/views/charging_history_screen.dart';
+import 'package:zetra/features/charging/views/charging_history.dart';
 import 'package:zetra/features/charging/views/invoice_screen.dart';
 import 'package:zetra/features/charging/views/plug_in.dart';
 import 'package:zetra/features/charging/views/plug_in_light.dart';
 import 'package:zetra/features/home/views/home.dart';
-import 'package:zetra/features/home/views/notification_screen.dart';
-import 'package:zetra/features/home/views/notification_screen_light.dart';
-import 'package:zetra/features/home/views/profile_screen.dart';
+import 'package:zetra/features/notification/views/notification_screen.dart';
+import 'package:zetra/features/notification/views/notification_screen_light.dart';
+import 'package:zetra/features/profile/views/profile_screen.dart';
 import 'package:zetra/features/station/bloc/scan_qr_bloc.dart';
 import 'package:zetra/features/station/bloc/search_station_bloc.dart';
 import 'package:zetra/features/station/bloc/search_station_event.dart';
@@ -142,7 +142,7 @@ final GoRouter appRouter = GoRouter(
 
         return BlocProvider<ChargingHistoryBloc>(
           create: (_) => GetIt.instance<ChargingHistoryBloc>()..add(const LoadChargingHistory()),
-          child: const ChargingHistoryScreen(),
+          child: const ChargingHistory(),
         );
 
       }
