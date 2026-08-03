@@ -1,23 +1,39 @@
 import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:go_router/go_router.dart';
+import 'package:zetra/app/themes/app_colors.dart';
+import 'package:zetra/app/themes/app_radius.dart';
+import 'package:zetra/app/themes/app_spacing.dart';
+import 'package:zetra/app/themes/app_typography.dart';
+import 'package:zetra/core/l10n/app_localizations.dart';
 import 'package:zetra/core/storage/secure_storage.dart';
+import 'package:zetra/core/widgets/bottom_nav_bar.dart';
 import 'package:zetra/features/authentication/bloc/auth_bloc.dart';
 import 'package:zetra/features/authentication/bloc/auth_event.dart';
-import 'package:zetra/core/l10n/app_localizations.dart';
 import 'package:zetra/features/wallet/bloc/wallet_bloc.dart';
+import 'package:zetra/features/wallet/bloc/wallet_event.dart';
 import 'package:zetra/features/wallet/bloc/wallet_state.dart';
-import '../../../app/themes/app_colors.dart';
-import '../../../app/themes/app_spacing.dart';
-import '../../../app/themes/app_radius.dart';
-import '../../../app/themes/app_typography.dart';
-import '../../../core/widgets/bottom_nav_bar.dart';
 
 /// Dark-themed Profile screen for the ZETRA application.
-class ProfileScreen extends StatelessWidget {
+class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
+
+  @override
+  State<ProfileScreen> createState() => _ProfileScreenState();
+}
+
+class _ProfileScreenState extends State<ProfileScreen> {
+
+  @override
+  void initState() {
+
+    super.initState();
+    context.read<WalletBloc>().add(const WalletLoadRequested());
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +44,7 @@ class ProfileScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
+          children: <Widget>[
             // ── Profile Photo Header ──────────────────────────────────────
             _ProfileHeader(blueNeon: blueNeon),
 

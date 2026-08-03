@@ -161,6 +161,22 @@ class _WalletState extends State<Wallet> with TickerProviderStateMixin {
           ),
           child: Row(
             children: <Widget>[
+              InkWell(
+                onTap: (){
+
+                  HapticFeedback.lightImpact();
+                  context.push('/home');
+
+                },
+                child: Icon(
+                    Icons.arrow_back_ios,
+                    color: isDark ? AppColors.textPrimary : AppColors.textPrimaryLight,
+                    size: 20.h
+                )
+              ),
+              SizedBox(
+                width: 5.w
+              ),
               Text(
                 AppLocalizations.of(context).wallet,
                 style: AppTypography.h3.copyWith(

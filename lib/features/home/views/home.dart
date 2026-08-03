@@ -15,6 +15,7 @@ import 'package:zetra/features/home/bloc/home_event.dart';
 import 'package:zetra/features/home/bloc/home_state.dart';
 import 'package:zetra/features/home/widgets/nearest_station_card.dart';
 import 'package:zetra/features/wallet/bloc/wallet_bloc.dart';
+import 'package:zetra/features/wallet/bloc/wallet_event.dart';
 import 'package:zetra/features/wallet/bloc/wallet_state.dart';
 
 class Home extends StatefulWidget {
@@ -159,6 +160,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
 
     super.initState();
     context.read<HomeBloc>().add(HomeInitialized());
+    context.read<WalletBloc>().add(const WalletLoadRequested());
 
   }
 
@@ -294,6 +296,7 @@ class _HomeState extends State<Home> with TickerProviderStateMixin {
   }
 
   Widget _buildTopAppBar(bool isDark) {
+
     final Color cardBg = isDark ? AppColors.scaffoldDark : AppColors.scaffoldLight;
 
     return Container(

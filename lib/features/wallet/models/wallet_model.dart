@@ -1,4 +1,5 @@
 class WalletModel {
+
   final String id;
   final int balancePaise;
   final double balance;
@@ -8,27 +9,62 @@ class WalletModel {
     required this.id,
     required this.balancePaise,
     required this.balance,
-    this.currency,
+    this.currency
   });
 
-  factory WalletModel.fromJson(Map<String, dynamic> json) {
-    final int paise = json['balancePaise'] is num
-        ? (json['balancePaise'] as num).toInt()
-        : 0;
-    final double bal = json['balance'] is num
-        ? (json['balance'] as num).toDouble()
-        : (paise / 100.0);
+  factory WalletModel.fromJson(Map<String, dynamic> rawJson) {
+
+    final Map<String, dynamic> json = (rawJson.containsKey('data') && rawJson['data'] is Map<String, dynamic>) ? rawJson['data'] as Map<String, dynamic> : rawJson;
+
+    int paise = 0;
+
+    if (json['balancePaise'] is num) {
+
+      paise = (json['balancePaise'] as num).toInt();
+
+    } else if (json['balancePaise'] != null) {
+
+      paise = int.tryParse(json['balancePaise'].toString()) ?? 0;
+
+    }
+
+    double bal = 0;
+
+    if (json['balance'] is num) {
+
+      bal = (json['balance'] as num).toDouble();
+
+    } else if (json['balance'] != null) {
+
+      bal = double.tryParse(json['balance'].toString()) ?? 0.0;
+
+    }
+
+    if (bal == 0 && paise > 0) {
+
+      bal = paise / 100.0;
+
+    }
+
+    if (paise == 0 && bal > 0) {
+
+      paise = (bal * 100).round();
+
+    }
 
     return WalletModel(
       id: json['id']?.toString() ?? '',
       balancePaise: paise,
       balance: bal,
-      currency: json['currency']?.toString() ?? 'INR',
+      currency: json['currency']?.toString() ?? 'INR'
     );
+
   }
+
 }
 
 class WalletTransactionModel {
+
   final String id;
   final String type; // CREDIT, DEBIT, REFUND, VOUCHER
   final int amountPaise;
@@ -44,18 +80,15 @@ class WalletTransactionModel {
     required this.amount,
     this.description,
     this.reference,
-    required this.createdAt,
+    required this.createdAt
   });
 
   bool get isCredit => type == 'CREDIT' || type == 'VOUCHER' || type == 'REFUND';
 
   factory WalletTransactionModel.fromJson(Map<String, dynamic> json) {
-    final int paise = json['amountPaise'] is num
-        ? (json['amountPaise'] as num).toInt()
-        : 0;
-    final double amt = json['amount'] is num
-        ? (json['amount'] as num).toDouble()
-        : (paise / 100.0);
+
+    final int paise = json['amountPaise'] is num ? (json['amountPaise'] as num).toInt() : 0;
+    final double amt = json['amount'] is num ? (json['amount'] as num).toDouble() : (paise / 100.0);
 
     return WalletTransactionModel(
       id: json['id']?.toString() ?? '',
@@ -66,12 +99,15 @@ class WalletTransactionModel {
       reference: json['reference']?.toString(),
       createdAt: json['createdAt'] != null
           ? DateTime.tryParse(json['createdAt'].toString()) ?? DateTime.now()
-          : DateTime.now(),
+          : DateTime.now()
     );
+
   }
+
 }
 
 class WalletTransactionsPage {
+
   final List<WalletTransactionModel> data;
   final int page;
   final int pageSize;
@@ -83,14 +119,13 @@ class WalletTransactionsPage {
     required this.page,
     required this.pageSize,
     required this.total,
-    required this.hasMore,
+    required this.hasMore
   });
 
   factory WalletTransactionsPage.fromJson(Map<String, dynamic> json) {
+
     final List<dynamic> rawList = json['data'] as List<dynamic>? ?? <dynamic>[];
-    final List<WalletTransactionModel> items = rawList
-        .map((dynamic item) => WalletTransactionModel.fromJson(item as Map<String, dynamic>))
-        .toList();
+    final List<WalletTransactionModel> items = rawList.map((dynamic item) => WalletTransactionModel.fromJson(item as Map<String, dynamic>)).toList();
 
     final Map<String, dynamic>? pagination = json['pagination'] as Map<String, dynamic>?;
     final int currentPage = pagination?['page'] is num ? (pagination!['page'] as num).toInt() : 1;
@@ -103,24 +138,30 @@ class WalletTransactionsPage {
       page: currentPage,
       pageSize: size,
       total: tot,
-      hasMore: currentPage < totalPages,
+      hasMore: currentPage < totalPages
     );
+
   }
+
 }
 
 class TopupResponseModel {
+
   final String paymentId;
   final String checkoutUrl;
 
   const TopupResponseModel({
     required this.paymentId,
-    required this.checkoutUrl,
+    required this.checkoutUrl
   });
 
   factory TopupResponseModel.fromJson(Map<String, dynamic> json) {
+
     return TopupResponseModel(
       paymentId: json['id']?.toString() ?? json['paymentId']?.toString() ?? '',
-      checkoutUrl: json['checkoutUrl']?.toString() ?? json['paymentUrl']?.toString() ?? '',
+      checkoutUrl: json['checkoutUrl']?.toString() ?? json['paymentUrl']?.toString() ?? ''
     );
+
   }
+
 }
