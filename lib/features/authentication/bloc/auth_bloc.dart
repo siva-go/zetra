@@ -90,11 +90,26 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
         final Map<String, dynamic> data = response.data as Map<String, dynamic>;
 
+        final String? accToken = data['accessToken'] as String? ?? data['access_token'] as String?;
+        final String? refToken = data['refreshToken'] as String? ?? data['refresh_token'] as String?;
+
+        if (accToken != null && accToken.isNotEmpty) {
+
+          await _secureStorage.saveAccessToken(accToken);
+
+        }
+
+        if (refToken != null && refToken.isNotEmpty) {
+
+          await _secureStorage.saveRefreshToken(refToken);
+
+        }
+
         emit(state.copyWith(
           status: AuthStatus.otpSent,
           otpDigits: List<String>.filled(6, ''),
-          accessToken: data['accessToken'] as String?,
-          refreshToken: data['refreshToken'] as String?
+          accessToken: accToken,
+          refreshToken: refToken
         ));
 
       } else {
@@ -380,10 +395,26 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       if (response.statusCode == 200 || response.statusCode == 201) {
 
         final Map<String, dynamic> data = response.data as Map<String, dynamic>;
+
+        final String? accToken = data['accessToken'] as String? ?? data['access_token'] as String?;
+        final String? refToken = data['refreshToken'] as String? ?? data['refresh_token'] as String?;
+
+        if (accToken != null && accToken.isNotEmpty) {
+
+          await _secureStorage.saveAccessToken(accToken);
+
+        }
+
+        if (refToken != null && refToken.isNotEmpty) {
+
+          await _secureStorage.saveRefreshToken(refToken);
+
+        }
+
         emit(state.copyWith(
           status: AuthStatus.otpSent,
-          accessToken: data['accessToken'] as String?,
-          refreshToken: data['refreshToken'] as String?
+          accessToken: accToken,
+          refreshToken: refToken
         ));
 
       } else {

@@ -15,8 +15,7 @@ import 'package:zetra/features/charging/views/invoice_screen.dart';
 import 'package:zetra/features/charging/views/plug_in.dart';
 import 'package:zetra/features/charging/views/plug_in_light.dart';
 import 'package:zetra/features/home/views/home.dart';
-import 'package:zetra/features/notification/views/notification_screen.dart';
-import 'package:zetra/features/notification/views/notification_screen_light.dart';
+import 'package:zetra/features/notification/views/notifications.dart';
 import 'package:zetra/features/profile/views/profile_screen.dart';
 import 'package:zetra/features/station/bloc/scan_qr_bloc.dart';
 import 'package:zetra/features/station/bloc/search_station_bloc.dart';
@@ -29,6 +28,7 @@ import 'package:zetra/features/station/views/search_station.dart';
 import 'package:zetra/features/station/views/station_details.dart';
 import 'package:zetra/features/wallet/views/add_money.dart';
 import 'package:zetra/features/wallet/views/wallet.dart';
+import 'package:zetra/features/wallet/views/wallet_transactions.dart';
 
 final GoRouter appRouter = GoRouter(
   initialLocation: '/login',
@@ -92,15 +92,7 @@ final GoRouter appRouter = GoRouter(
       path: '/notifications',
       builder: (BuildContext context, GoRouterState state) {
 
-        return const NotificationScreen();
-
-      }
-    ),
-    GoRoute(
-      path: '/notifications-light',
-      builder: (BuildContext context, GoRouterState state) {
-
-        return const NotificationScreenLight();
+        return const Notifications();
 
       }
     ),
@@ -229,6 +221,14 @@ final GoRouter appRouter = GoRouter(
       builder: (BuildContext context, GoRouterState state) {
 
         return const AddMoney();
+
+      }
+    ),
+    GoRoute(
+      path: '/wallet/transactions',
+      builder: (BuildContext context, GoRouterState state) {
+
+        return const WalletTransactionsScreen();
 
       }
     )

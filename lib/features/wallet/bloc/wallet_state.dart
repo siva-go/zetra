@@ -3,6 +3,8 @@ import 'package:zetra/features/wallet/models/wallet_model.dart';
 
 enum WalletStatus { initial, loading, loaded, paying, success, error }
 
+enum WalletTransactionFilter { all, credits, debits }
+
 typedef WalletTransaction = WalletTransactionModel;
 
 @immutable
@@ -17,6 +19,7 @@ class WalletState {
   final int transactionPage;
   final bool hasMoreTransactions;
   final bool isLoadingTransactions;
+  final WalletTransactionFilter transactionFilter;
   final String enteredAmount;
   final int? selectedQuickAmount;
   final String selectedPaymentMethod;
@@ -34,6 +37,7 @@ class WalletState {
     required this.transactionPage,
     required this.hasMoreTransactions,
     required this.isLoadingTransactions,
+    required this.transactionFilter,
     required this.enteredAmount,
     this.selectedQuickAmount,
     required this.selectedPaymentMethod,
@@ -54,10 +58,28 @@ class WalletState {
       transactionPage: 1,
       hasMoreTransactions: false,
       isLoadingTransactions: false,
+      transactionFilter: WalletTransactionFilter.all,
       enteredAmount: '500',
       selectedQuickAmount: 500,
       selectedPaymentMethod: 'UPI'
     );
+
+  }
+
+  List<WalletTransactionModel> get filteredTransactions {
+
+    switch (transactionFilter) {
+
+      case WalletTransactionFilter.credits:
+        return recentTransactions.where((WalletTransactionModel txn) => txn.isCredit).toList();
+
+      case WalletTransactionFilter.debits:
+        return recentTransactions.where((WalletTransactionModel txn) => !txn.isCredit).toList();
+
+      case WalletTransactionFilter.all:
+        return recentTransactions;
+
+    }
 
   }
 
@@ -71,6 +93,7 @@ class WalletState {
     int? transactionPage,
     bool? hasMoreTransactions,
     bool? isLoadingTransactions,
+    WalletTransactionFilter? transactionFilter,
     String? enteredAmount,
     int? selectedQuickAmount,
     bool clearQuickAmount = false,
@@ -92,6 +115,7 @@ class WalletState {
       transactionPage: transactionPage ?? this.transactionPage,
       hasMoreTransactions: hasMoreTransactions ?? this.hasMoreTransactions,
       isLoadingTransactions: isLoadingTransactions ?? this.isLoadingTransactions,
+      transactionFilter: transactionFilter ?? this.transactionFilter,
       enteredAmount: enteredAmount ?? this.enteredAmount,
       selectedQuickAmount: clearQuickAmount ? null : (selectedQuickAmount ?? this.selectedQuickAmount),
       selectedPaymentMethod: selectedPaymentMethod ?? this.selectedPaymentMethod,

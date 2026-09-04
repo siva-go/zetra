@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:zetra/features/wallet/bloc/wallet_state.dart';
 
 @immutable
 abstract class WalletEvent {
@@ -83,5 +84,12 @@ class WalletTopupVerified extends WalletEvent {
 
   final String paymentId;
   const WalletTopupVerified(this.paymentId);
+
+}
+
+class WalletTransactionFilterChanged extends WalletEvent {
+
+  final WalletTransactionFilter filter;
+  const WalletTransactionFilterChanged(this.filter);
 
 }

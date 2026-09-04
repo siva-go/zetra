@@ -520,13 +520,25 @@ class _WalletState extends State<Wallet> with TickerProviderStateMixin {
           )
         ),
         GestureDetector(
-          onTap: () {},
-          child: Text(
-            AppLocalizations.of(context).viewAll,
-            style: AppTypography.bodySmall.copyWith(
-              fontSize: 13.sp,
-              color: AppColors.primary,
-              fontWeight: FontWeight.w600
+          onTap: () {
+
+            HapticFeedback.lightImpact();
+            context.push('/wallet/transactions');
+
+          },
+          behavior: HitTestBehavior.opaque,
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: 4.h,
+              horizontal: 4.w
+            ),
+            child: Text(
+              AppLocalizations.of(context).viewAll,
+              style: AppTypography.bodySmall.copyWith(
+                fontSize: 13.sp,
+                color: AppColors.primary,
+                fontWeight: FontWeight.w600
+              )
             )
           )
         )
@@ -540,8 +552,75 @@ class _WalletState extends State<Wallet> with TickerProviderStateMixin {
 
   Widget _buildTransactionsList(bool isDark, WalletState state) {
 
+    if (state.status == WalletStatus.loading && state.recentTransactions.isEmpty) {
+
+      return Padding(
+        padding: EdgeInsets.symmetric(
+          vertical: 24.h
+        ),
+        child: const Center(
+          child: CircularProgressIndicator.adaptive()
+        )
+      );
+
+    }
+
+    if (state.recentTransactions.isEmpty) {
+
+      final Color cardBg = isDark ? AppColors.cardDark : AppColors.whiteColor;
+      final Color borderColor = isDark ? AppColors.border : AppColors.borderLight;
+      final Color textPrimary = isDark ? AppColors.textPrimary : AppColors.textPrimaryLight;
+      final Color textSecondary = isDark ? AppColors.textSecondary : AppColors.textSecondaryLight;
+
+      return Container(
+        width: double.infinity,
+        padding: EdgeInsets.symmetric(
+          vertical: 24.h,
+          horizontal: 16.w
+        ),
+        decoration: BoxDecoration(
+          color: cardBg,
+          borderRadius: AppRadius.mdBorder,
+          border: Border.all(
+            color: borderColor
+          )
+        ),
+        child: Column(
+          children: <Widget>[
+            Icon(
+              Icons.receipt_long_outlined,
+              size: 36.h,
+              color: textSecondary
+            ),
+            SizedBox(
+              height: 8.h
+            ),
+            Text(
+              'No recent transactions',
+              style: AppTypography.bodyMedium.copyWith(
+                fontWeight: FontWeight.w600,
+                color: textPrimary
+              )
+            ),
+            SizedBox(
+              height: 4.h
+            ),
+            Text(
+              'Your wallet transactions will appear here',
+              style: AppTypography.bodySmall.copyWith(
+                color: textSecondary
+              )
+            )
+          ]
+        )
+      ).animate().fadeIn(
+        duration: 400.ms
+      );
+
+    }
+
     return Column(
-      children: state.recentTransactions.asMap().entries.map((MapEntry<int, WalletTransaction> entry) {
+      children: state.recentTransactions.take(5).toList().asMap().entries.map((MapEntry<int, WalletTransaction> entry) {
 
         return _buildTransactionTile(isDark, entry.value, entry.key);
 

@@ -12,6 +12,8 @@ import 'package:zetra/features/charging/bloc/charging_history_bloc.dart';
 import 'package:zetra/features/charging/bloc/plugin_bloc.dart';
 import 'package:zetra/features/charging/repository/charging_repository.dart';
 import 'package:zetra/features/home/bloc/home_bloc.dart';
+import 'package:zetra/features/notification/bloc/notification_bloc.dart';
+import 'package:zetra/features/notification/repository/notification_repository.dart';
 import 'package:zetra/features/station/bloc/scan_qr_bloc.dart';
 import 'package:zetra/features/station/bloc/search_station_bloc.dart';
 import 'package:zetra/features/station/bloc/station_detail_bloc.dart';
@@ -58,10 +60,16 @@ Future<void> setupDependencies() async {
   getIt.registerLazySingleton<WalletRepository>(
     () => WalletRepository(getIt<ApiClient>())
   );
+  getIt.registerLazySingleton<NotificationRepository>(
+    () => NotificationRepository(getIt<ApiClient>())
+  );
 
   /// Blocs
   getIt.registerFactory<ChargingBloc>(
     () => ChargingBloc()
+  );
+  getIt.registerFactory<NotificationBloc>(
+    () => NotificationBloc(getIt<NotificationRepository>())
   );
   getIt.registerFactory<AuthBloc>(
     () => AuthBloc(

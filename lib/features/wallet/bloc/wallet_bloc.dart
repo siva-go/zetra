@@ -21,6 +21,7 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
     on<WalletVoucherRedeemed>(_onVoucherRedeemed);
     on<WalletTopupVerified>(_onTopupVerified);
     on<PaymentResultReceived>(_onPaymentResultReceived);
+    on<WalletTransactionFilterChanged>(_onTransactionFilterChanged);
   }
 
   Future<void> _onLoadRequested(WalletLoadRequested event, Emitter<WalletState> emit) async {
@@ -238,6 +239,14 @@ class WalletBloc extends Bloc<WalletEvent, WalletState> {
     emit(state.copyWith(
         status: WalletStatus.loaded,
         clearError: true
+    ));
+
+  }
+
+  void _onTransactionFilterChanged(WalletTransactionFilterChanged event, Emitter<WalletState> emit) {
+
+    emit(state.copyWith(
+      transactionFilter: event.filter,
     ));
 
   }
