@@ -67,9 +67,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     borderRadius: AppRadius.lgBorder,
                     border: Border.all(
                       color: AppColors.border.withValues(alpha: 0.6),
-                      width: 1,
                     ),
-                    boxShadow: [
+                    boxShadow: <BoxShadow>[
                       BoxShadow(
                         color: Colors.black.withValues(alpha: 0.25),
                         blurRadius: 10,
@@ -81,7 +80,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     borderRadius: AppRadius.lgBorder,
                       child: ListView(
                         padding: const EdgeInsets.symmetric(vertical: 4),
-                        children: [
+                        children: <Widget>[
                           _MenuOptionItem(
                             icon: Icons.credit_card_rounded,
                             title: AppLocalizations.of(context).paymentMethods,
@@ -174,7 +173,7 @@ class _ProfileHeader extends StatelessWidget {
         (MediaQuery.of(context).size.height * 0.28).clamp(160.0, 220.0);
 
     return Stack(
-      children: [
+      children: <Widget>[
         Container(
           height: headerHeight,
           width: double.infinity,
@@ -192,13 +191,13 @@ class _ProfileHeader extends StatelessWidget {
               gradient: LinearGradient(
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
-                colors: [
+                colors: <Color>[
                   Colors.transparent,
                   Colors.black.withValues(alpha: 0.15),
                   AppColors.scaffoldDark.withValues(alpha: 0.7),
                   AppColors.scaffoldDark,
                 ],
-                stops: const [0.0, 0.4, 0.85, 1.0],
+                stops: const <double>[0, 0.4, 0.85, 1],
               ),
             ),
           ),
@@ -209,14 +208,14 @@ class _ProfileHeader extends StatelessWidget {
           right: AppSpacing.md,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+            children: <Widget>[
               Text(
                 'Hi Karan! 👋',
                 style: AppTypography.labelLarge.copyWith(
                   fontSize: 22,
                   fontWeight: FontWeight.w800,
                   color: Colors.white,
-                  shadows: const [
+                  shadows: const <Shadow>[
                     Shadow(
                         color: Colors.black87,
                         offset: Offset(0, 1.5),
@@ -240,7 +239,7 @@ class _ProfileHeader extends StatelessWidget {
           top: AppSpacing.sm,
           left: AppSpacing.md,
           child: CustomPaint(
-            painter: HexagonPainter(glowColor: blueNeon, strokeWidth: 2.0),
+            painter: HexagonPainter(glowColor: blueNeon),
             child: Container(
               width: 44,
               height: 44,
@@ -365,40 +364,43 @@ class _MenuOptionItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListTile(
-      onTap: onTap,
-      dense: true,
-      contentPadding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.md, vertical: 4),
-      leading: Container(
-        width: 36,
-        height: 36,
-        decoration: BoxDecoration(
-          color: neonColor.withValues(alpha: 0.12),
-          shape: BoxShape.circle,
-          border: Border.all(
-              color: neonColor.withValues(alpha: 0.3), width: 1.5),
-          boxShadow: [
-            BoxShadow(
-                color: neonColor.withValues(alpha: 0.25),
-                blurRadius: 10,
-                spreadRadius: 1),
-          ],
+    return Material(
+      color: Colors.transparent,
+      child: ListTile(
+        onTap: onTap,
+        dense: true,
+        contentPadding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.md, vertical: 4),
+        leading: Container(
+          width: 36,
+          height: 36,
+          decoration: BoxDecoration(
+            color: neonColor.withValues(alpha: 0.12),
+            shape: BoxShape.circle,
+            border: Border.all(
+                color: neonColor.withValues(alpha: 0.3), width: 1.5),
+            boxShadow: <BoxShadow>[
+              BoxShadow(
+                  color: neonColor.withValues(alpha: 0.25),
+                  blurRadius: 10,
+                  spreadRadius: 1),
+            ],
+          ),
+          child: Icon(icon, color: neonColor, size: 18),
         ),
-        child: Icon(icon, color: neonColor, size: 18),
-      ),
-      title: Text(
-        title,
-        style: AppTypography.bodyMedium.copyWith(
-          color: Colors.white,
-          fontWeight: FontWeight.w600,
-          fontSize: 13.5,
+        title: Text(
+          title,
+          style: AppTypography.bodyMedium.copyWith(
+            color: Colors.white,
+            fontWeight: FontWeight.w600,
+            fontSize: 13.5,
+          ),
         ),
-      ),
-      trailing: const Icon(
-        Icons.chevron_right_rounded,
-        color: AppColors.textSecondary,
-        size: 18,
+        trailing: const Icon(
+          Icons.chevron_right_rounded,
+          color: AppColors.textSecondary,
+          size: 18,
+        ),
       ),
     );
   }
@@ -415,20 +417,23 @@ class HexagonPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    final w = size.width;
-    final h = size.height;
-    final cx = w / 2;
-    final cy = h / 2;
-    final padding = 6.0 + strokeWidth;
-    final radius = (math.min(w, h) / 2) - padding;
+    final double w = size.width;
+    final double h = size.height;
+    final double cx = w / 2;
+    final double cy = h / 2;
+    final double padding = 6.0 + strokeWidth;
+    final double radius = (math.min(w, h) / 2) - padding;
 
-    final path = Path();
+    final Path path = Path();
     for (int i = 0; i < 6; i++) {
-      final angle = -math.pi / 2 + (i * math.pi / 3);
-      final x = cx + radius * math.cos(angle);
-      final y = cy + radius * math.sin(angle);
-      if (i == 0) path.moveTo(x, y);
-      else path.lineTo(x, y);
+      final double angle = -math.pi / 2 + (i * math.pi / 3);
+      final double x = cx + radius * math.cos(angle);
+      final double y = cy + radius * math.sin(angle);
+      if (i == 0) {
+        path.moveTo(x, y);
+      } else {
+        path.lineTo(x, y);
+      }
     }
     path.close();
 

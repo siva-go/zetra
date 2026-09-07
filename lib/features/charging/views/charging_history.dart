@@ -344,7 +344,13 @@ class _SessionCard extends StatelessWidget {
         borderRadius: AppRadius.mdBorder,
         child: InkWell(
           borderRadius: AppRadius.mdBorder,
-          onTap: () {},
+          onTap: () {
+            if (session.id != null && session.id!.isNotEmpty) {
+              context.push('/invoice?id=${session.id}');
+            } else {
+              context.push('/invoice');
+            }
+          },
           splashColor: activeGreen.withValues(
               alpha: 0.08
           ),

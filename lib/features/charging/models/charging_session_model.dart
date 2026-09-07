@@ -4,6 +4,7 @@ import 'package:zetra/features/charging/models/session_entry.dart';
 class ChargingSessionModel {
 
   final String id;
+  final String? invoiceId;
   final String? userId;
   final String? stationId;
   final String? stationName;
@@ -17,6 +18,7 @@ class ChargingSessionModel {
 
   const ChargingSessionModel({
     required this.id,
+    this.invoiceId,
     this.userId,
     this.stationId,
     this.stationName,
@@ -143,8 +145,11 @@ class ChargingSessionModel {
     final String station = json['stationName']?.toString() ?? json['station']?['name']?.toString() ??
         json['station']?.toString() ?? 'ZETRA Charging Hub';
 
+    final String? invId = json['invoiceId']?.toString() ?? json['invoice']?['id']?.toString();
+
     return ChargingSessionModel(
       id: json['id']?.toString() ?? '',
+      invoiceId: invId,
       userId: json['userId']?.toString(),
       stationId: json['stationId']?.toString(),
       stationName: station,
@@ -171,6 +176,7 @@ class ChargingSessionModel {
   SessionEntry toSessionEntry() {
 
     return SessionEntry(
+      id: invoiceId ?? id,
       stationName: stationName ?? 'ZETRA Charging Hub',
       energyKwh: '${energyConsumedKwh.toStringAsFixed(1)} kWh',
       amountRupees: '₹ ${totalCost.toStringAsFixed(2)}',

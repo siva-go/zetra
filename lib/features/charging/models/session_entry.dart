@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 /// Represents one past charging session entry in the history list.
 class SessionEntry {
 
+  final String? id;
   final String stationName;
   final String energyKwh;
   final String amountRupees;
@@ -11,6 +12,7 @@ class SessionEntry {
   final IconData icon;
 
   const SessionEntry({
+    this.id,
     required this.stationName,
     required this.energyKwh,
     required this.amountRupees,

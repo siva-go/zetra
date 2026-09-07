@@ -9,6 +9,7 @@ import 'package:zetra/core/storage/secure_storage.dart';
 import 'package:zetra/features/authentication/bloc/auth_bloc.dart';
 import 'package:zetra/features/charging/bloc/charging_bloc.dart';
 import 'package:zetra/features/charging/bloc/charging_history_bloc.dart';
+import 'package:zetra/features/charging/bloc/invoice_bloc.dart';
 import 'package:zetra/features/charging/bloc/plugin_bloc.dart';
 import 'package:zetra/features/charging/repository/charging_repository.dart';
 import 'package:zetra/features/home/bloc/home_bloc.dart';
@@ -97,6 +98,9 @@ Future<void> setupDependencies() async {
   );
   getIt.registerFactory<ChargingHistoryBloc>(
     () => ChargingHistoryBloc(getIt<ChargingRepository>())
+  );
+  getIt.registerFactory<InvoiceBloc>(
+    () => InvoiceBloc(getIt<ChargingRepository>())
   );
   getIt.registerFactory<WalletBloc>(
     () => WalletBloc(getIt<WalletRepository>())
