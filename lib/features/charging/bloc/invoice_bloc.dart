@@ -3,11 +3,11 @@ import 'package:zetra/core/api/result.dart';
 import 'package:zetra/features/charging/bloc/invoice_event.dart';
 import 'package:zetra/features/charging/bloc/invoice_state.dart';
 import 'package:zetra/features/charging/models/invoice_model.dart';
-import 'package:zetra/features/charging/repository/charging_repository.dart';
+import 'package:zetra/features/wallet/repository/invoice_repository.dart';
 
 class InvoiceBloc extends Bloc<InvoiceEvent, InvoiceState> {
 
-  final ChargingRepository _repository;
+  final InvoiceRepository _repository;
 
   InvoiceBloc(this._repository) : super(InvoiceState.initial()) {
 
@@ -16,6 +16,7 @@ class InvoiceBloc extends Bloc<InvoiceEvent, InvoiceState> {
     });
 
     on<InvoiceFetchRequested>(_onFetchRequested);
+    on<InvoiceDownloadPdfRequested>(_onDownloadPdfRequested);
 
   }
 
@@ -23,7 +24,8 @@ class InvoiceBloc extends Bloc<InvoiceEvent, InvoiceState> {
 
     emit(state.copyWith(
       status: InvoiceStatus.loading,
-      clearError: true
+      clearError: true,
+      clearDownloadedPdf: true
     ));
 
     final String? id = event.invoiceId;
@@ -67,6 +69,34 @@ class InvoiceBloc extends Bloc<InvoiceEvent, InvoiceState> {
         ));
 
       }
+
+    }
+
+  }
+
+  Future<void> _onDownloadPdfRequested(InvoiceDownloadPdfRequested event, Emitter<InvoiceState> emit) async {
+
+    emit(state.copyWith(
+      isDownloadingPdf: true,
+      clearError: true,
+      clearDownloadedPdf: true
+    ));
+
+    final Result<String> result = await _repository.downloadInvoicePdf(event.invoiceId);
+
+    if (result.isSuccess && result.dataOrNull != null) {
+
+      emit(state.copyWith(
+        isDownloadingPdf: false,
+        downloadedPdfPath: result.dataOrNull
+      ));
+
+    } else {
+
+      emit(state.copyWith(
+        isDownloadingPdf: false,
+        errorMessage: result.failureOrNull?.toString() ?? 'Failed to download invoice PDF'
+      ));
 
     }
 

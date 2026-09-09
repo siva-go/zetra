@@ -8,12 +8,10 @@ import 'package:zetra/features/authentication/views/login_otp.dart';
 import 'package:zetra/features/authentication/views/signup.dart';
 import 'package:zetra/features/charging/bloc/charging_history_bloc.dart';
 import 'package:zetra/features/charging/bloc/charging_history_event.dart';
-import 'package:zetra/features/charging/bloc/invoice_bloc.dart';
-import 'package:zetra/features/charging/bloc/invoice_event.dart';
 import 'package:zetra/features/charging/views/charge_link.dart';
 import 'package:zetra/features/charging/views/charging.dart' as charging;
 import 'package:zetra/features/charging/views/charging_history.dart';
-import 'package:zetra/features/charging/views/invoice_screen.dart';
+import 'package:zetra/features/charging/views/invoice.dart';
 import 'package:zetra/features/charging/views/plug_in.dart';
 import 'package:zetra/features/charging/views/plug_in_light.dart';
 import 'package:zetra/features/home/views/home.dart';
@@ -154,10 +152,8 @@ final GoRouter appRouter = GoRouter(
       builder: (BuildContext context, GoRouterState state) {
 
         final String? invoiceId = state.uri.queryParameters['id'];
-        return BlocProvider<InvoiceBloc>(
-          create: (_) => GetIt.instance<InvoiceBloc>()
-            ..add(InvoiceInitialized(invoiceId: invoiceId)),
-          child: const InvoiceScreen(),
+        return Invoice(
+            invoiceId: invoiceId
         );
 
       }

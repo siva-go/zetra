@@ -22,3 +22,11 @@ class InvoiceFetchRequested extends InvoiceEvent {
   const InvoiceFetchRequested({this.invoiceId});
 
 }
+
+class InvoiceDownloadPdfRequested extends InvoiceEvent {
+
+  final String invoiceId;
+
+  const InvoiceDownloadPdfRequested({required this.invoiceId});
+
+}

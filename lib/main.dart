@@ -9,9 +9,11 @@ import 'package:zetra/core/services/di.dart';
 import 'package:zetra/features/authentication/bloc/auth_bloc.dart';
 import 'package:zetra/features/charging/bloc/charging_bloc.dart';
 import 'package:zetra/features/charging/bloc/charging_history_bloc.dart';
+import 'package:zetra/features/charging/bloc/invoice_bloc.dart';
 import 'package:zetra/features/charging/bloc/plugin_bloc.dart';
 import 'package:zetra/features/home/bloc/home_bloc.dart';
 import 'package:zetra/features/notification/bloc/notification_bloc.dart';
+import 'package:zetra/features/profile/bloc/profile_bloc.dart';
 import 'package:zetra/features/wallet/bloc/wallet_bloc.dart';
 
 void main() async {
@@ -61,6 +63,12 @@ class ZetraApp extends StatelessWidget {
         ),
         BlocProvider<NotificationBloc>(
           create: (_) => getIt<NotificationBloc>()
+        ),
+        BlocProvider<ProfileBloc>(
+          create: (_) => getIt<ProfileBloc>()
+        ),
+        BlocProvider<InvoiceBloc>(
+          create: (_) => getIt<InvoiceBloc>()
         )
       ],
       child: ScreenUtilInit(
