@@ -98,7 +98,7 @@ class _NotificationsState extends State<Notifications> {
                   child: Row(
                     children: <Widget>[
                       GestureDetector(
-                        onTap: () => context.pop(),
+                        onTap: () => context.canPop() ? context.pop() : context.go('/home'),
                         child: Container(
                           width: 40,
                           height: 40,

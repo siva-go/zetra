@@ -227,16 +227,7 @@ class _ZetraBottomNavBarState extends State<ZetraBottomNavBar> with TickerProvid
 
     final String route = _navRoutes[index];
 
-    if (index == 0) {
-
-      context.go('/home');
-
-    } else {
-
-      context.push(route);
-
-    }
-
+    context.go(route);
   }
 
   void _handleQrTap() {
