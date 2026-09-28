@@ -16,7 +16,7 @@ import 'package:zetra/features/charging/views/plug_in.dart';
 import 'package:zetra/features/charging/views/plug_in_light.dart';
 import 'package:zetra/features/home/views/home.dart';
 import 'package:zetra/features/notification/views/notifications.dart';
-import 'package:zetra/features/profile/views/profile_screen.dart';
+import 'package:zetra/features/profile/views/profile.dart';
 import 'package:zetra/features/station/bloc/scan_qr_bloc.dart';
 import 'package:zetra/features/station/bloc/search_station_bloc.dart';
 import 'package:zetra/features/station/bloc/search_station_event.dart';
@@ -143,7 +143,7 @@ final GoRouter appRouter = GoRouter(
       path: '/profile',
       builder: (BuildContext context, GoRouterState state) {
 
-        return const ProfileScreen();
+        return const Profile();
 
       }
     ),
