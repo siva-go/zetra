@@ -1,0 +1,206 @@
+﻿Success! Paths count: 172
+
+All Endpoints:
+GET    /api/v1/admin/health                               [Health] Readiness probe
+GET    /api/v1/admin/health/liveness                      [Health] Liveness probe
+GET    /api/v1/admin/health/workers                       [Health] Worker liveness + queue depth
+POST   /api/v1/auth/login                                 [Auth] Login with email/phone + password
+POST   /api/v1/auth/logout                                [Auth] Logout the current session
+POST   /api/v1/auth/logout-all                            [Auth] Logout every session for this user
+POST   /api/v1/auth/otp/request                           [Auth] Request a one-time password
+POST   /api/v1/auth/otp/verify                            [Auth] Verify a one-time password
+POST   /api/v1/auth/refresh                               [Auth] Rotate an access/refresh token pair
+POST   /api/v1/auth/register                              [Auth] Register a new user
+POST   /api/v1/business-units                             [Business Units] Create a Business Unit
+GET    /api/v1/business-units                             [Business Units] List Business Units for an organization
+GET    /api/v1/business-units/{id}                        [Business Units] Get a Business Unit
+PATCH  /api/v1/business-units/{id}                        [Business Units] Update a Business Unit
+POST   /api/v1/business-units/{id}/move                   [Business Units] Re-parent a Business Unit
+POST   /api/v1/business-units/{id}/soft-delete            [Business Units] Soft-delete a Business Unit
+GET    /api/v1/business-units/{id}/subtree                [Business Units] List a BU and its descendants
+POST   /api/v1/chargers                                   [Chargers] Register a new charger
+GET    /api/v1/chargers                                   [Chargers] List chargers
+GET    /api/v1/chargers/ocpp-connection-info              [Chargers] Public OCPP WebSocket endpoint for charger configuration
+GET    /api/v1/chargers/unassigned                        [Chargers] List unassigned chargers available for station attachment
+GET    /api/v1/chargers/{id}                              [Chargers] Get a charger by id
+PATCH  /api/v1/chargers/{id}                              [Chargers] Update charger metadata
+POST   /api/v1/chargers/{id}/decommission                 [Chargers] Decommission a charger (terminal)
+POST   /api/v1/chargers/{id}/disable                      [Chargers] Disable a charger (lifecycle)
+POST   /api/v1/chargers/{id}/enable                       [Chargers] Enable a charger (lifecycle)
+POST   /api/v1/chargers/{id}/remote-start                 [Chargers] Remote-start a charger
+POST   /api/v1/chargers/{id}/remote-stop                  [Chargers] Remote-stop a charger transaction
+POST   /api/v1/chargers/{id}/rotate-token                 [Chargers] Rotate the OCPP charger auth token
+POST   /api/v1/charging-intents                           [Charging Intents] Create a charging intent (app flow)
+GET    /api/v1/charging-intents/public/{publicRef}        [Charging Intents] Get a charging intent by public reference (no auth)
+POST   /api/v1/charging-intents/qr                        [Charging Intents] Create a charging intent from a QR scan (no auth)
+GET    /api/v1/charging-intents/{id}                      [Charging Intents] Get a charging intent by id (authenticated)
+POST   /api/v1/charging-intents/{id}/authorize            [Charging Intents] Authorize a charging intent
+POST   /api/v1/charging-intents/{id}/cancel               [Charging Intents] Cancel a charging intent
+POST   /api/v1/charging-intents/{id}/start                [Charging Intents] Start charging ù dispatch RemoteStartTransaction
+GET    /api/v1/charging-sessions                          [Charging Sessions] List the callerÆs charging sessions
+GET    /api/v1/charging-sessions/me/active                [Charging Sessions] Get the callerÆs active charging session (if any)
+GET    /api/v1/charging-sessions/{id}                     [Charging Sessions] Get a charging session by id
+POST   /api/v1/charging-sessions/{id}/stop                [Charging Sessions] Request to stop an active charging session
+POST   /api/v1/connectors                                 [Connectors] Create a connector on a charger
+GET    /api/v1/connectors/{id}                            [Connectors] Get a connector by id
+GET    /api/v1/discover/stations                          [Discover] List ACTIVE stations (mobile map / search)
+GET    /api/v1/discover/stations/{id}                     [Discover] Station detail for mobile (chargers + connectors)
+POST   /api/v1/invitations/accept                         [Users] Consume a single-use invitation token and activate the account.
+GET    /api/v1/notifications/me                           [Notifications] List the callerÆs in-app notifications
+POST   /api/v1/notifications/me/read-all                  [Notifications] Mark all notifications as read
+GET    /api/v1/notifications/me/unread-count              [Notifications] Unread notification count (app badge)
+POST   /api/v1/notifications/me/{id}/read                 [Notifications] Mark one notification as read
+GET    /api/v1/offers                                     [Offers] List active offers
+POST   /api/v1/offers                                     [Offers] Create an offer
+GET    /api/v1/organization/features                      [SaaS (Organization Self-Service)] Get effective features for the callerÆs organization
+GET    /api/v1/organization/limits                        [SaaS (Organization Self-Service)] Get plan limits for the callerÆs organization
+GET    /api/v1/organization/subscription                  [SaaS (Organization Self-Service)] Get the callerÆs subscription
+GET    /api/v1/organization/usage                         [SaaS (Organization Self-Service)] Get usage snapshot for the callerÆs organization
+POST   /api/v1/organizations                              [Organizations] Create a new organization
+GET    /api/v1/organizations                              [Organizations] List organizations visible to the caller
+GET    /api/v1/organizations/current/audit-logs           [Audit Logs] List audit log entries for the current organization (cursor-paginated).
+POST   /api/v1/organizations/current/audit-logs/export    [Audit Logs] Request an audit log export (architecture placeholder).
+GET    /api/v1/organizations/current/audit-logs/{id}      [Audit Logs] Fetch a single audit log entry by id.
+GET    /api/v1/organizations/current/charger-onboarding/pending-chargers [Chargers] List pending auto-detected chargers.
+POST   /api/v1/organizations/current/charger-onboarding/pending-chargers/{id}/archive [Chargers] 
+POST   /api/v1/organizations/current/charger-onboarding/pending-chargers/{id}/attach [Chargers] Attach a pending charger to a station.
+POST   /api/v1/organizations/current/charger-onboarding/pending-chargers/{id}/reject [Chargers] 
+GET    /api/v1/organizations/current/charger-onboarding/tokens [Chargers] 
+POST   /api/v1/organizations/current/charger-onboarding/tokens [Chargers] Generate an onboarding token (secret shown once).
+POST   /api/v1/organizations/current/charger-onboarding/tokens/{id}/revoke [Chargers] 
+GET    /api/v1/organizations/current/customers            [Users] List every driver linked to the current organization.
+POST   /api/v1/organizations/current/customers            [Users] Find or create a driver and link them as a customer
+GET    /api/v1/organizations/current/customers/{id}       [Users] Get a single customer profile dossier.
+GET    /api/v1/organizations/current/customers/{id}/audit [Users] Audit history for a single customer.
+POST   /api/v1/organizations/current/customers/{id}/block [Users] Block a customer. Reversible via reactivate; reason and audit are required.
+GET    /api/v1/organizations/current/customers/{id}/invoices [Users] Invoice history (foundation) for a single customer.
+GET    /api/v1/organizations/current/customers/{id}/offer-usage [Users] Offer application history for a single customer.
+POST   /api/v1/organizations/current/customers/{id}/reactivate [Users] Reactivate a SUSPENDED or BLOCKED customer.
+GET    /api/v1/organizations/current/customers/{id}/sessions [Users] Charging session history for a single customer.
+POST   /api/v1/organizations/current/customers/{id}/suspend [Users] Suspend a customer. Reversible; reason and audit are required.
+GET    /api/v1/organizations/current/customers/{id}/voucher-redemptions [Users] Voucher redemptions for a single customer (this organization only).
+GET    /api/v1/organizations/current/exports              [Exports] List export jobs for the current organisation.
+POST   /api/v1/organizations/current/exports              [Exports] Request a new export.
+GET    /api/v1/organizations/current/exports/{id}         [Exports] Get a single export job by id.
+DELETE /api/v1/organizations/current/exports/{id}         [Exports] Delete an export job and its stored artefact.
+GET    /api/v1/organizations/current/exports/{id}/download [Exports] Download the generated artefact for a completed export.
+POST   /api/v1/organizations/current/exports/{id}/retry   [Exports] Retry a failed or expired export job.
+GET    /api/v1/organizations/current/invitations          [Users] List invitations for the current organization.
+POST   /api/v1/organizations/current/invitations          [Users] Invite a new user to the current organization.
+POST   /api/v1/organizations/current/invitations/{id}/resend [Users] Rotate the token + extend the TTL on a pending invitation, then re-email it.
+POST   /api/v1/organizations/current/invitations/{id}/revoke [Users] Revoke a pending invitation.
+GET    /api/v1/organizations/current/invoices             [Wallet] List GST invoices for the current organization.
+POST   /api/v1/organizations/current/invoices             [Wallet] Generate an invoice from a completed session.
+GET    /api/v1/organizations/current/invoices/{id}        [Wallet] Get a single invoice with the full GST breakdown.
+POST   /api/v1/organizations/current/invoices/{id}/cancel [Wallet] Cancel an invoice.
+GET    /api/v1/organizations/current/invoices/{id}/pdf    [Wallet] Stream the invoice PDF generated at runtime.
+POST   /api/v1/organizations/current/invoices/{id}/regenerate-pdf [Wallet] Backfill a missing immutable invoice snapshot (legacy).
+GET    /api/v1/organizations/current/payments             [Payments] List payments for the current organization.
+POST   /api/v1/organizations/current/payments/manual      [Payments] Record a manual payment (e.g. cash accepted at the station).
+GET    /api/v1/organizations/current/payments/{id}        [Payments] Get a single payment with refunds, receipt and webhook timeline.
+GET    /api/v1/organizations/current/payments/{id}/receipt/pdf [Payments] Download the wallet top-up receipt PDF.
+POST   /api/v1/organizations/current/payments/{id}/refund [Payments] Refund a captured payment.
+GET    /api/v1/organizations/current/reconciliation       [Reconciliation] Reconciliation snapshot for the selected financial period.
+GET    /api/v1/organizations/current/reports/customers    [Reports] Customers report ù active/new + top customers (by lifetime spend) + top vehicles.
+GET    /api/v1/organizations/current/reports/energy       [Reports] Energy report ù daily/monthly + per-station / per-charger.
+GET    /api/v1/organizations/current/reports/overview     [Reports] Dashboard KPIs for the current organisation.
+GET    /api/v1/organizations/current/reports/revenue      [Reports] Revenue report ù gross / tax / discount / refund / net + breakdowns.
+GET    /api/v1/organizations/current/reports/sessions     [Reports] Sessions report ù totals, daily series, by-status + top stations.
+GET    /api/v1/organizations/current/reports/tax          [Reports] GST report ù CGST / SGST / IGST collected + place-of-supply breakdown.
+GET    /api/v1/organizations/current/reports/utilization  [Reports] Utilization report ù per-station / per-charger busy hours + most/least utilized.
+POST   /api/v1/organizations/current/reports/{reportKey}/export [Reports] Request an export of the named report.
+GET    /api/v1/organizations/current/sessions             [Charging Sessions] List charging sessions for the current organization (cursor-paginated).
+POST   /api/v1/organizations/current/sessions/export      [Charging Sessions] Request a session export (architecture placeholder).
+GET    /api/v1/organizations/current/sessions/{id}        [Charging Sessions] Get a single session detail (overview + timeline + cost + technical).
+POST   /api/v1/organizations/current/sessions/{id}/attach-customer [Charging Sessions] Attach a driver to a guest / mis-attributed session and optionally settle.
+PATCH  /api/v1/organizations/current/sessions/{id}/costing [Charging Sessions] Manually override session costing for recovery.
+POST   /api/v1/organizations/current/sessions/{id}/retry-costing [Charging Sessions] Re-run automatic tariff costing for a stuck session.
+POST   /api/v1/organizations/current/sessions/{id}/settle [Charging Sessions] Debit the attached customer wallet and settle the session.
+GET    /api/v1/organizations/current/users                [Users] List members of the current organization.
+POST   /api/v1/organizations/current/users                [Users] Create a tenant user directly (bypasses the invitation flow).
+GET    /api/v1/organizations/current/users/{id}           [Users] Get a single tenant user by id.
+PATCH  /api/v1/organizations/current/users/{id}           [Users] Edit a tenant user ù role, name, or contact phone.
+DELETE /api/v1/organizations/current/users/{id}           [Users] Remove a user from the current organization.
+POST   /api/v1/organizations/current/users/{id}/disable   [Users] Disable a tenant user. The user can no longer sign in.
+POST   /api/v1/organizations/current/users/{id}/enable    [Users] Re-enable a previously disabled tenant user.
+POST   /api/v1/organizations/current/users/{id}/reset-password [Users] Mint a one-time temporary password for a tenant user.
+GET    /api/v1/organizations/current/vehicles             [Users] List vehicles registered on this operator network.
+POST   /api/v1/organizations/current/vehicles             [Users] Register a new vehicle for an existing customer.
+GET    /api/v1/organizations/current/vehicles/{id}        [Users] Get a single vehicle detail dossier.
+PATCH  /api/v1/organizations/current/vehicles/{id}        [Users] Edit a vehicle. Pass only the fields you want to change.
+POST   /api/v1/organizations/current/vehicles/{id}/deactivate [Users] Deactivate a vehicle. Reversible via reactivate. No hard delete.
+POST   /api/v1/organizations/current/vehicles/{id}/reactivate [Users] Reactivate an INACTIVE vehicle.
+GET    /api/v1/organizations/current/wallets              [Wallet] List every wallet owned by a member of the current organization.
+GET    /api/v1/organizations/current/wallets/{id}         [Wallet] Get a single wallet dashboard summary.
+POST   /api/v1/organizations/current/wallets/{id}/manual-credit [Wallet] Issue a manual credit against a customer wallet.
+POST   /api/v1/organizations/current/wallets/{id}/manual-debit [Wallet] Issue a manual debit against a customer wallet.
+POST   /api/v1/organizations/current/wallets/{id}/refund  [Wallet] Refund money to a customer wallet (wallet-only, no payment-gateway).
+GET    /api/v1/organizations/current/wallets/{id}/transactions [Wallet] List the ledger for a single wallet.
+GET    /api/v1/organizations/{id}                         [Organizations] Get an organization by id
+PATCH  /api/v1/organizations/{id}                         [Organizations] Update organization metadata
+GET    /api/v1/payments/me                                [Payments] List the callerÆs payment history.
+GET    /api/v1/payments/me/{id}                           [Payments] Get one of the callerÆs payments by id
+GET    /api/v1/payments/me/{id}/receipt/pdf               [Payments] Download a top-up receipt for the caller.
+POST   /api/v1/payments/topups                            [Payments] Initiate a wallet top-up
+POST   /api/v1/payments/topups/{id}/verify                [Payments] Verify a top-up against the provider.
+POST   /api/v1/payments/webhooks/{provider}               [Payments] Provider webhook endpoint.
+GET    /api/v1/payments/{id}                              [Payments] Get a payment by id (caller-scoped).
+POST   /api/v1/payments/{id}/capture                      [Payments] [Legacy] Capture an authorised payment.
+POST   /api/v1/payments/{id}/refund                       [Payments] [Legacy] Refund a captured payment (no-reason path).
+GET    /api/v1/platform/impersonation/current             [Platform Impersonation] Describe the in-flight impersonation session
+POST   /api/v1/platform/impersonation/exit                [Platform Impersonation] Exit the active impersonation session
+POST   /api/v1/platform/organizations/{id}/impersonate    [Platform Impersonation] Start a "view as tenant" session
+POST   /api/v1/platform/organizations/{organizationId}/archive [SaaS (Platform Admin)] Archive (soft-delete) a tenant
+GET    /api/v1/platform/organizations/{organizationId}/audit-logs [SaaS (Platform Admin)] List audit log entries scoped to a tenant
+GET    /api/v1/platform/organizations/{organizationId}/business-units [SaaS (Platform Admin)] List business units for the Business Units tab
+GET    /api/v1/platform/organizations/{organizationId}/features [SaaS (Platform Admin)] Get effective features for an organization
+PATCH  /api/v1/platform/organizations/{organizationId}/features [SaaS (Platform Admin)] Update per-organization feature overrides
+POST   /api/v1/platform/organizations/{organizationId}/reactivate [SaaS (Platform Admin)] Reactivate a suspended tenant
+POST   /api/v1/platform/organizations/{organizationId}/subscription [SaaS (Platform Admin)] Create an organization subscription
+GET    /api/v1/platform/organizations/{organizationId}/subscription [SaaS (Platform Admin)] Get an organization subscription
+PATCH  /api/v1/platform/organizations/{organizationId}/subscription [SaaS (Platform Admin)] Update an organization subscription
+POST   /api/v1/platform/organizations/{organizationId}/suspend [SaaS (Platform Admin)] Suspend a tenant
+GET    /api/v1/platform/organizations/{organizationId}/usage [SaaS (Platform Admin)] Get usage snapshot for an organization
+GET    /api/v1/platform/organizations/{organizationId}/users [SaaS (Platform Admin)] List org members (Users tab data)
+POST   /api/v1/platform/organizations/{organizationId}/users [SaaS (Platform Admin)] Invite or create a member for a tenant
+PATCH  /api/v1/platform/organizations/{organizationId}/users/{userId} [SaaS (Platform Admin)] Update an org member (role / user status)
+DELETE /api/v1/platform/organizations/{organizationId}/users/{userId} [SaaS (Platform Admin)] Remove a member from a tenant
+POST   /api/v1/platform/organizations/{organizationId}/users/{userId}/reset-password [SaaS (Platform Admin)] Reset a member password
+POST   /api/v1/platform/plans                             [SaaS (Platform Admin)] Create a SaaS plan
+GET    /api/v1/platform/plans                             [SaaS (Platform Admin)] List SaaS plans
+GET    /api/v1/platform/plans/{id}                        [SaaS (Platform Admin)] Get a SaaS plan
+PATCH  /api/v1/platform/plans/{id}                        [SaaS (Platform Admin)] Update a SaaS plan
+POST   /api/v1/stations                                   [Stations] Create a station
+GET    /api/v1/stations                                   [Stations] List stations
+GET    /api/v1/stations/{id}                              [Stations] Get a station by id
+PATCH  /api/v1/stations/{id}                              [Stations] Update station metadata
+POST   /api/v1/stations/{id}/activate                     [Stations] Activate a station
+POST   /api/v1/stations/{id}/archive                      [Stations] Archive a station (soft-delete)
+POST   /api/v1/stations/{id}/deactivate                   [Stations] Deactivate a station
+GET    /api/v1/stations/{id}/overview                     [Stations] Station operations KPI overview
+POST   /api/v1/stations/{id}/restore                      [Stations] Restore an archived station
+POST   /api/v1/tariffs                                    [Tariffs] Create a tariff (DRAFT)
+GET    /api/v1/tariffs                                    [Tariffs] List tariffs for an organization
+POST   /api/v1/tariffs/bulk                               [Tariffs] Bulk-create tariffs (DRAFT)
+GET    /api/v1/tariffs/station/{stationId}                [Tariffs] List tariffs applicable to a station
+GET    /api/v1/tariffs/{id}                               [Tariffs] Get a single tariff
+PATCH  /api/v1/tariffs/{id}                               [Tariffs] Update a tariff
+POST   /api/v1/tariffs/{id}/activate                      [Tariffs] Activate a tariff
+GET    /api/v1/tariffs/{id}/assignments                   [Tariffs] Tariff usage summary
+POST   /api/v1/tariffs/{id}/clone                         [Tariffs] Clone a tariff into a new DRAFT version
+POST   /api/v1/tariffs/{id}/preview                       [Tariffs] Preview pricing for a synthetic session
+POST   /api/v1/tariffs/{id}/retire                        [Tariffs] Retire a tariff
+POST   /api/v1/tariffs/{id}/schedule                      [Tariffs] Schedule a tariff for future activation
+GET    /api/v1/tariffs/{id}/versions                      [Tariffs] List version history for a tariff
+GET    /api/v1/users                                      [Users] List users (platform admin)
+GET    /api/v1/users/me                                   [Users] Get the authenticated userÆs profile
+PATCH  /api/v1/users/me                                   [Users] Update the authenticated userÆs profile
+GET    /api/v1/users/me/vehicles                          [Users] List vehicles registered to the caller
+GET    /api/v1/users/me/vehicles/{id}                     [Users] Get one of the callerÆs vehicles by id
+GET    /api/v1/users/{id}                                 [Users] Get a user by id (platform admin / support)
+POST   /api/v1/vouchers                                   [Vouchers] Create a voucher campaign
+GET    /api/v1/vouchers                                   [Vouchers] List vouchers visible to the caller
+GET    /api/v1/wallet/me                                  [Wallet] Get the callerÆs wallet
+POST   /api/v1/wallet/redeem                              [Wallet] Redeem a voucher into the wallet
+POST   /api/v1/wallet/topup                               [Wallet] Initiate a wallet top-up
+GET    /api/v1/wallet/transactions                        [Wallet] List the callerÆs wallet transactions

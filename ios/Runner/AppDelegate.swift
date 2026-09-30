@@ -4,6 +4,8 @@ import GoogleMaps
 
 @main
 @objc class AppDelegate: FlutterAppDelegate {
+  private var liveActivityChannel: FlutterMethodChannel?
+
   override func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
@@ -12,10 +14,11 @@ import GoogleMaps
     GeneratedPluginRegistrant.register(with: self)
     
     let controller : FlutterViewController = window?.rootViewController as! FlutterViewController
-    let liveActivityChannel = FlutterMethodChannel(name: "app.zetraev.com/live_activity",
-                                              binaryMessenger: controller.binaryMessenger)
+    let channel = FlutterMethodChannel(name: "app.zetraev.com/live_activity",
+                                       binaryMessenger: controller.binaryMessenger)
+    self.liveActivityChannel = channel
     
-    liveActivityChannel.setMethodCallHandler({
+    channel.setMethodCallHandler({
       (call: FlutterMethodCall, result: @escaping FlutterResult) -> Void in
       
       switch call.method {
@@ -30,7 +33,13 @@ import GoogleMaps
                   return
               }
               let isDarkMode = args["isDarkMode"] as? Bool ?? true
-              LiveActivityManager.shared.startLiveActivity(soc: soc, timeRemainingMins: timeRemainingMins, speedKw: speedKw, costRm: costRm, isDarkMode: isDarkMode)
+              LiveActivityManager.shared.startLiveActivity(
+                  soc: soc,
+                  timeRemainingMins: timeRemainingMins,
+                  speedKw: speedKw,
+                  costRm: costRm,
+                  isDarkMode: isDarkMode
+              )
           }
           result(nil)
           
@@ -45,7 +54,13 @@ import GoogleMaps
                   return
               }
               let isDarkMode = args["isDarkMode"] as? Bool ?? true
-              LiveActivityManager.shared.updateLiveActivity(soc: soc, timeRemainingMins: timeRemainingMins, speedKw: speedKw, costRm: costRm, isDarkMode: isDarkMode)
+              LiveActivityManager.shared.updateLiveActivity(
+                  soc: soc,
+                  timeRemainingMins: timeRemainingMins,
+                  speedKw: speedKw,
+                  costRm: costRm,
+                  isDarkMode: isDarkMode
+              )
           }
           result(nil)
           
@@ -61,5 +76,19 @@ import GoogleMaps
     })
     
     return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+  }
+
+  override func application(
+    _ app: UIApplication,
+    open url: URL,
+    options: [UIApplication.OpenURLOptionsKey : Any] = [:]
+  ) -> Bool {
+    if url.scheme == "zetra" {
+      if url.host == "stop-charging" || url.path == "/stop-charging" {
+        liveActivityChannel?.invokeMethod("stopChargingFromNotification", arguments: nil)
+        return true
+      }
+    }
+    return super.application(app, open: url, options: options)
   }
 }

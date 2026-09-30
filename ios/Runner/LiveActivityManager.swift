@@ -2,19 +2,6 @@ import Foundation
 import ActivityKit
 import Flutter
 
-@available(iOS 16.1, *)
-struct ChargingAttributes: ActivityAttributes {
-    public struct ContentState: Codable, Hashable {
-        var soc: Double
-        var timeRemainingMins: Int
-        var speedKw: Double
-        var costRm: Double
-        var isDarkMode: Bool
-    }
-    
-    var sessionName: String
-}
-
 class LiveActivityManager {
     static let shared = LiveActivityManager()
     
@@ -24,10 +11,15 @@ class LiveActivityManager {
     
     func startLiveActivity(soc: Double, timeRemainingMins: Int, speedKw: Double, costRm: Double, isDarkMode: Bool) {
         if #available(iOS 16.1, *) {
-            // End any active activity first
+            guard ActivityAuthorizationInfo().areActivitiesEnabled else {
+                print("[ZETRA ActivityKit] Live Activities are disabled in system settings.")
+                return
+            }
+            
+            // End any previously active activities before starting a new one
             stopLiveActivity()
             
-            let attributes = ChargingAttributes(sessionName: "Active Charging")
+            let attributes = ChargingAttributes(sessionName: "ZETRA Active Charging")
             let initialContentState = ChargingAttributes.ContentState(
                 soc: soc,
                 timeRemainingMins: timeRemainingMins,
@@ -43,9 +35,9 @@ class LiveActivityManager {
                     pushType: nil
                 )
                 self.currentActivity = activity
-                print("Requested Live Activity: \(activity.id)")
+                print("[ZETRA ActivityKit] Live Activity started successfully with id: \(activity.id)")
             } catch {
-                print("Error requesting Live Activity: \(error.localizedDescription)")
+                print("[ZETRA ActivityKit] Failed to start Live Activity: \(error.localizedDescription)")
             }
         }
     }
@@ -53,10 +45,16 @@ class LiveActivityManager {
     func updateLiveActivity(soc: Double, timeRemainingMins: Int, speedKw: Double, costRm: Double, isDarkMode: Bool) {
         if #available(iOS 16.1, *) {
             guard let activity = currentActivity as? Activity<ChargingAttributes> else {
-                // Try to find any active activity
+                // If current reference was lost, attempt to find existing active activity
                 if let activeActivity = Activity<ChargingAttributes>.activities.first {
                     self.currentActivity = activeActivity
-                    updateLiveActivity(soc: soc, timeRemainingMins: timeRemainingMins, speedKw: speedKw, costRm: costRm, isDarkMode: isDarkMode)
+                    updateLiveActivity(
+                        soc: soc,
+                        timeRemainingMins: timeRemainingMins,
+                        speedKw: speedKw,
+                        costRm: costRm,
+                        isDarkMode: isDarkMode
+                    )
                 }
                 return
             }
@@ -71,7 +69,6 @@ class LiveActivityManager {
             
             Task {
                 await activity.update(.init(state: updatedState, staleDate: nil))
-                print("Updated Live Activity: \(activity.id)")
             }
         }
     }
@@ -85,7 +82,7 @@ class LiveActivityManager {
                 }
             }
             self.currentActivity = nil
-            print("Stopped all charging Live Activities.")
+            print("[ZETRA ActivityKit] Stopped all active charging Live Activities.")
         }
     }
 }
